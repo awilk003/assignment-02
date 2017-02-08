@@ -1,0 +1,10 @@
+# Artifacts
+*.[oad]
+*.so
+*.out
+*.tar.*
+
+# Misc
+.*.swp
+*.bak
+*~
