@@ -1,0 +1,20 @@
+FLAGS := -pipe -ansi -Wall -Wextra -lm
+EXEC  := test.out
+
+SOURCES := $(wildcard *.cpp)
+OBJECTS := $(SOURCES:.cpp=.o)
+DEPENDS := $(SOURCES:.cpp=.d)
+
+$(EXEC): $(OBJECTS)
+	$(CXX) $(OBJECTS) -o $(EXEC)
+
+%.o: %.cpp
+	$(CXX) -c $(CC_FLAGS) $< -o $@
+
+%.d: %.cpp
+	$(CXX) -MM $< > $@
+
+clean:
+	rm -f $(EXEC) $(OBJECTS) $(DEPENDS)
+
+-include $(DEPENDS)
