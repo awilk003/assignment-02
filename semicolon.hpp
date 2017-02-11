@@ -4,7 +4,7 @@ class Semicolon : public Cmdline
 {
 	public:
 		Semicolon();
-		void execute(string uCmd);
+		void execute();
 	protected:
 		Cmdline* Lchild;
 		Cmdline* Rchild;
