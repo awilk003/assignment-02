@@ -6,9 +6,10 @@
 class Cmd : public Cmdline
 {
 	public:
+		Cmd() {};
 		Cmd(string input1, string input2 = 0);
 		bool isValid();
-		void execute();
+		bool execute();
 	protected:
 		string Lcmd;
 		string Rcmd;

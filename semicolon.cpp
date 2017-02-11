@@ -1,11 +1,13 @@
 #include "semicolon.hpp"
 
-Semicolon::Semicolon(Cmdline* cmd)
+Semicolon::Semicolon(Cmd* Right, Cmd* Left)
 {
-	Lcmd = cmd;
+	Lchild = Left;
+	Rchild = Right;	
 }
 
-void Semicolon::execute()
+bool Semicolon::execute()
 {
-	system(Rcmd.c_str());	
+	Rchild->execute();	
+	return Rchild->isValid();
 }
