@@ -1,7 +1,5 @@
 #include "cmdline.hpp"
 
-Cmdline::Cmdline(string cmd1, string cmd2 = "")
+Cmdline::Cmdline()
 {
-	 Lcmd = cmd1;
-	 Rcmd = cmd2;
 }
