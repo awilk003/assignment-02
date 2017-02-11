@@ -5,7 +5,7 @@ Semicolon::Semicolon(Cmdline* cmd)
 	Lcmd = cmd;
 }
 
-void Semicolon::execute()
+void Semicolon::execute(string uCmd)
 {
-	//system thing	
+	system(uCmd.c_str());	
 }
