@@ -1,6 +1,6 @@
 #include "semicolon.hpp"
 
-Semicolon::Semicolon(Cmd* Right, Cmd* Left)
+Semicolon::Semicolon(Cmd* Left, Cmd* Right)
 {
 	Lchild = Left;
 	Rchild = Right;	
