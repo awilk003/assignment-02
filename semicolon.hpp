@@ -1,11 +1,12 @@
 #include "cmd.hpp"
 
-class Semicolon : public Cmd
+class Semicolon : public Cmdline
 {
 	public:
-		Semicolon(Cmd* Right, Cmd* Left);
+		Semicolon(bool Left, Cmdline* Right);
 		bool execute();
+		bool isValid();
 	protected:
-		Cmd* Lchild;
-		Cmd* Rchild;
+		Cmdline* Lchild;
+		Cmdline* Rchild;
 };

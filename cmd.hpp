@@ -7,12 +7,11 @@ class Cmd : public Cmdline
 {
 	public:
 		Cmd() {};
-		Cmd(string input1, string input2 = 0);
+		Cmd(string input1);
 		bool isValid();
-		bool execute();
+		bool execute();	
 	protected:
-		string Lcmd;
-		string Rcmd;
+		string uCmd;
 };
 
 #endif

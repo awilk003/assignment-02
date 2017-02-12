@@ -2,12 +2,15 @@
 #include "cmdline.hpp"
 #include "cmd.hpp"
 #include "semicolon.hpp"
+#include "pound.hpp"
+
 int main()
 {
-	Cmd* A = new Cmd("ls", "asdf");
-	Cmd* B = new Cmd("ls", "asdf");
-	Semicolon* C = new Semicolon(A,B);
-	if (C->isValid())
+	Cmd* A = new Cmd("ls");
+	Cmd* B = new Cmd("asdf");
+	Semicolon* C = new Semicolon(false,A);
+	Pound* D = new Pound(false, B);
+	if (D->isValid())
 	{
 		cout << "GOOD " << endl;
 	}

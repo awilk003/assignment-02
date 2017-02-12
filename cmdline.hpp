@@ -12,7 +12,7 @@ class Cmdline
 	public:
 		Cmdline();
 		virtual bool execute() = 0;
-
+		virtual bool isValid() = 0;
 };
 
 #endif

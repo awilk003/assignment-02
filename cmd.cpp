@@ -1,20 +1,24 @@
 #include "cmd.hpp"
 
-Cmd::Cmd(string input1, string input2)
+Cmd::Cmd(string input1)
 {
-	Rcmd = input1;
+	uCmd = input1;
+	cout << "uCmd: " << uCmd << endl;
 }
 
 
 bool Cmd::isValid()
 {
-	int i = system(Rcmd.c_str());
+	cout << "Ucd: " << uCmd << endl;
+	int i = system(uCmd.c_str());
 	return i == 0;
 }
 
 bool Cmd::execute()
 {
-	system(Rcmd.c_str());	
+	system(uCmd.c_str());	
 	return isValid();
 	
 }
+
+
