@@ -2,7 +2,7 @@
 
 Semicolon::Semicolon(bool Left, Cmdline* Right)
 {
-//	Lchild = Left;
+	Lchild = Left;
 	Rchild = Right;
 }
 

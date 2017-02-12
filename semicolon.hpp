@@ -1,4 +1,4 @@
-#include "cmd.hpp"
+#include "cmdline.hpp"
 
 class Semicolon : public Cmdline
 {
@@ -7,6 +7,6 @@ class Semicolon : public Cmdline
 		bool execute();
 		bool isValid();
 	protected:
-		Cmdline* Lchild;
+		bool Lchild;
 		Cmdline* Rchild;
 };
