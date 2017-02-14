@@ -1,7 +1,10 @@
 # Artifacts
+bin/
 *.[oad]
 *.so
 *.out
+rshell
+*.?ch
 *.tar.*
 
 # Misc
