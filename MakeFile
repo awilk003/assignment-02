@@ -1,20 +1,17 @@
-FLAGS := -pipe -ansi -Wall -Wextra -lm
-EXEC  := test.out
+CXX=g++
+CXXFLAGS:=-g -ansi -Wall 
+SOURCES=main.cpp add.cpp or.cpp cmd.cpp cmdline.cpp pound.cpp semicolon.cpp
+OBJS=$(SOURCES:.cpp=.o)
+EXECUTABLE=test
 
-SOURCES := $(wildcard *.cpp)
-OBJECTS := $(SOURCES:.cpp=.o)
-DEPENDS := $(SOURCES:.cpp=.d)
+all: $(EXECUTABLE)
 
-$(EXEC): $(OBJECTS)
-	$(CXX) $(OBJECTS) -o $(EXEC)
+$(EXECUTABLE): $(OBJS)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $@
 
-%.o: %.cpp
-	$(CXX) -c $(CC_FLAGS) $< -o $@
-
-%.d: %.cpp
-	$(CXX) -MM $< > $@
-
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $< -o $@
 clean:
-	rm -f $(EXEC) $(OBJECTS) $(DEPENDS)
+	rm -f $(EXECUTABLE)
+	rm -f $(OBJS)
 
--include $(DEPENDS)
