@@ -14,7 +14,7 @@ bool Semicolon::execute()
 
 bool Semicolon::isValid()
 {
-	return Rchild->isValid();
+	return true;
 }
 
 //class operations : public Base

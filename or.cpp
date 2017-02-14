@@ -16,7 +16,14 @@ bool Or::execute()
 	return Rchild->isValid();
 }
 
-bool Or::isValid()
+bool Or::isValid(bool valid)
 {
-	return Rchild->isValid();
+	if (valid)
+	{
+		return false;
+	}
+	else
+	{
+		return Rchild->execute()
+	}
 }
