@@ -73,7 +73,7 @@ substr.push_back(NULL);
 */
 
 cout << "substr: " << endl;
-for (int i = 0; i < substr.size(); i++)
+for (unsigned i = 0; i < substr.size(); i++)
 {
 	cout << substr.at(i) << " ";
 }

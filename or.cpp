@@ -24,6 +24,6 @@ bool Or::isValid(bool valid)
 	}
 	else
 	{
-		return Rchild->execute()
+		return Rchild->execute();
 	}
 }
