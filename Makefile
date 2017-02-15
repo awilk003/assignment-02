@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS:=-g -ansi -Wall 
-SOURCES=main.cpp add.cpp or.cpp cmd.cpp cmdline.cpp pound.cpp semicolon.cpp
+SOURCES=main.cpp and.cpp or.cpp cmd.cpp cmdline.cpp pound.cpp semicolon.cpp
 OBJS=$(SOURCES:.cpp=.o)
 EXECUTABLE=test
 
