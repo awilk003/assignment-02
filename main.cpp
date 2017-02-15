@@ -4,6 +4,7 @@
 #include "semicolon.hpp"
 #include "pound.hpp"
 #include "or.hpp"
+#include "and.hpp"
 #include <vector>
 #include <string>
 #include <cstring>
@@ -19,12 +20,12 @@ int main()
 vector<char> substr;
 string uInput;
 //getline(cin, uInput);
-//cout << uInput << endl;
-uInput = "ls ; ls || ls && ls # ls";
+//uInput = "ls ; ls || ls && ls # ls";
+uInput = "ls; ls || ls";
 //char* newInput;
 //newInput = strtok(uInput, " ");
-
 tokenizer<> tok(uInput);
+bool isValid = true;
 for (string::iterator i = uInput.begin(); i != uInput.end(); i++)
 {
 	if (!isalpha(*i) && (*i) != ' ')
@@ -32,6 +33,82 @@ for (string::iterator i = uInput.begin(); i != uInput.end(); i++)
 		substr.push_back((*i));
 	}
 }
+
+
+
+cout << "substr: " << endl;
+for (unsigned i = 0; i < substr.size(); i++)
+{
+	cout << substr.at(i) << " ";
+}
+cout << endl;
+
+cout << "TOKENIZER" << endl;
+
+
+string temp;
+tokenizer<>::iterator i = tok.begin();
+Cmd* first = new Cmd((*i));
+first->execute((*i));
+//isValid = first->isValid();
+i++;
+
+
+for (unsigned j = 0; j < substr.size(); j++)
+{
+	Cmd* uCmd = new Cmd((*i));
+	switch(substr.at(j))
+	{
+		case ';':
+		{
+			cout << "HIT CASE SEMICOLON" << endl;
+			Semicolon* sHolder = new Semicolon(isValid, uCmd);
+			sHolder->execute((*i));
+			// isValid = sHolder->isValid();
+			delete sHolder;	
+			break;
+		}
+		case '|':
+		{
+			cout << "HIT CASE OR" << endl;
+			Or* oHolder = new Or(isValid, uCmd);
+			oHolder->execute(*i);
+			//isValid = oHolder->isValid();
+			j++;
+			delete oHolder;
+			break;
+		}
+		case '&':
+		{
+			cout << "HIT CASE AND" << endl;	
+			And* aHolder = new And(isValid, uCmd);
+			aHolder->execute((*i));
+			//isValid = aHolder->isValid();
+			delete aHolder;
+			j++;
+		}
+		break;
+		default:
+		{
+			j = substr.size();
+			break;		
+		}
+	}
+	i++;
+}
+
+//Cmd* A = new Cmd(temp);
+//A->execute(temp);
+
+
+
+	return 0;
+}
+
+
+
+
+
 /*for (int i = 0; i < uInput.size(); i++)
 {
 	if (uInput.at(i) != ' ')
@@ -72,53 +149,6 @@ newInput.clear();
 substr.push_back(NULL);
 */
 
-cout << "substr: " << endl;
-for (unsigned i = 0; i < substr.size(); i++)
-{
-	cout << substr.at(i) << " ";
-}
-cout << endl;
-cout << "TOKENIZER" << endl;
-string temp;
-for (tokenizer<>::iterator i = tok.begin(); i != tok.end(); i++)
-{
-	temp = (*i);
-	cout << temp <<  endl;
-}
-
-Cmd* A = new Cmd(temp);
-A->execute(temp);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 	Cmd* A = new Cmd("ls");
 	Cmd* B = new Cmd("asdf");
@@ -134,6 +164,3 @@ A->execute(temp);
 		cout << "ERROR" << endl;
 	}
 */
-	return 0;
-}
-
