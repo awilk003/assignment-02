@@ -11,8 +11,8 @@ class Cmdline
 {
 	public:
 		Cmdline();
-		virtual bool execute() = 0;
-		virtual bool isValid() = 0;
+		virtual void execute(string cmd) = 0;
+		//virtual bool isValid() = 0;
 };
 
 #endif

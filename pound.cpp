@@ -6,9 +6,9 @@ Pound::Pound(bool Left, Cmdline* Right)
 	Rchild = Right;
 }
 
-bool Pound::execute()
+void Pound::execute(string cmd)
 {
-	return false;
+	
 }
 
 bool Pound::isValid()

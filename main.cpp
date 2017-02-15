@@ -7,17 +7,32 @@
 #include <vector>
 #include <string>
 #include <cstring>
+#include <boost/tokenizer.hpp>
+#include <locale>
+using namespace boost;
+
 
 //NOTE TO SELF: MAKE SURE TO MAKE THE DISTINCTION BETWEEN EXECUTE AND ISVALID, ISVALID CURRENTLY EXECUTES A FUNCTION
 
 int main()
 {
-vector<char*> substr;
+vector<char> substr;
 string uInput;
-getline(cin, uInput);
+//getline(cin, uInput);
 //cout << uInput << endl;
-string newInput;
-for (int i = 0; i < uInput.size(); i++)
+uInput = "ls ; ls || ls && ls # ls";
+//char* newInput;
+//newInput = strtok(uInput, " ");
+
+tokenizer<> tok(uInput);
+for (string::iterator i = uInput.begin(); i != uInput.end(); i++)
+{
+	if (!isalpha(*i) && (*i) != ' ')
+	{
+		substr.push_back((*i));
+	}
+}
+/*for (int i = 0; i < uInput.size(); i++)
 {
 	if (uInput.at(i) != ' ')
 	{
@@ -55,14 +70,24 @@ substr.push_back(temp);
 newInput.clear();		
 	
 substr.push_back(NULL);
-cout << "substr: " << endl;
+*/
 
-for (int j = 0; j < substr.size(); j ++)
+cout << "substr: " << endl;
+for (unsigned i = 0; i < substr.size(); i++)
 {
-	cout << substr.at(j) <<  endl;
+	cout << substr.at(i) << " ";
+}
+cout << endl;
+cout << "TOKENIZER" << endl;
+string temp;
+for (tokenizer<>::iterator i = tok.begin(); i != tok.end(); i++)
+{
+	temp = (*i);
+	cout << temp <<  endl;
 }
 
-
+Cmd* A = new Cmd(temp);
+A->execute(temp);
 
 
 
