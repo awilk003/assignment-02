@@ -19,16 +19,11 @@ Cmd::Cmd(string input1)
 	cout << "Ucd: " << uCmd << endl;
 	int i = system(uCmd.c_str());
 	return i == 0;
-}
-
-bool Cmd::execute()
-{
-	system(uCmd.c_str());	
-	return isValid();
-	
 }*/
 
-void Cmd::execute(string cmd_s)
+
+
+bool Cmd::execute(string cmd_s)
 {
   
   pid_t pid;
@@ -39,7 +34,7 @@ void Cmd::execute(string cmd_s)
    if ((pid = fork()) == -1) 
     {
         perror("fork"); 
-        return ;
+        return false;
     }
     if (pid == 0) // child process
     {
@@ -52,10 +47,12 @@ void Cmd::execute(string cmd_s)
     {
       if(wait(0) == -1)
       {
-	perror("wait");
+		perror("wait");
+		return false
       }
+	  
     }
-    return;
+    return true;
 }
 
 
