@@ -7,7 +7,7 @@ class And : public Cmdline
 {
 	public:
 		And(bool Left, Cmdline* Right);
-		bool execute();
+		void execute(string cmd);
 		bool isValid();
 	protected:
 		bool Lchild;

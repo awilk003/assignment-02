@@ -87,7 +87,7 @@ for (tokenizer<>::iterator i = tok.begin(); i != tok.end(); i++)
 }
 
 Cmd* A = new Cmd(temp);
-A->execute();
+A->execute(temp);
 
 
 

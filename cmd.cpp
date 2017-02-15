@@ -4,6 +4,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+Cmd::Cmd ()
+{}
+
 Cmd::Cmd(string input1)
 {
 	uCmd = input1;
@@ -28,7 +31,7 @@ bool Cmd::execute()
 void Cmd::execute(string cmd_s)
 {
   
-
+  pid_t pid;
   char* args[2];
   args[0] = (char*)cmd_s.c_str();
   args[1] = NULL;

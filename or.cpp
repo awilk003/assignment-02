@@ -6,14 +6,13 @@ Or::Or(bool Left, Cmdline* Right)
 	Rchild = Right;	
 }
 
-bool Or::execute()
+void Or::execute(string cmd)
 {
 	if (!Lchild)
 	{
 		cout  << "HIT IF " << endl;
-		Rchild->execute();
+		Rchild->execute(cmd);
 	}
-	return Rchild->isValid();
 }
 
 bool Or::isValid(bool valid)
@@ -24,6 +23,6 @@ bool Or::isValid(bool valid)
 	}
 	else
 	{
-		return Rchild->execute();
+	
 	}
 }
