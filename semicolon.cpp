@@ -6,16 +6,16 @@ Semicolon::Semicolon(bool Left, Cmdline* Right)
 	Rchild = Right;
 }
 
-void Semicolon::execute(string cmd)
+bool Semicolon::execute(string cmd)
 {
-	Rchild->execute(cmd);	
+	return Rchild->execute(cmd);	
 }
-
+/*
 bool Semicolon::isValid()
 {
 	return true;
 }
-
+*/
 //class operations : public Base
 //{
 //	public:

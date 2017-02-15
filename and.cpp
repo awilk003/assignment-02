@@ -6,16 +6,21 @@ And::And(bool Left, Cmdline* Right)
 	Rchild = Right;	
 }
 
-void And::execute(string cmd)
+bool And::execute(string cmd)
 {
 	if (Lchild)
 	{
-		Rchild->execute(cmd);
+		return Rchild->execute(cmd);
+	}
+	else
+	{
+		return false;
 	}
 
 }
-
+/*
 bool And::isValid()
 {
 //	return Rchild->isValid();
 }
+*/

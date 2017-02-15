@@ -9,7 +9,7 @@ class Cmd : public Cmdline
 		Cmd() ;
 		Cmd(string input1);
 		//bool isValid();
-		void execute(string cmd_s);	
+		bool execute(string cmd_s);	
 	protected:
 		string uCmd;
 };

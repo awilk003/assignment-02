@@ -4,8 +4,8 @@ class Or : public Cmdline
 {
 	public:
 		Or(bool Left, Cmdline* Right);
-		void execute(string cmd);
-		bool isValid(bool flag);
+		bool execute(string cmd);
+		//bool isValid(bool flag);
 	protected:
 		bool Lchild;
 		Cmdline* Rchild;

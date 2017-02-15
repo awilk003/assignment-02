@@ -21,7 +21,7 @@ vector<char> substr;
 string uInput;
 //getline(cin, uInput);
 //uInput = "ls ; ls || ls && ls # ls";
-uInput = "ls&&ls ";
+uInput = "ls; ls || ls && ls # ls ";
 //char* newInput;
 //newInput = strtok(uInput, " ");
 tokenizer<> tok(uInput);
@@ -58,8 +58,7 @@ cout << "TOKENIZER" << endl;
 string temp;
 tokenizer<>::iterator i = tok.begin();
 Cmd* first = new Cmd((*i));
-first->execute((*i));
-//isValid = first->isValid();
+isValid = first->execute((*i));
 i++;
 
 
@@ -72,8 +71,7 @@ for (unsigned j = 0; j < substr.size(); j++)
 		{
 			cout << "HIT CASE SEMICOLON" << endl;
 			Semicolon* sHolder = new Semicolon(isValid, uCmd);
-			sHolder->execute((*i));
-			// isValid = sHolder->isValid();
+			isValid = sHolder->execute((*i));	
 			delete sHolder;	
 			break;
 		}
@@ -81,8 +79,7 @@ for (unsigned j = 0; j < substr.size(); j++)
 		{
 			cout << "HIT CASE OR" << endl;
 			Or* oHolder = new Or(isValid, uCmd);
-			oHolder->execute(*i);
-			//isValid = oHolder->isValid();
+			isValid = oHolder->execute(*i);
 			delete oHolder;
 			break;
 		}
@@ -90,8 +87,7 @@ for (unsigned j = 0; j < substr.size(); j++)
 		{
 			cout << "HIT CASE AND" << endl;	
 			And* aHolder = new And(isValid, uCmd);
-			aHolder->execute((*i));
-			//isValid = aHolder->isValid();
+			isValid = aHolder->execute((*i));
 			delete aHolder;
 			break;
 		}
