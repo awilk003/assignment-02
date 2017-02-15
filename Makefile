@@ -11,6 +11,10 @@ $(EXECUTABLE): $(OBJS)
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) $< -o $@
+	
+main.o: main.cpp
+	$(CXX) -c main.cpp
+
 clean:
 	rm -f $(EXECUTABLE)
 	rm -f $(OBJS)
