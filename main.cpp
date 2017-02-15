@@ -21,19 +21,28 @@ vector<char> substr;
 string uInput;
 //getline(cin, uInput);
 //uInput = "ls ; ls || ls && ls # ls";
-uInput = "ls; ls || ls";
+uInput = "ls&&ls ";
 //char* newInput;
 //newInput = strtok(uInput, " ");
 tokenizer<> tok(uInput);
 bool isValid = true;
+
 for (string::iterator i = uInput.begin(); i != uInput.end(); i++)
 {
-	if (!isalpha(*i) && (*i) != ' ')
+	if ((*i) == ';' || (*i) == '|' || (*i) == '&')
 	{
 		substr.push_back((*i));
 	}
 }
 
+
+for (unsigned i = 0; i < substr.size(); i++)
+{
+	if (substr.at(i) == substr.at(i+1))
+	{
+		substr.erase(substr.begin() + (i+1));
+	}
+}
 
 
 cout << "substr: " << endl;
@@ -74,7 +83,6 @@ for (unsigned j = 0; j < substr.size(); j++)
 			Or* oHolder = new Or(isValid, uCmd);
 			oHolder->execute(*i);
 			//isValid = oHolder->isValid();
-			j++;
 			delete oHolder;
 			break;
 		}
@@ -85,9 +93,8 @@ for (unsigned j = 0; j < substr.size(); j++)
 			aHolder->execute((*i));
 			//isValid = aHolder->isValid();
 			delete aHolder;
-			j++;
+			break;
 		}
-		break;
 		default:
 		{
 			j = substr.size();
