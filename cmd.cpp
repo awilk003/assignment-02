@@ -33,7 +33,8 @@ bool Cmd::execute(string cmd_s)
   
    if ((pid = fork()) == -1) 
     {
-        perror("fork"); 
+        perror("fork");
+	exit(1);
         return false;
     }
     if (pid == 0) // child process
@@ -41,6 +42,7 @@ bool Cmd::execute(string cmd_s)
        if(execvp(args[0], args) == -1)
        {
 	 perror("exec");
+	 exit(1);
        }
     }
     else // parent process
@@ -48,6 +50,7 @@ bool Cmd::execute(string cmd_s)
       if(wait(0) == -1)
       {
 		perror("wait");
+		exit(1);
 		return false;
       }
 	  
