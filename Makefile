@@ -2,7 +2,7 @@ CXX=g++
 CXXFLAGS:=-g -ansi -Wall 
 SOURCES=main.cpp and.cpp or.cpp cmd.cpp cmdline.cpp pound.cpp semicolon.cpp
 OBJS=$(SOURCES:.cpp=.o)
-EXECUTABLE=test
+EXECUTABLE=bin/rshell
 
 all: $(SOURCES) $(EXECUTABLE)
 
@@ -15,4 +15,6 @@ $(EXECUTABLE): $(OBJS)
 clean:
 	rm -f $(EXECUTABLE)
 	rm -f $(OBJS)
+	rm -f *.gch
+
 
