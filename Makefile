@@ -17,6 +17,7 @@ $(EXECUTABLE): $(OBJS)
 clean:
 	rm -f $(EXECUTABLE)
 	rm -f $(OBJS)
+	rm -R bin
 	rm -f *.gch
 
 
