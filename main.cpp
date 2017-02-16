@@ -85,8 +85,16 @@ while (getline(cin, uInput))
 	cout << endl;
 
 	cout << "TOKENIZER" << endl;
-
-
+/*	
+	for (tokenizer<>::iterator k = tok.begin(); k != tok.end(); k++)
+	{
+	//	cout << "K " << (*k) << endl;
+		if ((*k) == "quit")
+		{
+			return 0;		
+		}
+	}
+*/	
 	tokenizer<>::iterator i = tok.begin();
 	Cmd* first = new Cmd((*i));
 	isValid = first->execute((*i));
@@ -99,7 +107,7 @@ while (getline(cin, uInput))
 		{
 			if ((*i) == "quit")
 			{
-				break;
+				return 0;
 			}
 			Cmd* uCmd = new Cmd((*i));
 			switch(substr.at(j))
@@ -139,6 +147,7 @@ while (getline(cin, uInput))
 	}
 	uInput.clear();
 	substr.clear();
+	
 }
 
 	return 0;
