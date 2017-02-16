@@ -1,0 +1,39 @@
+SSTARTED WHILE
+substr: 
+
+TOKENIZER
+uCmd: ls
+and.cpp
+and.hpp
+and.hpp.gch
+and.o
+a.out
+cmd.cpp
+cmd.hpp
+cmd.hpp.gch
+cmdline.cpp
+cmdline.hpp
+cmdline.hpp.gch
+cmdline.o
+cmd.o
+ls,
+main.cpp
+main.o
+Makefile
+or.cpp
+or.hpp
+or.hpp.gch
+or.o
+pound.cpp
+pound.hpp
+pound.hpp.gch
+pound.o
+README.md
+rshell
+semicolon.cpp
+semicolon.hpp
+semicolon.hpp.gch
+semicolon.o
+single_command.sh
+test
+SSTARTED WHILE

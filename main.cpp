@@ -17,93 +17,129 @@ using namespace boost;
 
 int main()
 {
-vector<char> substr;
-string uInput;
-//getline(cin, uInput);
-//uInput = "ls ; ls || ls && ls # ls";
-uInput = "ls; ls || ls && ls # ls ";
+string uInput = "";
+//uInput = "ls; ls || ls && ls # ls ";
 //char* newInput;
 //newInput = strtok(uInput, " ");
-tokenizer<> tok(uInput);
-bool isValid = true;
 
-for (string::iterator i = uInput.begin(); i != uInput.end(); i++)
-{
-	if ((*i) == ';' || (*i) == '|' || (*i) == '&')
+while (getline(cin, uInput))
+{	
+	cout << "SSTARTED WHILE" << endl;
+	if (uInput == "quit")
 	{
-		substr.push_back((*i));
+		break;
 	}
-}
+	vector<char> substr;
+	tokenizer<> tok(uInput);
+	bool isValid = true;
 
+	string otemp;
+	string atemp;	
 
-for (unsigned i = 0; i < substr.size(); i++)
-{
-	if (substr.at(i) == substr.at(i+1))
+	for (string::iterator i = uInput.begin(); i != uInput.end(); i++)
 	{
-		substr.erase(substr.begin() + (i+1));
-	}
-}
-
-
-cout << "substr: " << endl;
-for (unsigned i = 0; i < substr.size(); i++)
-{
-	cout << substr.at(i) << " ";
-}
-cout << endl;
-
-cout << "TOKENIZER" << endl;
-
-
-string temp;
-tokenizer<>::iterator i = tok.begin();
-Cmd* first = new Cmd((*i));
-isValid = first->execute((*i));
-i++;
-
-
-for (unsigned j = 0; j < substr.size(); j++)
-{
-	Cmd* uCmd = new Cmd((*i));
-	switch(substr.at(j))
-	{
-		case ';':
+		if ((*i) == ';')
 		{
-			cout << "HIT CASE SEMICOLON" << endl;
-			Semicolon* sHolder = new Semicolon(isValid, uCmd);
-			isValid = sHolder->execute((*i));	
-			delete sHolder;	
+			substr.push_back((*i));
+		}
+		else if ((*i) == '|')
+		{
+			otemp.push_back('|');
+			if (otemp == "||")
+			{
+				substr.push_back((*i));
+				otemp.clear();
+			}
+		}
+		else if ((*i) == '&')
+		{
+			atemp.push_back('&');
+			if (atemp == "&&")
+			{
+				substr.push_back((*i));
+				atemp.clear();
+			}
+		}
+		else if ((*i) == '#')
+		{
 			break;
 		}
-		case '|':
+	}
+/*	if (substr.size() != 1)
+	{
+		for (unsigned i = 0; i < substr.size(); i++)
 		{
-			cout << "HIT CASE OR" << endl;
-			Or* oHolder = new Or(isValid, uCmd);
-			isValid = oHolder->execute(*i);
-			delete oHolder;
-			break;
-		}
-		case '&':
-		{
-			cout << "HIT CASE AND" << endl;	
-			And* aHolder = new And(isValid, uCmd);
-			isValid = aHolder->execute((*i));
-			delete aHolder;
-			break;
-		}
-		default:
-		{
-			j = substr.size();
-			break;		
+			if (substr.at(i) == substr.at(i+1))
+			{
+				substr.erase(substr.begin() + (i+1));
+			}
 		}
 	}
+*/
+
+	cout << "substr: " << endl;
+	for (unsigned i = 0; i < substr.size(); i++)
+	{
+		cout << substr.at(i) << " ";
+	}
+	cout << endl;
+
+	cout << "TOKENIZER" << endl;
+
+
+	tokenizer<>::iterator i = tok.begin();
+	Cmd* first = new Cmd((*i));
+	isValid = first->execute((*i));
 	i++;
+
+	if (i != tok.end())
+	{
+		cout << "HIT MAJOR LOOP" << endl;	
+		for (unsigned j = 0; j < substr.size(); j++)
+		{
+			if ((*i) == "quit")
+			{
+				break;
+			}
+			Cmd* uCmd = new Cmd((*i));
+			switch(substr.at(j))
+			{
+				case ';':
+				{
+					cout << "HIT CASE SEMICOLON" << endl;
+					Semicolon* sHolder = new Semicolon(isValid, uCmd);
+					isValid = sHolder->execute((*i));	
+				//	delete sHolder;	
+					break;
+				}
+				case '|':
+				{
+					cout << "HIT CASE OR" << endl;
+					Or* oHolder = new Or(isValid, uCmd);
+					isValid = oHolder->execute(*i);
+					//delete oHolder;
+					break;
+				}
+				case '&':
+				{
+					cout << "HIT CASE AND" << endl;	
+					And* aHolder = new And(isValid, uCmd);
+					isValid = aHolder->execute((*i));
+					//delete aHolder;
+					break;
+				}
+				default:
+				{
+					j = substr.size();
+					break;		
+				}
+			}
+			i++;
+		}
+	}
+	uInput.clear();
+	substr.clear();
 }
-
-//Cmd* A = new Cmd(temp);
-//A->execute(temp);
-
-
 
 	return 0;
 }
