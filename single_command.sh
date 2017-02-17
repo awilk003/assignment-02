@@ -1,7 +1,6 @@
 #!/bin/sh
 make clean; make
-./test 
-ls
+echo "ps" | bin/rshell 
 #quit
 #ls
 #cd
