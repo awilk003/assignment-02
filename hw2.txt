@@ -1,0 +1,5 @@
+name1=Alexander Wilkins
+ucrnetid1=awilk003
+name2=Jon Chee
+ucrnetid2=jchee006
+repourl=https://github.com/awilk003/rshell.git
