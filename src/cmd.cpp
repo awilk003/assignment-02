@@ -38,7 +38,7 @@ bool Cmd::execute(string cmd_s)
        if(execvp(args[0], args) == -1)
        {
 		 perror("exec");
-		 invalid = false;
+		 valid = false;
 		 exit(1);
        }
     }
