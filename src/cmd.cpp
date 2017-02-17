@@ -45,7 +45,7 @@ bool Cmd::execute(string cmd_s)
       if(wait(0) == -1)
       {
 		perror("wait");
-		exit(1);
+		//exit(1);
 		return false;
       }
 	  
