@@ -35,8 +35,9 @@ bool Cmd::execute(string cmd_s)
     {
        if(execvp(args[0], args) == -1)
        {
-	 perror("exec");
-	 exit(1);
+		 perror("exec");
+		 exit(1);
+		 return false;
        }
     }
     else // parent process
