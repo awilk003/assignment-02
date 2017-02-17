@@ -10,7 +10,7 @@ Cmd::Cmd ()
 Cmd::Cmd(string input1)
 {
 	uCmd = input1;
-	cout << "uCmd: " << uCmd << endl;
+//	cout << "uCmd: " << uCmd << endl;
 }
 
 
