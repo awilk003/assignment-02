@@ -14,15 +14,9 @@ Cmd::Cmd(string input1)
 }
 
 
-/*bool Cmd::isValid()
-{
-	cout << "Ucd: " << uCmd << endl;
-	int i = system(uCmd.c_str());
-	return i == 0;
-}*/
 
-
-
+//where the magic happens
+//uses fork and exec to execute commands and returns bool values to indicate a valid/invalid command
 bool Cmd::execute(string cmd_s)
 {
   

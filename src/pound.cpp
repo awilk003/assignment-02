@@ -6,14 +6,12 @@ Pound::Pound(bool Left, Cmdline* Right)
 	Rchild = Right;
 }
 
+
+//no real need for this connector as it is taken care of in the parsing
+
 //bool Pound::execute(string cmd)
 //{
 	
 //}
-/*
-bool Pound::isValid()
-{
-	return false;
-}
-*/
+
 

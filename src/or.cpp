@@ -6,11 +6,13 @@ Or::Or(bool Left, Cmdline* Right)
 	Rchild = Right;	
 }
 
+//calls execute on Cmdline* Right and returns a bool value indicating whether the command was executed or not
 bool Or::execute(string cmd)
 {
 	if (!Lchild)
 	{
-		cout  << "HIT IF " << endl;
+		//debugging statement
+		//cout  << "HIT IF " << endl;
 		return Rchild->execute(cmd);
 	}
 	else
@@ -18,16 +20,4 @@ bool Or::execute(string cmd)
 		return false;
 	}
 }
-/*
-bool Or::isValid(bool valid)
-{
-	if (valid)
-	{
-		return false;
-	}
-	else
-	{
-	
-	}
-}
-*/
+

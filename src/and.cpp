@@ -6,6 +6,7 @@ And::And(bool Left, Cmdline* Right)
 	Rchild = Right;	
 }
 
+//calls execute on Cmdline* Right and returns a bool value indicating whether the command was executed or not
 bool And::execute(string cmd)
 {
 	if (Lchild)
@@ -18,9 +19,4 @@ bool And::execute(string cmd)
 	}
 
 }
-/*
-bool And::isValid()
-{
-//	return Rchild->isValid();
-}
-*/
+
