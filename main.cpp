@@ -10,6 +10,10 @@
 #include <cstring>
 #include <boost/tokenizer.hpp>
 #include <locale>
+#include <unistd.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <stdio.h>
 using namespace boost;
 
 
@@ -18,9 +22,13 @@ using namespace boost;
 
 int main()
 {
+char uname[100]; 
 string uInput = "";
+char* ulgn = getlogin();
+gethostname(uname, 100);
+puts(uname);
 cout << "Begginning Terminal" << endl;
-cout << "$ ";
+cout << ulgn << "@" << uname << "$ ";
 while (getline(cin, uInput))
 {
 	if (!uInput.empty())
@@ -144,7 +152,7 @@ while (getline(cin, uInput))
 	}
 	uInput.clear(); //CLEARED FOR NEXT USER INPUT
 	substr.clear();	//CLEARED FOR NEXT USER INPUT
-	cout << "$ "; 
+	cout << ulgn << "@" << uname << "$ "; 
 	}
 	
 }
