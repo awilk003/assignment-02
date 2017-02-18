@@ -20,40 +20,38 @@ Cmd::Cmd(string input1)
 bool Cmd::execute(string cmd_s)
 {
   
-  pid_t pid;
-  char* args[2];
-  args[0] = (char*)cmd_s.c_str();
-  args[1] = NULL;
-  pid = fork();
-  bool valid = false;
-  
-   if (pid == -1) 
-    {
-        perror("fork");
+    pid_t pid;
+    char* args[2];
+    args[0] = (char*)cmd_s.c_str();
+    args[1] = NULL;
+    pid = fork();
+    bool valid = false;
 
+	if (pid == -1)
+	{
+		perror("fork");
 		exit(1);
     }
     if (pid == 0) // child process
     {
-       if(execvp(args[0], args) == -1)
-       {
-		 perror("exec");
-
-		 exit(1);
+         if(execvp(args[0], args) == -1)
+         {
+		     perror("exec");
+		     exit(1);
        }
     }
     else // parent process
     {
-      if(wait(0) == -1)
-      {
-		perror("wait");
-
-		exit(1);
-      }
-	  
-    }
+		if (wait(0) == -1)
+		{
+			perror("wait");
+			exit(1);
+		}
+     }
 	valid = true;
-    return valid;
+	return valid;
+	  
 }
+
 
 
