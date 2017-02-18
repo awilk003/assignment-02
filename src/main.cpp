@@ -73,7 +73,7 @@ int main()
 		    }
 	//DEBUGGING TOOLS
 	/*	if (substr.size() != 1)
-		{
+		{ 
 			for (unsigned i = 0; i < substr.size(); i++)
 			{
 				if (substr.at(i) == substr.at(i+1))
