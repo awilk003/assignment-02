@@ -25,7 +25,7 @@ bool Cmd::execute(string cmd_s)
     args[0] = (char*)cmd_s.c_str();
     args[1] = NULL;
     pid = fork();
-    bool valid = true;
+    bool valid = false;
 
 	if (pid == -1)
 	{
@@ -41,7 +41,8 @@ bool Cmd::execute(string cmd_s)
 			 valid = false;
 		     exit(1);
 			 
-       }
+         }
+		 valid = true;
     }
     else // parent process
     {
@@ -51,6 +52,7 @@ bool Cmd::execute(string cmd_s)
 			valid = false;
 			exit(1);
 		}
+		valid = true;
      }
 
 	return valid;
