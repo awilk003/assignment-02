@@ -22,56 +22,55 @@ using namespace boost;
 
 int main()
 {
-char uname[100]; 
-string uInput = "";
-char* ulgn = getlogin();
-gethostname(uname, 100);
-puts(uname);
+    char uname[100]; 
+    string uInput = "";
+    char* ulgn = getlogin();
+    gethostname(uname, 100);
+    puts(uname);
 
-cout << "Begginning Terminal" << endl;
-cout << ulgn << "@" << uname << "$ ";
-while (getline(cin, uInput))
-{
+    cout << "Beginning Terminal" << endl;
+    cout << ulgn << "@" << uname << "$ ";
+    while (getline(cin, uInput))
+    {
+		if (!uInput.empty() && uInput.at(0) != '#')
+	    {
+		    vector<char> substr;			// USED TO HOLD PARSERS
+		    tokenizer<> tok(uInput);		// USED TO HOLD COMMANDS
+		    bool isValid = true;			// USED IN && AND || TO DETERMINE IF PREVIOUS COMMAND WAS VALID
 
-	if (!uInput.empty() && uInput.at(0) != '#')
-	{
-		vector<char> substr;			// USED TO HOLD PARSERS
-		tokenizer<> tok(uInput);		// USED TO HOLD COMMANDS
-		bool isValid = true;			// USED IN && AND || TO DETERMINE IF PREVIOUS COMMAND WAS VALID
+		    string otemp;				//TEMP STRING IN ORDER TO CORRECTLY ADDED THE "||" SYMBOL TO SUBSTR
+		    string atemp;				//TEMP STRING IN ORDER TO CORRECTLY ADDED THE "&&" SYMBOL TO SUBSTR
 
-		string otemp;				//TEMP STRING IN ORDER TO CORRECTLY ADDED THE "||" SYMBOL TO SUBSTR
-		string atemp;				//TEMP STRING IN ORDER TO CORRECTLY ADDED THE "&&" SYMBOL TO SUBSTR
-
-		for (string::iterator i = uInput.begin(); i != uInput.end(); i++) // ITERATES THROUGH USER INPUT IN ORDER TO FIND PARSERS
-		{
-			if ((*i) == ';')
-			{
-				substr.push_back((*i)); // IF SYMBOL == ';' ADDED TO SUBSTR
-			}
-			else if ((*i) == '|')
-			{
-				otemp.push_back('|'); // PUSH BACK THE CHAR '|' TO ATEMP
-				if (otemp == "||")
-				{
-					substr.push_back((*i)); //IF OTEMP = "||" THEN ADD A OR SYMBOL TO SUBSTR, USED TO MAKE SURE USER INPUT "||' AND NOT "|'
-					otemp.clear(); // CLEAR OTEMP FOR NEXT RUN
-				}
-			}
-			else if ((*i) == '&')
-			{
-				atemp.push_back('&'); // PUSH BACK THE CHAR '&' TO ATEMP
-				if (atemp == "&&")
-				{
-					substr.push_back((*i)); //IF OTEMP = "&" THEN ADD A OR SYMBOL TO SUBSTR, USED TO MAKE SURE USER INPUT "&&' AND NOT "&'
-					atemp.clear(); // CLEAR ATEMP FOR NEXT RUN
-				}
-			}
-			else if ((*i) == '#')
-			{	
-				substr.push_back((*i));
-				break; // STOPS PARSING ALL TOGETHER IF '#' IS DETECTED
-			}
-		}
+		    for (string::iterator i = uInput.begin(); i != uInput.end(); i++) // ITERATES THROUGH USER INPUT IN ORDER TO FIND PARSERS
+		    {
+			    if ((*i) == ';')
+			    {
+				    substr.push_back((*i)); // IF SYMBOL == ';' ADDED TO SUBSTR
+			    }
+			    else if ((*i) == '|')
+			    {
+				    otemp.push_back('|'); // PUSH BACK THE CHAR '|' TO ATEMP
+				    if (otemp == "||")
+				    {
+					    substr.push_back((*i)); //IF OTEMP = "||" THEN ADD A OR SYMBOL TO SUBSTR, USED TO MAKE SURE USER INPUT "||' AND NOT "|'
+					    otemp.clear(); // CLEAR OTEMP FOR NEXT RUN
+				    }
+			    }
+			    else if ((*i) == '&')
+			    {
+				    atemp.push_back('&'); // PUSH BACK THE CHAR '&' TO ATEMP
+				    if (atemp == "&&")
+				    {
+					    substr.push_back((*i)); //IF OTEMP = "&" THEN ADD A OR SYMBOL TO SUBSTR, USED TO MAKE SURE USER INPUT "&&' AND NOT "&'
+					    atemp.clear(); // CLEAR ATEMP FOR NEXT RUN
+				    }
+			    }
+			    else if ((*i) == '#')
+			    {	
+				    substr.push_back((*i));
+				    break; // STOPS PARSING ALL TOGETHER IF '#' IS DETECTED
+			    }
+		    }
 	//DEBUGGING TOOLS
 	/*	if (substr.size() != 1)
 		{
@@ -103,64 +102,63 @@ while (getline(cin, uInput))
 		}
 	*/	
 	// END DEBUGGING TOOLS
-		tokenizer<>::iterator i = tok.begin(); // STARTING TO PARSE COMMANDS
-		if ((*i) == "quit")
-		{
-			return 0; //IF FIRST COMMAND IS QUIT EXIT IMMEDIATLY
-		}	
-		Cmd* first = new Cmd((*i)); // BECAUSE FIRST COMMAND DOES NOT HAVE A PARSER IN FRONT OF IT WE HARDCODED IT
-		
-		isValid = first->execute((*i)); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
-		i++; // INCREMENTED TOKENIZER ITERATOR
+		    tokenizer<>::iterator i = tok.begin(); // STARTING TO PARSE COMMANDS
+		    if ((*i) == "quit")
+		    {
+			    return 0; //IF FIRST COMMAND IS QUIT EXIT IMMEDIATLY
+		    }	
+		    Cmd* first = new Cmd((*i)); // BECAUSE FIRST COMMAND DOES NOT HAVE A PARSER IN FRONT OF IT WE HARDCODED IT
+		    isValid = first->execute((*i)); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
+		    i++; // INCREMENTED TOKENIZER ITERATOR
 
-		if (i != tok.end()) // IF ONLY ONE COMMAND THEN WILL NOT RUN
-		{	
-			for (unsigned j = 0; j < substr.size(); j++)	//ITERATING THROUGH THE PARSER VECTOR
-			{
-				Cmd* uCmd = new Cmd((*i));		// CREATE NEW COMMANDS FOR EACH PARSER
-				switch(substr.at(j))			// CASE USED TO DETERMINE WHICH PARSER WAS PASSED IN BY USER
-				{
-					case ';':
-					{
+		    if (i != tok.end()) // IF ONLY ONE COMMAND THEN WILL NOT RUN
+		    {	
+			    for (unsigned j = 0; j < substr.size(); j++)	//ITERATING THROUGH THE PARSER VECTOR
+			    {
+				    Cmd* uCmd = new Cmd((*i));		// CREATE NEW COMMANDS FOR EACH PARSER
+				    switch(substr.at(j))			// CASE USED TO DETERMINE WHICH PARSER WAS PASSED IN BY USER
+				    {
+					    case ';':
+					    {
 		//				cout << "HIT CASE SEMICOLON" << endl;
-						Semicolon* sHolder = new Semicolon(isValid, uCmd);	// CREATE SEMICOLON OBJECT WHEN SEMICOLON IS DETECTED;
-						isValid = sHolder->execute((*i));			// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+						    Semicolon* sHolder = new Semicolon(isValid, uCmd);	// CREATE SEMICOLON OBJECT WHEN SEMICOLON IS DETECTED;
+						    isValid = sHolder->execute((*i));			// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
 					//	delete sHolder;	
-						break;
+						    break;
 					}
-					case '|':
-					{
-		//				cout << "HIT CASE OR" << endl;
-						Or* oHolder = new Or(isValid, uCmd); 	//CREATE OR OBJECT WHEN "|" SYMBOL IS DETECTED
-						isValid = oHolder->execute(*i);		//EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-						//delete oHolder;
-						break;
-					}
-					case '&':
-					{
-		//				cout << "HIT CASE AND" << endl;	
-						And* aHolder = new And(isValid, uCmd);	//CREATE AND OBJECT WHEN "&" SYMBOL IS DETECTED
-						isValid = aHolder->execute((*i));	// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-						//delete aHolder;
-						break;
-					}
-					default:
-					{
-						j = substr.size();	// IF HASH DETECTED BREAK OUT OF THE LOOP
-						break;		
-					}
-				}
-				i++;	//INCREMENT TOKENIZER CLASS TO NEXT COMMAND TO MATCH NEXT PARSER
-			}
-	}
-	uInput.clear(); //CLEARED FOR NEXT USER INPUT
-	substr.clear();	//CLEARED FOR NEXT USER INPUT
-	cout << ulgn << "@" << uname << "$ "; 
-	}
+					    case '|':
+					    {
+		//				    cout << "HIT CASE OR" << endl;
+						    Or* oHolder = new Or(isValid, uCmd); 	//CREATE OR OBJECT WHEN "|" SYMBOL IS DETECTED
+						    isValid = oHolder->execute(*i);		//EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+						    //delete oHolder;
+						    break;
+					    }
+					    case '&':
+					    {
+		//				    cout << "HIT CASE AND" << endl;	
+						    And* aHolder = new And(isValid, uCmd);	//CREATE AND OBJECT WHEN "&" SYMBOL IS DETECTED
+						    isValid = aHolder->execute((*i));	// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+						    //delete aHolder;
+						    break;
+					    }
+					    default:
+					    {
+						    j = substr.size();	// IF HASH DETECTED BREAK OUT OF THE LOOP
+						    break;		
+					    }
+				    }
+				    i++;	//INCREMENT TOKENIZER CLASS TO NEXT COMMAND TO MATCH NEXT PARSER
+			    }
+	        }
+	        uInput.clear(); //CLEARED FOR NEXT USER INPUT
+	        substr.clear();	//CLEARED FOR NEXT USER INPUT
+	        cout << ulgn << "@" << uname << "$ "; 
+	    }
 	
-}
+    }
 
-	return 0;
+	    return 0;
 }
 
 
