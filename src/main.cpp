@@ -28,7 +28,7 @@ int main()
     gethostname(uname, 100);
     puts(uname);
 
-    cout << "Beginning Terminal" << endl;
+    cout << "Beginning Terminal" << endl << "Enter 'quit' to exit the program" << endl;
     cout << ulgn << "@" << uname << "$ ";
     while (getline(cin, uInput))
     {
