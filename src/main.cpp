@@ -27,11 +27,13 @@ string uInput = "";
 char* ulgn = getlogin();
 gethostname(uname, 100);
 puts(uname);
+
 cout << "Begginning Terminal" << endl;
 cout << ulgn << "@" << uname << "$ ";
 while (getline(cin, uInput))
 {
-	if (!uInput.empty())
+
+	if (!uInput.empty() && uInput.at(0) != '#')
 	{
 		vector<char> substr;			// USED TO HOLD PARSERS
 		tokenizer<> tok(uInput);		// USED TO HOLD COMMANDS
@@ -39,7 +41,6 @@ while (getline(cin, uInput))
 
 		string otemp;				//TEMP STRING IN ORDER TO CORRECTLY ADDED THE "||" SYMBOL TO SUBSTR
 		string atemp;				//TEMP STRING IN ORDER TO CORRECTLY ADDED THE "&&" SYMBOL TO SUBSTR
-
 
 		for (string::iterator i = uInput.begin(); i != uInput.end(); i++) // ITERATES THROUGH USER INPUT IN ORDER TO FIND PARSERS
 		{
@@ -66,7 +67,8 @@ while (getline(cin, uInput))
 				}
 			}
 			else if ((*i) == '#')
-			{
+			{	
+				substr.push_back((*i));
 				break; // STOPS PARSING ALL TOGETHER IF '#' IS DETECTED
 			}
 		}
@@ -107,7 +109,8 @@ while (getline(cin, uInput))
 			return 0; //IF FIRST COMMAND IS QUIT EXIT IMMEDIATLY
 		}	
 		Cmd* first = new Cmd((*i)); // BECAUSE FIRST COMMAND DOES NOT HAVE A PARSER IN FRONT OF IT WE HARDCODED IT
-		isValid = first->execute((*i)); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND
+		
+		isValid = first->execute((*i)); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
 		i++; // INCREMENTED TOKENIZER ITERATOR
 
 		if (i != tok.end()) // IF ONLY ONE COMMAND THEN WILL NOT RUN
