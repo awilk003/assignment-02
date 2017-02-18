@@ -24,5 +24,3 @@ Rshell is a custom bash terminal.  It can output commands as if using the bash t
 
 *If the user creates a syntax error (ls &&& ps; vim somefile), the program will run until it reaches the syntax error (will run the command ls only)
 
-
-
