@@ -40,7 +40,6 @@ bool Cmd::execute(string cmd_s)
 		     exit(1);
 			 
          }
-		 valid = true;
     }
     else // parent process
     {
