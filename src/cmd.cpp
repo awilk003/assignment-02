@@ -25,11 +25,11 @@ bool Cmd::execute(string cmd_s)
     args[0] = (char*)cmd_s.c_str();
     args[1] = NULL;
     pid = fork();
+	int status;
 
 	if (pid == -1)
 	{
 		perror("fork");
-		valid = false;
 		exit(1);
     }
     if (pid == 0) // child process
@@ -37,7 +37,6 @@ bool Cmd::execute(string cmd_s)
          if(execvp(args[0], args) == -1)
          {
 		     perror("exec");
-			 valid = false;
 		     exit(1);
 			 
          }
@@ -48,7 +47,6 @@ bool Cmd::execute(string cmd_s)
 		if (wait(0) == -1)
 		{
 			perror("wait");
-			valid = false;
 			exit(1);
 		}
 		if (WEXITSTATUS(status) != 0)
