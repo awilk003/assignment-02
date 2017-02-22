@@ -25,7 +25,6 @@ bool Cmd::execute(string cmd_s)
     args[0] = (char*)cmd_s.c_str();
     args[1] = NULL;
     pid = fork();
-    bool valid = false;
 
 	if (pid == -1)
 	{
@@ -52,10 +51,13 @@ bool Cmd::execute(string cmd_s)
 			valid = false;
 			exit(1);
 		}
-		valid = true;
+		if (WEXITSTATUS(status) != 0)
+		{
+			return false;
+		}
      }
 
-	return valid;
+	return true;
 	  
 }
 
