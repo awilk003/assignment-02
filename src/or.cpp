@@ -17,7 +17,7 @@ bool Or::execute(string cmd)
 	}
 	else
 	{
-		return false;
+		return true;
 	}
-}
+} 
 
