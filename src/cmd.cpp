@@ -21,7 +21,7 @@ bool Cmd::execute(string cmd_s)
 {
   
     pid_t pid;
-	char* args[] = { (char*)cmd_s.c_str(), NULL };
+	char* args[] = {"ls", "-l", NULL };
     pid = fork();
 	int status;
 
@@ -51,10 +51,10 @@ bool Cmd::execute(string cmd_s)
 		}
 		if (WEXITSTATUS(status) != 0)
 		{
-			return true;
+			return false;
 		}
      }
-	return false;	  
+	return true;	  
 }
 
 
