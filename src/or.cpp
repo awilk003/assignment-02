@@ -12,11 +12,12 @@ bool Or::execute(string cmd)
 	if (!Lchild)
 	{
 		//debugging statement
-		//cout  << "HIT IF " << endl;
+		cout  << "HIT IF " << endl;
 		return Rchild->execute(cmd);
 	}
 	else
 	{
+		coutt << "HIT ELSE" << endl;
 		return true;
 	}
 } 
