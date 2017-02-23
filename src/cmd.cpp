@@ -29,16 +29,16 @@ bool Cmd::execute(string cmd_s)
 	if (pid == -1)
 	{
 		perror("fork");
-        valid = false;
-		exit(valid);
+		status = 1;
+		exit(1);
     }
     if (pid == 0) // child process
     {
          if(execvp(args[0], args) == -1)
          {
 		     perror("exec");
-             valid = false;
-		     exit(valid);
+			 status = 1;
+		     exit(1);
 			 
          }
     }
@@ -47,13 +47,12 @@ bool Cmd::execute(string cmd_s)
 		if (wait(0) == -1)
 		{
 			perror("wait");
-			valid = false;
-			exit(valid);
+			status = 1;
+			exit(1);
 		}
 		if (WEXITSTATUS(status) != 0)
 		{
 			cout << "CHILD FAIL" << endl;
-			valid = false;
 		}
 		cout << "CHILD SUCCESS" << endl;
      }
