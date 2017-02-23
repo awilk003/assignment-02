@@ -49,7 +49,7 @@ bool Cmd::execute(string cmd_s)
 			//return false;
 			exit(1);
 		}
-		if (WEXITSTATUS(status) != 0)
+		if (WEXITSTATUS(status) == 0)
 		{
 			return false;
 		}
