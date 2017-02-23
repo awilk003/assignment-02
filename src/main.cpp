@@ -151,6 +151,8 @@ int main()
 			
 			    for (unsigned j = 1; j < substr.size(); j += 2)	//ITERATING THROUGH THE PARSER VECTOR
 			    {
+					if (isValid) { cout << "TRUE" << endl;}
+					else {cout << "FALSE" << endl;}
 				    Cmd* uCmd = new Cmd(cmds.at(j+1));		// CREATE NEW COMMANDS FOR EACH PARSER
 				    if (cmds.at(j) == ";")
 				    {
