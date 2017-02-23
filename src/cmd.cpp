@@ -57,6 +57,7 @@ bool Cmd::execute(string cmd_s)
 		}
 		cout << "CHILD SUCCESS" << endl;
      }
+	cout << valid << endl;
 	return valid;	  
 }
 
