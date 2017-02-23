@@ -21,7 +21,7 @@ bool Cmd::execute(string cmd_s)
 {
   
     pid_t pid;
-	char* args[] = {"ls", "-l", NULL };
+	char* args[] = { (char*)cmd_s.c_str(), NULL };
     pid = fork();
 	int status;
 
