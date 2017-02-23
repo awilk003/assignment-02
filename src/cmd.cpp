@@ -23,7 +23,7 @@ bool Cmd::execute(string cmd_s)
     pid_t pid;
 	char* args[] = { (char*)cmd_s.c_str(), NULL };
     pid = fork();
-	int status;
+	int status = 0;
 
 	if (pid == -1)
 	{
