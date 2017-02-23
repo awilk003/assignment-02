@@ -53,6 +53,7 @@ bool Cmd::execute(string cmd_s)
 		if (WEXITSTATUS(status) != 0)
 		{
 			cout << "CHILD FAIL" << endl;
+			valid = false;
 		}
 		cout << "CHILD SUCCESS" << endl;
      }
