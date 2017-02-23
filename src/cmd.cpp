@@ -1,16 +1,34 @@
+Skip to content
+This repository
+Search
+Pull requests
+Issues
+Gist
+@awilk003
+Sign out
+Watch 1
+Star 0
+Fork 0 awilk003 / rshell
+Code  Issues 0  Pull requests 0  Projects 0  Wiki  Pulse  Graphs  Settings
+Tree : 912e95d22e Find file Copy pathrshell / src / cmd.cpp
+	912e95d  23 hours ago
+	@awilk003 awilk003 added WEXITSTATUS
+	1 contributor
+	RawBlameHistory
+	63 lines(49 sloc)  879 Bytes
 #include "cmd.hpp"
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
-Cmd::Cmd ()
+	Cmd::Cmd()
 {}
 
 Cmd::Cmd(string input1)
 {
 	uCmd = input1;
-//	cout << "uCmd: " << uCmd << endl;
+	//	cout << "uCmd: " << uCmd << endl;
 }
 
 
@@ -19,47 +37,42 @@ Cmd::Cmd(string input1)
 //uses fork and exec to execute commands and returns bool values to indicate a valid/invalid command
 bool Cmd::execute(string cmd_s)
 {
-  
-    pid_t pid;
-	char* args[] = { (char*)cmd_s.c_str(), NULL };
-    pid = fork();
-	int status = 0;
-	bool valid = true;
+
+	pid_t pid;
+	char* args[2];
+	args[0] = (char*)cmd_s.c_str();
+	args[1] = NULL;
+	pid = fork();
+	int status;
 
 	if (pid == -1)
 	{
 		perror("fork");
-		status = 1;
 		exit(1);
-    }
-    if (pid == 0) // child process
-    {
-         if(execvp(args[0], args) == -1)
-         {
-		     perror("exec");
-			 status = 1;
-		     exit(1);
-			 
-         }
-    }
-    else // parent process
-    {
+	}
+	if (pid == 0) // child process
+	{
+		if (execvp(args[0], args) == -1)
+		{
+			perror("exec");
+			exit(1);
+
+		}
+	}
+	else // parent process
+	{
 		if (wait(0) == -1)
 		{
 			perror("wait");
-			status = 1;
 			exit(1);
 		}
 		if (WEXITSTATUS(status) != 0)
 		{
-			cout << "CHILD FAIL" << endl;
-			valid = false;
+			return false;
 		}
-		cout << "CHILD SUCCESS" << endl;
-     }
-	cout << valid << endl;
-	return valid;	  
+	}
+
+	return true;
+
 }
-
-
 
