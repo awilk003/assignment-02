@@ -17,7 +17,7 @@ bool Or::execute(string cmd)
 	}
 	else
 	{
-		coutt << "HIT ELSE" << endl;
+		cout << "HIT ELSE" << endl;
 		return true;
 	}
 } 
