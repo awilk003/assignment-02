@@ -20,7 +20,7 @@ Cmd::Cmd(string input1)
 //uses fork and exec to execute commands and returns bool values to indicate a valid/invalid command
 bool Cmd::execute(string cmd_s)
 {
-
+	cout << (char*)cmd_s.c_str() << endl;
 	pid_t pid;
 	char* args[] = { (char*)cmd_s.c_str(), NULL };
 	pid = fork();
