@@ -42,7 +42,7 @@ bool Cmd::execute(string cmd_s)
 	}
 	else // parent process
 	{
-		if (waitpid(pid, &status, 0))
+		if (waitpid(pid, &status, 0) == -1)
 		{
 			perror("wait");
 			exit(1);
