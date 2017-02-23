@@ -106,6 +106,7 @@ int main()
 			}
 			Cmd* first = new Cmd((*i)); // BECAUSE FIRST COMMAND DOES NOT HAVE A PARSER IN FRONT OF IT WE HARDCODED IT
 			isValid = first->execute((*i)); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
+			cout << isValid << endl;
 			i++; // INCREMENTED TOKENIZER ITERATOR
 
 			if (i != tok.end()) // IF ONLY ONE COMMAND THEN WILL NOT RUN
