@@ -22,9 +22,7 @@ bool Cmd::execute(string cmd_s)
 {
 
 	pid_t pid;
-	char* args[2];
-	args[0] = (char*)cmd_s.c_str();
-	args[1] = NULL;
+	char* args[] = { (char*)cmd_s.c_str(), NULL }
 	pid = fork();
 	int status;
 
@@ -44,7 +42,7 @@ bool Cmd::execute(string cmd_s)
 	}
 	else // parent process
 	{
-		if (wait(0) == -1)
+		if (waitpid(-1, &status, 0)
 		{
 			perror("wait");
 			exit(1);
