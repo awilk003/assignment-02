@@ -30,7 +30,7 @@ bool Cmd::execute(string cmd_s)
 	{
 		perror("fork");
         valid = false;
-		exit(1);
+		exit(valid);
     }
     if (pid == 0) // child process
     {
@@ -38,7 +38,7 @@ bool Cmd::execute(string cmd_s)
          {
 		     perror("exec");
              valid = false;
-		     exit(1);
+		     exit(valid);
 			 
          }
     }
@@ -48,7 +48,7 @@ bool Cmd::execute(string cmd_s)
 		{
 			perror("wait");
 			valid = false;
-			exit(1);
+			exit(valid);
 		}
 		if (WEXITSTATUS(status) != 0)
 		{
