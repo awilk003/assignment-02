@@ -14,6 +14,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 using namespace boost;
 
 
@@ -89,11 +90,14 @@ int main()
 		
 		    for (unsigned i = 0; i < cmds.size(); i += 2)
 		    {
-			    cmds.at(i).erase(cmds.at(i).end()-1);
+			    if (cmds.at(i).at(cmds.at(i).size()-1) == ' ')
+			    {
+			    	cmds.at(i).erase(cmds.at(i).end()-1);
+			    }
 		    }
 		    for (unsigned i = 2; i < cmds.size(); i += 2)
-		    {
-		    	    cmds.at(i).erase(cmds.at(i).begin()); 
+		    { 
+		   	    cmds.at(i).erase(cmds.at(i).begin()); 
 		    }
 
 /*
@@ -151,6 +155,8 @@ int main()
 			
 			    for (unsigned j = 1; j < substr.size(); j += 2)	//ITERATING THROUGH THE PARSER VECTOR
 			    {
+				if (isValid) { cout << "TRUE" << endl;}
+				else {cout << "FALSE" << endl;}
 				    Cmd* uCmd = new Cmd(cmds.at(j+1));		// CREATE NEW COMMANDS FOR EACH PARSER
 				    if (cmds.at(j) == ";")
 				    {
