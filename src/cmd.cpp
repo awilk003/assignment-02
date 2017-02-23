@@ -1,21 +1,4 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Gist
-@awilk003
-Sign out
-Watch 1
-Star 0
-Fork 0 awilk003 / rshell
-Code  Issues 0  Pull requests 0  Projects 0  Wiki  Pulse  Graphs  Settings
-Tree : 912e95d22e Find file Copy pathrshell / src / cmd.cpp
-	912e95d  23 hours ago
-	@awilk003 awilk003 added WEXITSTATUS
-	1 contributor
-	RawBlameHistory
-	63 lines(49 sloc)  879 Bytes
+
 #include "cmd.hpp"
 #include <unistd.h>
 #include <stdio.h>
