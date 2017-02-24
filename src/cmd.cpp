@@ -4,8 +4,9 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <string>
 
-	Cmd::Cmd()
+Cmd::Cmd()
 {}
 
 Cmd::Cmd(string input1)
@@ -15,19 +16,29 @@ Cmd::Cmd(string input1)
 }
 
 
-
 //where the magic happens
 //uses fork and exec to execute commands and returns bool values to indicate a valid/invalid command
 bool Cmd::execute(string cmd_s)
 {
-	cout << (char*)cmd_s.c_str() << endl;
+	//cout << (char*)cmd_s.c_str() << endl;
+	int space = 0;
+	space = cmd_s.find(" ");
+	if (space > 0)
+	{
+		string cmdx = cmd_s.substr(0, space);
+		string cmdy = cmd_s.substr(space + 1);
+		char* args[] = { (char*)cmdx.c_str(), (char*)cmdx.c_str(), NULL };
+	}
+	else
+	{
+		char* args[] = { (char*)cmd_s.c_str(), NULL };
+	}
 	pid_t pid;
-	char* args[] = { (char*)cmd_s.c_str(), NULL };
 	pid = fork();
 	int status;
 
 	if (pid == -1)
-	{
+	{ 
 		perror("fork");
 		exit(1);
 	}
