@@ -28,11 +28,14 @@ bool Cmd::execute(string cmd_s)
 	{
 		string cmdx = cmd_s.substr(0, space);
 		string cmdy = cmd_s.substr(space + 1);
-		args = { (char*)cmdx.c_str(), (char*)cmdx.c_str(), NULL };
+		args[0] = (char*)cmdx.c_str();
+		args[1] = (char*)cmdx.c_str();
+		args[2] = NULL;
 	}
 	else
 	{
-		args = { (char*)cmd_s.c_str(), NULL };
+		args[0] = (char*)cmd_s.c_str();
+		args[1] = NULL;
 	}
 	pid_t pid;
 	pid = fork();
