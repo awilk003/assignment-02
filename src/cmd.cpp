@@ -23,15 +23,16 @@ bool Cmd::execute(string cmd_s)
 	//cout << (char*)cmd_s.c_str() << endl;
 	int space = 0;
 	space = cmd_s.find(" ");
+	char* args[256];
 	if (space > 0)
 	{
 		string cmdx = cmd_s.substr(0, space);
 		string cmdy = cmd_s.substr(space + 1);
-		char* args[] = { (char*)cmdx.c_str(), (char*)cmdx.c_str(), NULL };
+		args = { (char*)cmdx.c_str(), (char*)cmdx.c_str(), NULL };
 	}
 	else
 	{
-		char* args[] = { (char*)cmd_s.c_str(), NULL };
+		args = { (char*)cmd_s.c_str(), NULL };
 	}
 	pid_t pid;
 	pid = fork();
