@@ -23,7 +23,7 @@ bool Cmd::execute(string cmd_s)
 	//cout << (char*)cmd_s.c_str() << endl;
 	int space = 0;
 	space = cmd_s.find(" ");
-	char* args[256];
+	char* args[512];
 	if (space > 0)
 	{
 		string cmdx = cmd_s.substr(0, space);
