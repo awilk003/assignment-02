@@ -1,5 +1,5 @@
-#ifndef CMDLINE_H
-#define CMDLINE_H
+#ifndef _CMDLINE_H_
+#define _CMDLINE_H_
 
 #include <iostream>
 #include <string>
