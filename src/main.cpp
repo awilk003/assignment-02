@@ -45,9 +45,9 @@ bool run(bool isValid, vector<string> cmds )
 		}
 		else
 		{
-//			Test* tHolder = new Test();
-//			tHolder->execute(cmds.at(1));
-			cout << "PATHHOLDER" << cmds.at(1) << endl;		
+			Test* tHolder = new Test();
+			tHolder->execute(cmds.at(1));
+			cout << "PATHHOLDER " << cmds.at(1) << endl;		
 		}
 
 	}
