@@ -25,7 +25,7 @@ bool Test::execute(string path)
 	{
 		cout << "HIT IF" << endl;
 		flag = path.substr(0, 2);
-		newPath = path.substr(2);
+		newPath = path.substr(3);
 	}
 	else
 	{
