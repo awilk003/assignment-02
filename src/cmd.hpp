@@ -1,12 +1,12 @@
-#ifndef CMD_H
-#define CMD_H
+#ifndef _CMD_H_
+#define _CMD_H_
 
 #include "cmdline.hpp"
 
 class Cmd : public Cmdline
 {
 	public:
-		Cmd() ;
+		Cmd();
 		Cmd(string input1);
 		//bool isValid();
 		bool execute(string cmd_s);	
