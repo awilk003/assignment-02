@@ -6,8 +6,10 @@
 class Test : public Cmdline
 {
 public:
-	Test();
+	Test(string k);
 	bool execute(string path);
+
+	
 };
 
 #endif

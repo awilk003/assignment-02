@@ -5,6 +5,7 @@
 #include "pound.hpp"
 #include "or.hpp"
 #include "and.hpp"
+#include "test.hpp"
 #include <vector>
 #include <string>
 #include <cstring>
@@ -29,13 +30,37 @@ bool run(bool isValid, vector<string> cmds )
 	//cout << "MADE IT TO FIRST CMD" << endl << cmds.at(0) << "TEST" <<  endl;	
 	//cout << "CMD: " << cmds.at(0) << endl;
 	cout << "CMD: " << cmds.at(0) << endl;
-	Cmd* first = new Cmd(cmds.at(0)); // BECAUSE FIRST COMMAND DOES NOT HAVE A PARSER IN FRONT OF IT WE HARDCODED IT
-	isValid = first->execute(cmds.at(0)); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
+	if (cmds.at(0) == "[" || cmds.at(0) == "test")
+	{
+		if (cmds.at(0) == "[")
+		{
+			string pathHolder;
+			unsigned counter = 1;
+			while (cmds.at(0+counter) != "]")
+			{
+				pathHolder += cmds.at(0+counter);
+				counter++;
+			}
+			cout << "PATHHOLDER" << pathHolder << endl;
+		}
+		else
+		{
+//			Test* tHolder = new Test();
+//			tHolder->execute(cmds.at(1));
+			cout << "PATHHOLDER" << cmds.at(1) << endl;		
+		}
+
+	}
+	else	
+	{
+		Cmd* first = new Cmd(cmds.at(0)); // BECAUSE FIRST COMMAND DOES NOT HAVE A PARSER IN FRONT OF IT WE HARDCODED IT
+		isValid = first->execute(cmds.at(0)); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
+	}
 	if (cmds.size() % 2 == 1 && cmds.size() != 1) // IF ONLY ONE COMMAND THEN WILL NOT RUN
 	{
 		for (unsigned j = 1; j < cmds.size(); j++)	//ITERATING THROUGH THE PARSER VECTOR
 		{
-		     if (cmds.at(j) == ";" || cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == "#")
+		     if (cmds.at(j) == ";" || cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == "#" || cmds.at(j) == "[" || cmds.at(j) == "test")
 		     {	
 				Cmd* uCmd = new Cmd(cmds.at(j));		// CREATE NEW COMMANDS FOR EACH PARSER
 				if (cmds.at(j) == ";")
@@ -59,6 +84,19 @@ bool run(bool isValid, vector<string> cmds )
 					isValid = aHolder->execute(cmds.at(j + 1));	// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
 											//delete aHolder;
 				}
+				else if (cmds.at(j) == "[" || cmds.at(j) == "test")
+				{
+					string pathHolder;
+					unsigned counter = 0;
+					while (cmds.at(j+counter) != "]")
+					{
+						pathHolder += cmds.at(j+counter);
+						counter++;
+					}
+					cout << "PATHHOLDER" << pathHolder << endl;
+				//	Test* tHolder = new Test("A");
+				//	isValid = tHolder->execute(pathHolder);
+				}
 				else if (cmds.at(j) == "#")
 				{
 					break;
@@ -77,7 +115,7 @@ vector<string> parse (string uInput)
 {
 	vector<string> substr;			// USED TO HOLD PARSERS
 	typedef tokenizer<char_separator<char> > Tok;		// USED TO HOLD COMMANDS
-	char_separator<char> sep("", ";(&&)(||)", keep_empty_tokens);
+	char_separator<char> sep("", ";(&&)(||)[]", keep_empty_tokens);
 	Tok tok(uInput, sep);
 	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)
 	{
@@ -115,9 +153,23 @@ vector<string> parse (string uInput)
 		substr.at(last-1) = substr.at(last-1) + substr.at(last);	
 		substr.erase(substr.begin() + last);
 	}
-	for (unsigned i = 0; i < substr.size(); i++)
+
+
+
+/*	for (unsigned i = 0; i < substr.size(); i++)
 	{
 		cout << "SUBSTR" << substr.at(i) << endl;
+	}
+*/
+
+	for (unsigned i = 0; i < substr.size(); i++)	
+	{
+		size_t found = substr.at(i).find("test");	
+		if (found != string::npos)
+		{
+			substr.push_back(substr.at(i).substr(4, substr.at(i).length()));
+			substr.at(i) = "test";
+		}
 	}
 	for (unsigned i = 0; i < substr.size(); i++)
 	{	

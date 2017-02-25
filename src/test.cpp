@@ -2,8 +2,10 @@
 #include <sys/stat.h>
 #include <string>
 
-Test::Test()
-{}
+Test::Test(string k)
+{
+	
+}
 
 bool Test::execute(string path)
 {
