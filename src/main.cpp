@@ -56,28 +56,29 @@ bool run(bool isValid, vector<string> cmds )
 		Cmd* first = new Cmd(cmds.at(0)); // BECAUSE FIRST COMMAND DOES NOT HAVE A PARSER IN FRONT OF IT WE HARDCODED IT
 		isValid = first->execute(cmds.at(0)); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
 	}
-	if (cmds.size() % 2 == 1 && cmds.size() != 1) // IF ONLY ONE COMMAND THEN WILL NOT RUN
+	if (cmds.size() != 1) // IF ONLY ONE COMMAND THEN WILL NOT RUN
 	{
 		for (unsigned j = 1; j < cmds.size(); j++)	//ITERATING THROUGH THE PARSER VECTOR
 		{
-		     if (cmds.at(j) == ";" || cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == "#" || cmds.at(j) == "[" || cmds.at(j) == "test")
-		     {	
+		     if ((cmds.at(j) == ";" || cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == "#" || cmds.at(j) == "[" || cmds.at(j) == "test"))
+		     {
+//cout << "CMDSATJ" << cmds.at(j) << endl;	
 				Cmd* uCmd = new Cmd(cmds.at(j));		// CREATE NEW COMMANDS FOR EACH PARSER
-				if (cmds.at(j) == ";")
+				if (cmds.at(j) == ";" && (j+1) != cmds.size())
 				{
 				//				cout << "HIT CASE SEMICOLON" << endl;
 					Semicolon* sHolder = new Semicolon(isValid, uCmd);	// CREATE SEMICOLON OBJECT WHEN SEMICOLON IS DETECTED;
 					isValid = sHolder->execute(cmds.at(j + 1));			// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
 												//	delete sHolder;	
 				}
-				else if (cmds.at(j) == "||")
+				else if (cmds.at(j) == "||" && (j+1) != cmds.size())
 				{
 				//				    cout << "HIT CASE OR" << endl;
 					Or* oHolder = new Or(isValid, uCmd); 	//CREATE OR OBJECT WHEN "|" SYMBOL IS DETECTED
 					isValid = oHolder->execute(cmds.at(j + 1));		//EXECUTES COMMAND AND CHECKS/SETS VALIDITY
 												//delete oHolder;
 				}
-				else if (cmds.at(j) == "&&")
+				else if (cmds.at(j) == "&&" && (j+1) != cmds.size())
 				{
 				//				    cout << "HIT CASE AND" << endl;	
 					And* aHolder = new And(isValid, uCmd);	//CREATE AND OBJECT WHEN "&" SYMBOL IS DETECTED
@@ -86,14 +87,22 @@ bool run(bool isValid, vector<string> cmds )
 				}
 				else if (cmds.at(j) == "[" || cmds.at(j) == "test")
 				{
-					string pathHolder;
-					unsigned counter = 0;
-					while (cmds.at(j+counter) != "]")
+//cout << "HIT TEST" << endl;
+					if (cmds.at(j) == "[")	
 					{
-						pathHolder += cmds.at(j+counter);
-						counter++;
+						string pathHolder;
+						unsigned counter = 1;
+						while (cmds.at(j+counter) != "]")
+						{
+							pathHolder += cmds.at(j+counter);
+							counter++;
+						}
+						cout << "PATHHOLDER" << pathHolder << endl;
 					}
-					cout << "PATHHOLDER" << pathHolder << endl;
+					else
+					{
+						cout << "PATHHOLDER" << cmds.at(j+1) << endl;		
+					}
 				//	Test* tHolder = new Test("A");
 				//	isValid = tHolder->execute(pathHolder);
 				}
@@ -161,6 +170,19 @@ vector<string> parse (string uInput)
 		cout << "SUBSTR" << substr.at(i) << endl;
 	}
 */
+
+
+	for (unsigned i = 0; i < substr.size(); i++)
+	{	
+		if (isspace( substr.at(i).at(substr.at(i).length()-1) ) != 0) {substr.at(i).erase(substr.at(i).end() - 1);}
+	}
+
+	for (unsigned i = 0; i < substr.size(); i++ )
+	{
+		if (isspace(substr.at(i).at(0)) != 0) {substr.at(i).erase(substr.at(i).begin());}
+	}
+
+
 
 	for (unsigned i = 0; i < substr.size(); i++)	
 	{
