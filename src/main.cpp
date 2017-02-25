@@ -20,11 +20,11 @@ using namespace boost;
 //ALL COMMENTED CODE WAS USED FOR DEBUGGING PURPOSES, WITH THE EXCEPTION OF THE CODE OUTSIDE IF MAIN, WHICH IS SCRAPPED PREVIOUS ATTEMPTS.
 
 
-bool run(bool isValid, vector<string> cmds)
+bool run(bool isValid, vector<string> cmds )
 {
 	if (cmds.at(0) == "quit")
 	{
-		return true; //IF FIRST COMMAND IS QUIT EXIT IMMEDIATLY
+		exit(1); //IF FIRST COMMAND IS QUIT EXIT IMMEDIATLY
 	}
 	//cout << "MADE IT TO FIRST CMD" << endl << cmds.at(0) << "TEST" <<  endl;	
 	//cout << "CMD: " << cmds.at(0) << endl;
@@ -77,76 +77,93 @@ vector<string> parse (string uInput)
 {
 	vector<string> substr;			// USED TO HOLD PARSERS
 	typedef tokenizer<char_separator<char> > Tok;		// USED TO HOLD COMMANDS
-	char_separator<char> sep(" ", " ");
+	char_separator<char> sep("", ";(&&)(||)", keep_empty_tokens);
 	Tok tok(uInput, sep);
 	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)
 	{
-		substr.push_back((*i));
-		//				    substr.push_back(" ");
+		if ((*i) != "")
+		{
+			substr.push_back((*i));
+		}
+	//				    substr.push_back(" ");
 	}
-	string icmd;
-	vector<string> cmds;
+	for (unsigned i = 0; i < substr.size()-1; i++)
+	{
+		if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) == substr.at(i+1))
+		{
+			substr.at(i) = substr.at(i) + substr.at(i+1);
+			substr.erase(substr.begin() + (i+1));
+		}
+		else if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) != substr.at(i+1))
+		{
+			if (i == 0)
+			{
+				substr.at(i) = substr.at(i) + substr.at(i+1);
+				substr.erase(substr.begin() + (i+1));
+			}
+			else	
+			{
+				substr.at(i) = substr.at(i-1) + substr.at(i) + substr.at(i+1);
+				substr.erase(substr.begin() + (i-1));
+				substr.erase(substr.begin() + (i+1));
+			}
+		}
+	}
+	int last = substr.size()-1;
+	if (substr.at(last) == "&" || substr.at(last) == "|")
+	{
+		substr.at(last-1) = substr.at(last-1) + substr.at(last);	
+		substr.erase(substr.begin() + last);
+	}
 	for (unsigned i = 0; i < substr.size(); i++)
 	{
-		icmd.append(substr.at(i));
-		if (icmd.substr(icmd.length() - 1) == ";")
-		{ 
-			cmds.push_back(icmd.substr(0, icmd.length() - 1));
-			cmds.push_back(";");
-			icmd.clear();
-		}
-		else if (icmd.at(0) == ';')
-		{
-			cmds.push_back(";");
-			cmds.push_back(icmd.substr(1, icmd.length()));
-			icmd.clear();
-		}
-		else if (icmd.substr(icmd.length() - 1) == "|")
-		{
-			if (icmd.at(icmd.size() - 2) == '|')
-			{
-				cmds.push_back(icmd.substr(0, icmd.length() - 2));
-				cmds.push_back("||");
-				icmd.clear();
-			}
-		}
-		else if (icmd.substr(icmd.length() - 1) == "&")
-		{
-			if (icmd.at(icmd.size() - 2) == '&')
-			{
-				cmds.push_back(icmd.substr(0, icmd.length() - 2));
-				cmds.push_back("&&");
-				icmd.clear();
-			}
-		}
-		else if (icmd.substr(icmd.length() - 1) == "#")
-		{
-			cmds.push_back("#");
-			break;
-		}
-		icmd.append(" ");
+		cout << "SUBSTR" << substr.at(i) << endl;
 	}
-	if (icmd != " ") {cmds.push_back(icmd);}
-
-	for (unsigned i = 0; i < cmds.size(); i++)
+	for (unsigned i = 0; i < substr.size(); i++)
 	{	
-		if (isspace( cmds.at(i).at(cmds.at(i).length()-1) ) != 0) {cmds.at(i).erase(cmds.at(i).end() - 1);}
+		if (isspace( substr.at(i).at(substr.at(i).length()-1) ) != 0) {substr.at(i).erase(substr.at(i).end() - 1);}
 	}
 
-	for (unsigned i = 0; i < cmds.size(); i++ )
+	for (unsigned i = 0; i < substr.size(); i++ )
 	{
-		if (isspace(cmds.at(i).at(0)) != 0) {cmds.at(i).erase(cmds.at(i).begin());}
+		if (isspace(substr.at(i).at(0)) != 0) {substr.at(i).erase(substr.at(i).begin());}
 	}
 
 
 	cout << "TESTING CMDS:" << endl;		
-	for (unsigned i = 0; i < cmds.size(); i++)
+	for (unsigned i = 0; i < substr.size(); i++)
 	{
-		cout << cmds.at(i) << endl;
+		cout << substr.at(i) << endl;
 	}
-	return cmds;
+	return substr;
+
 }
 
+
+vector<string> pParse (string uInput)
+{
+	vector<string> substr;			// USED TO HOLD PARSERS
+	typedef tokenizer<char_separator<char> > Tok;		// USED TO HOLD COMMANDS
+	char_separator<char> sep("", "()", keep_empty_tokens);
+	Tok tok(uInput, sep);
+	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)
+	{
+		if ((*i) != "")
+		{
+			cout << "TOK" << (*i) << endl;
+			substr.push_back(*i);
+		}
+		
+	}
+	cout << "TESTING SUBSTR" << endl;
+	for (unsigned j = 0; j < substr.size(); j++)
+	{
+		cout << substr.at(j) << endl;
+	}
+	cout << "END SUBSTR" << endl;
+	return substr;
+
+}
 
 
 int main()
@@ -164,9 +181,21 @@ int main()
 	{
 		if (!uInput.empty() && uInput.at(0) != '#')
 		{
+//			vector< vector <string> > CMD;
+			/*
+			vector<string> test = pParse(uInput);
+			for (unsigned i = 0; i < test.size(); i++)
+			{
+				if (i ==  )
+				{
+						
+				}
+			}	*/		
 			vector<string> temp = parse(uInput);
-			cout << "RUNNING CMDS" << endl;
-			isValid = run(isValid, temp);
+			bool holder = run(isValid, temp);
+			if (holder) {}
+			//cout << "RUNNING CMDS" << endl;
+			//isValid = run(isValid, temp);
 		}
 		cout << ulgn << "@" << uname << "$ ";
 	}
@@ -346,4 +375,49 @@ break;
 i++;	//INCREMENT TOKENIZER CLASS TO NEXT COMMAND TO MATCH NEXT PARSER
 }
 
+	string icmd;
+	vector<string> cmds;
+	for (unsigned i = 0; i < substr.size(); i++)
+	{
+		icmd.append(substr.at(i));
+		if (icmd.substr(icmd.length() - 1) == ";")
+		{ 
+			cmds.push_back(icmd.substr(0, icmd.length() - 1));
+			cmds.push_back(";");
+			icmd.clear();
+		}
+		else if (icmd.at(0) == ';')
+		{
+			cmds.push_back(";");
+			cmds.push_back(icmd.substr(1, icmd.length()));
+			icmd.clear();
+		}
+		else if (icmd.substr(icmd.length() - 1) == "|")
+		{
+			if (icmd.at(icmd.size() - 2) == '|')
+			{
+				cmds.push_back(icmd.substr(0, icmd.length() - 2));
+				cmds.push_back("||");
+				icmd.clear();
+			}
+		}
+		else if (icmd.substr(icmd.length() - 1) == "&")
+		{
+			if (icmd.at(icmd.size() - 2) == '&')
+			{
+				cmds.push_back(icmd.substr(0, icmd.length() - 2));
+				cmds.push_back("&&");
+				icmd.clear();
+			}
+		}
+		else if (icmd.substr(icmd.length() - 1) == "#")
+		{
+			cmds.push_back("#");
+			break;
+		}
+		icmd.append(" ");
+	}
+	if (icmd != " ") {cmds.push_back(icmd);}
 */
+
+
