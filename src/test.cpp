@@ -23,6 +23,7 @@ bool Test::execute(string path)
 
 	if (path.at(0) == '-')
 	{
+		cout << "HIT IF" << endl;
 		flag = path.substr(0, 2);
 		newPath = path.substr(2);
 	}
