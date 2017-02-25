@@ -63,11 +63,14 @@ bool run(bool isValid, vector<string> cmds )
 	j++;
 	if (cmds.size() != 1) // IF ONLY ONE COMMAND THEN WILL NOT RUN
 	{
+//cout << "HIT IF" << endl;
 		for (; j < cmds.size(); j++)	//ITERATING THROUGH THE PARSER VECTOR
 		{
+//cout << "HIT FOR" << endl;
+cout << "LCMDS:" << cmds.at(j) << endl;
 		     if ((cmds.at(j) == ";" || cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == "#" || cmds.at(j) == "[" || cmds.at(j) == "test"))
 		     {
-//cout << "CMDSATJ" << cmds.at(j) << endl;	
+cout << "CMDSATJ" << cmds.at(j) << endl;	
 				Cmd* uCmd = new Cmd(cmds.at(j));		// CREATE NEW COMMANDS FOR EACH PARSER
 				if (cmds.at(j) == ";" && (j+1) != cmds.size())
 				{
@@ -86,13 +89,14 @@ bool run(bool isValid, vector<string> cmds )
 				else if (cmds.at(j) == "&&" && (j+1) != cmds.size())
 				{
 				//				    cout << "HIT CASE AND" << endl;	
+				cout << cmds.at(j+1) << endl;				    
 					And* aHolder = new And(isValid, uCmd);	//CREATE AND OBJECT WHEN "&" SYMBOL IS DETECTED
 					isValid = aHolder->execute(cmds.at(j + 1));	// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
 											//delete aHolder;
 				}
 				else if (cmds.at(j) == "[" || cmds.at(j) == "test")
 				{
-//cout << "HIT TEST" << endl;
+cout << "HIT TEST" << endl;
 					if (cmds.at(j) == "[")	
 					{
 						string pathHolder;
@@ -101,8 +105,8 @@ bool run(bool isValid, vector<string> cmds )
 						{
 							pathHolder += cmds.at(j+counter);
 							counter++;
-					
 						}
+
 						cout << "PATHHOLDER" << pathHolder << endl;
 					}
 					else
