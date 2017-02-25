@@ -134,6 +134,19 @@ vector<string> parse (string uInput)
 		}
 	//				    substr.push_back(" ");
 	}
+
+
+
+/*	for (unsigned i = 0; i < substr.size(); i++)	
+	{
+		size_t found = substr.at(i).find("test");	
+		if (found != string::npos)
+		{
+			substr.push_back(substr.at(i).substr(4, substr.at(i).length()));
+			substr.at(i) = "test";
+		}
+	}
+*/	
 	for (unsigned i = 0; i < substr.size()-1; i++)
 	{
 		if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) == substr.at(i+1))
@@ -182,17 +195,17 @@ vector<string> parse (string uInput)
 		if (isspace(substr.at(i).at(0)) != 0) {substr.at(i).erase(substr.at(i).begin());}
 	}
 
-
-
 	for (unsigned i = 0; i < substr.size(); i++)	
 	{
-		size_t found = substr.at(i).find("test");	
+		size_t found = substr.at(i).find("test");			
 		if (found != string::npos)
 		{
-			substr.push_back(substr.at(i).substr(4, substr.at(i).length()));
+			substr.insert(substr.begin() + (i+1), substr.at(i).substr(4, substr.at(i).length()));
 			substr.at(i) = "test";
 		}
 	}
+	
+
 	for (unsigned i = 0; i < substr.size(); i++)
 	{	
 		if (isspace( substr.at(i).at(substr.at(i).length()-1) ) != 0) {substr.at(i).erase(substr.at(i).end() - 1);}
