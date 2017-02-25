@@ -45,12 +45,17 @@ bool run(bool isValid, vector<string> cmds )
 				j += 2;
 			}
 			cout << "PATHHOLDER" << pathHolder << endl;
+			Test* tHolder = new Test("A");
+			tHolder->execute(pathHolder);
+
 		}
 		else
 		{
 //			Test* tHolder = new Test();
 //			tHolder->execute(cmds.at(1));
 			cout << "PATHHOLDER" << cmds.at(j+1) << endl;		
+			Test* tHolder = new Test("A");
+			tHolder->execute(cmds.at(1));
 			j++;
 		}
 
@@ -67,10 +72,10 @@ bool run(bool isValid, vector<string> cmds )
 		for (; j < cmds.size(); j++)	//ITERATING THROUGH THE PARSER VECTOR
 		{
 //cout << "HIT FOR" << endl;
-cout << "LCMDS:" << cmds.at(j) << endl;
+//cout << "LCMDS:" << cmds.at(j) << endl;
 		     if ((cmds.at(j) == ";" || cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == "#" || cmds.at(j) == "[" || cmds.at(j) == "test"))
 		     {
-cout << "CMDSATJ" << cmds.at(j) << endl;	
+//cout << "CMDSATJ" << cmds.at(j) << endl;	
 				Cmd* uCmd = new Cmd(cmds.at(j));		// CREATE NEW COMMANDS FOR EACH PARSER
 				if (cmds.at(j) == ";" && (j+1) != cmds.size())
 				{
@@ -96,7 +101,7 @@ cout << "CMDSATJ" << cmds.at(j) << endl;
 				}
 				else if (cmds.at(j) == "[" || cmds.at(j) == "test")
 				{
-cout << "HIT TEST" << endl;
+//cout << "HIT TEST" << endl;
 					if (cmds.at(j) == "[")	
 					{
 						string pathHolder;
@@ -108,14 +113,18 @@ cout << "HIT TEST" << endl;
 						}
 
 						cout << "PATHHOLDER" << pathHolder << endl;
-					}
+						Test* tHolder = new Test("A");
+						isValid = tHolder->execute(pathHolder);
+	
+						}
 					else
 					{
 						cout << "PATHHOLDER" << cmds.at(j+1) << endl;		
+						Test* tHolder = new Test("A");
+						isValid = tHolder->execute(cmds.at(j+1));
+
 					}
-				//	Test* tHolder = new Test("A");
-				//	isValid = tHolder->execute(pathHolder);
-				}
+								}
 				else if (cmds.at(j) == "#")
 				{
 					break;

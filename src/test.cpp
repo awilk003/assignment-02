@@ -1,7 +1,7 @@
 #include "test.hpp"
 #include <sys/stat.h>
 #include <string>
-
+#include <stdio.h>
 Test::Test(string k)
 {
 	
@@ -15,10 +15,10 @@ bool Test::execute(string path)
 	int validPath;
 	bool valid = false;
 
-	if (path.at(0) == "-")
+	if (path.at(0) == '-')
 	{
 		flag = path.substr(0, 2);
-		newPath = path.substr(2);
+		newPath = path.substr(3);
 	}
 	else
 	{
