@@ -23,16 +23,18 @@ using namespace boost;
 
 bool run(bool isValid, vector<string> cmds )
 {
+//cout << "HIT RUN" << endl;
 	if (cmds.at(0) == "quit")
 	{
 		exit(1); //IF FIRST COMMAND IS QUIT EXIT IMMEDIATLY
 	}
 	//cout << "MADE IT TO FIRST CMD" << endl << cmds.at(0) << "TEST" <<  endl;	
 	//cout << "CMD: " << cmds.at(0) << endl;
+	unsigned j = 0;
 	cout << "CMD: " << cmds.at(0) << endl;
-	if (cmds.at(0) == "[" || cmds.at(0) == "test")
+	if (cmds.at(j) == "[" || cmds.at(j) == "test")
 	{
-		if (cmds.at(0) == "[")
+		if (cmds.at(j) == "[")
 		{
 			string pathHolder;
 			unsigned counter = 1;
@@ -40,6 +42,7 @@ bool run(bool isValid, vector<string> cmds )
 			{
 				pathHolder += cmds.at(0+counter);
 				counter++;
+				j += 2;
 			}
 			cout << "PATHHOLDER" << pathHolder << endl;
 		}
@@ -47,18 +50,20 @@ bool run(bool isValid, vector<string> cmds )
 		{
 //			Test* tHolder = new Test();
 //			tHolder->execute(cmds.at(1));
-			cout << "PATHHOLDER" << cmds.at(1) << endl;		
+			cout << "PATHHOLDER" << cmds.at(j+1) << endl;		
+			j++;
 		}
 
 	}
 	else	
 	{
-		Cmd* first = new Cmd(cmds.at(0)); // BECAUSE FIRST COMMAND DOES NOT HAVE A PARSER IN FRONT OF IT WE HARDCODED IT
-		isValid = first->execute(cmds.at(0)); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
+		Cmd* first = new Cmd(cmds.at(j)); // BECAUSE FIRST COMMAND DOES NOT HAVE A PARSER IN FRONT OF IT WE HARDCODED IT
+		isValid = first->execute(cmds.at(j)); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
 	}
+	j++;
 	if (cmds.size() != 1) // IF ONLY ONE COMMAND THEN WILL NOT RUN
 	{
-		for (unsigned j = 1; j < cmds.size(); j++)	//ITERATING THROUGH THE PARSER VECTOR
+		for (; j < cmds.size(); j++)	//ITERATING THROUGH THE PARSER VECTOR
 		{
 		     if ((cmds.at(j) == ";" || cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == "#" || cmds.at(j) == "[" || cmds.at(j) == "test"))
 		     {
@@ -96,6 +101,7 @@ bool run(bool isValid, vector<string> cmds )
 						{
 							pathHolder += cmds.at(j+counter);
 							counter++;
+					
 						}
 						cout << "PATHHOLDER" << pathHolder << endl;
 					}
@@ -124,7 +130,7 @@ vector<string> parse (string uInput)
 {
 	vector<string> substr;			// USED TO HOLD PARSERS
 	typedef tokenizer<char_separator<char> > Tok;		// USED TO HOLD COMMANDS
-	char_separator<char> sep("", ";(&&)(||)[]", keep_empty_tokens);
+	char_separator<char> sep(" ", ";&|[]", keep_empty_tokens);
 	Tok tok(uInput, sep);
 	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)
 	{
@@ -136,8 +142,8 @@ vector<string> parse (string uInput)
 	}
 
 
-
-/*	for (unsigned i = 0; i < substr.size(); i++)	
+/*
+	for (unsigned i = 0; i < substr.size(); i++)	
 	{
 		size_t found = substr.at(i).find("test");	
 		if (found != string::npos)
@@ -146,7 +152,7 @@ vector<string> parse (string uInput)
 			substr.at(i) = "test";
 		}
 	}
-*/	
+*/		
 	for (unsigned i = 0; i < substr.size()-1; i++)
 	{
 		if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) == substr.at(i+1))
@@ -169,6 +175,9 @@ vector<string> parse (string uInput)
 			}
 		}
 	}
+
+//	cout << "PAST && AND ||" << endl;
+	
 	int last = substr.size()-1;
 	if (substr.at(last) == "&" || substr.at(last) == "|")
 	{
@@ -176,25 +185,37 @@ vector<string> parse (string uInput)
 		substr.erase(substr.begin() + last);
 	}
 
-
-
 /*	for (unsigned i = 0; i < substr.size(); i++)
 	{
 		cout << "SUBSTR" << substr.at(i) << endl;
 	}
 */
 
+/*	for (unsigned x = 0; x < substr.size(); x++)
+	{
+		if (substr.at(x) == "[" && substr.size() >= (x+3) )
+		{
+			substr.erase(substr.begin() + (x+3));
+		}	
+	}
 
+*/
+//substr.erase(substr.begin() + 3);
 	for (unsigned i = 0; i < substr.size(); i++)
 	{	
 		if (isspace( substr.at(i).at(substr.at(i).length()-1) ) != 0) {substr.at(i).erase(substr.at(i).end() - 1);}
 	}
-
+//ciout << "PAST FIRST FRONT CLEANING" << endl;
+/*for (unsigned x = 0; x < substr.size(); x++)
+{
+	cout << "SUBSTR:" << substr.at(x) << "END" << endl; 
+}*/
 	for (unsigned i = 0; i < substr.size(); i++ )
 	{
+//		cout << "SUBSTR:" << substr.at(i) << endl;
 		if (isspace(substr.at(i).at(0)) != 0) {substr.at(i).erase(substr.at(i).begin());}
 	}
-
+//cout << "PAST FIRST ROUND OF CLEANING" << endl;
 	for (unsigned i = 0; i < substr.size(); i++)	
 	{
 		size_t found = substr.at(i).find("test");			
@@ -204,7 +225,8 @@ vector<string> parse (string uInput)
 			substr.at(i) = "test";
 		}
 	}
-	
+
+//cout << "PAST TEST PARSER" << endl;	
 
 	for (unsigned i = 0; i < substr.size(); i++)
 	{	
