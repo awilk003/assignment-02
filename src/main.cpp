@@ -197,7 +197,7 @@ vector<string> parse (string uInput)
 	{
 		if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) == substr.at(i+1))
 		{
-			substr.at(i) = substr.at(i) + " " + substr.at(i+1);
+			substr.at(i) = substr.at(i) + substr.at(i+1);
 			substr.erase(substr.begin() + (i+1));
 		}
 		else if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) != substr.at(i+1))
@@ -260,10 +260,12 @@ vector<string> parse (string uInput)
 {
 	cout << "SUBSTR:" << substr.at(x) << "END" << endl; 
 }*/
-	for (unsigned i = 0; i < substr.size(); i++ )
+	for (unsigned i = 0; i < substr.size(); i++)
 	{
-//		cout << "SUBSTR:" << substr.at(i) << endl;
-		if (isspace(substr.at(i).at(0)) != 0) {substr.at(i).erase(substr.at(i).begin());}
+		while (substr.at(i).at(0) == ' ')
+		{
+			substr.at(i).erase(substr.at(i).begin());
+		}		
 	}
 //cout << "PAST FIRST ROUND OF CLEANING" << endl;
 /*	for (unsigned i = 0; i < substr.size(); i++)	
@@ -446,6 +448,9 @@ int main()
 				else
 				{
 					vector< vector<string> > pcmds;
+					
+
+			
 					for (unsigned i = 0; i < test.size(); i++)
 					{	
 						cout << "INPUT" << test.at(i) << "END" <<  endl;
