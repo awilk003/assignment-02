@@ -88,16 +88,26 @@ bool run(bool isValid, vector<string> cmds)
 				}
 				else if (cmds.at(j) == "[" || cmds.at(j) == "test")
 				{
-					string pathHolder;
-					unsigned counter = 0;
-					while (cmds.at(j + counter) != "]")
+					if (cmds.at(j) == "[")
 					{
-						pathHolder += cmds.at(j + counter);
-						counter++;
+						string pathHolder;
+						unsigned counter = 1;
+						while (cmds.at(j + counter) != "]")
+						{
+							pathHolder += cmds.at(0 + counter);
+							counter++;
+						}
+						Test* tHolder = new Test();
+						tHolder->execute(pathHolder);
+						cout << "PATHHOLDER" << pathHolder << endl;
 					}
-					cout << "PATHHOLDER" << pathHolder << endl;
-					//	Test* tHolder = new Test("A");
-					//	isValid = tHolder->execute(pathHolder);
+					else	
+					{
+						Test* tHolder = new Test();
+						tHolder->execute(cmds.at(j+1));
+						cout << "PATHHOLDER " << cmds.at(j+1) << endl;
+					}
+			
 				}
 				else if (cmds.at(j) == "#")
 				{
