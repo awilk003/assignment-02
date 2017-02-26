@@ -197,7 +197,7 @@ vector<string> parse (string uInput)
 	{
 		if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) == substr.at(i+1))
 		{
-			substr.at(i) = substr.at(i) + substr.at(i+1);
+			substr.at(i) = substr.at(i) + " " + substr.at(i+1);
 			substr.erase(substr.begin() + (i+1));
 		}
 		else if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) != substr.at(i+1))
@@ -392,6 +392,9 @@ cout << "HIT ELSE" << endl;
 	cout << "HIT EXCEPTION, RETURNING FALSE" << endl;
 	return false;
 }
+
+
+//	2/26/17 fix the spacing issue in parse, IE echo
 
 int main()
 {
