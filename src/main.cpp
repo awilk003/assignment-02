@@ -27,6 +27,7 @@ bool run(bool isValid, vector<string> cmds )
 	if (cmds.at(0) == "quit")
 	{
 		exit(1); //IF FIRST COMMAND IS QUIT EXIT IMMEDIATLY
+		cout << "SHOULD HAVE QUIT" << endl;
 	}
 	//cout << "MADE IT TO FIRST CMD" << endl << cmds.at(0) << "TEST" <<  endl;	
 	//cout << "CMD: " << cmds.at(0) << endl;
@@ -149,6 +150,7 @@ vector<string> parse (string uInput)
 	{
 		if ((*i) != "")
 		{
+	//		cout << "TOK"<< (*i) << endl;
 			substr.push_back((*i));
 		}
 	//				    substr.push_back(" ");
@@ -165,7 +167,32 @@ vector<string> parse (string uInput)
 			substr.at(i) = "test";
 		}
 	}
-*/		
+*/	
+	for (unsigned i = 0; i < substr.size(); i++)	
+	{
+		if (substr.at(i) == "test")
+		{	
+			while (i < substr.size()-2) 
+			{
+				if (substr.at(i+1) == "&" || substr.at(i+1) == "|" || substr.at(i+1) == ";")
+				{
+					
+				}
+				else
+				{//	cout << "HIT IF " << endl;
+					substr.at(i+1) += " " + substr.at(i+2);
+					substr.erase(substr.begin() + (i+2));
+				}
+				i++;
+			}	
+		}
+	}
+
+//for (unsigned i = 0; i < substr.size(); i++)
+//{
+//	cout << "SUBSTR" << substr.at(i) << endl;
+//}
+
 	for (unsigned i = 0; i < substr.size()-1; i++)
 	{
 		if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) == substr.at(i+1))
@@ -229,7 +256,7 @@ vector<string> parse (string uInput)
 		if (isspace(substr.at(i).at(0)) != 0) {substr.at(i).erase(substr.at(i).begin());}
 	}
 //cout << "PAST FIRST ROUND OF CLEANING" << endl;
-	for (unsigned i = 0; i < substr.size(); i++)	
+/*	for (unsigned i = 0; i < substr.size(); i++)	
 	{
 		size_t found = substr.at(i).find("test");			
 		if (found != string::npos)
@@ -238,6 +265,23 @@ vector<string> parse (string uInput)
 			substr.at(i) = "test";
 		}
 	}
+*/
+/*	for (unsigned i = 0; i < substr.size(); i++)	
+	{
+		if (substr.at(i) == "test")
+		{	
+			while (i < substr.size()-2) 
+			{
+				if (substr.at(i) != "&&" || substr.at(i) != "||" || substr.at(i) != ";")
+				{
+					substr.at(i+1) += " " + substr.at(i+2);
+					substr.erase(substr.begin() + (i+2));
+				}
+				i++;
+			}	
+		}
+	}
+*/
 
 //cout << "PAST TEST PARSER" << endl;	
 
@@ -252,11 +296,11 @@ vector<string> parse (string uInput)
 	}
 
 
-	cout << "TESTING CMDS:" << endl;		
-	for (unsigned i = 0; i < substr.size(); i++)
-	{
-		cout << substr.at(i) << endl;
-	}
+	//cout << "TESTING CMDS:" << endl;		
+//	for (unsigned i = 0; i < substr.size(); i++)
+//	{
+//		cout << substr.at(i) << endl;
+//	}
 	return substr;
 
 }
@@ -277,16 +321,57 @@ vector<string> pParse (string uInput)
 		}
 		
 	}
+	
+	for (unsigned i = 0; i < substr.size(); i++)
+	{
+		while (substr.at(i).at(0) == ' ')
+		{
+			substr.at(i).erase(substr.at(i).begin());
+		}		
+	}
+
 	cout << "TESTING SUBSTR" << endl;
 	for (unsigned j = 0; j < substr.size(); j++)
 	{
-		cout << substr.at(j) << endl;
+		cout << substr.at(j) << "END"  << endl;
 	}
 	cout << "END SUBSTR" << endl;
 	return substr;
 
 }
 
+bool pRun (bool isValid, string connector, vector<string> cmd)
+{
+	if (connector == "|| ")
+	{
+		if (!isValid)
+		{
+			return run(isValid, cmd);
+		}
+		else
+		{
+cout << "HIT ELSE" << endl;
+			return isValid;
+		}
+	}	
+	else if (connector == "&&")
+	{
+		if (isValid)	
+		{
+			return run(isValid, cmd);
+		}
+		else
+		{
+			return isValid;
+		}
+	}
+	else if (connector == ";")
+	{
+		return run(isValid, cmd);
+	}
+	cout << "HIT EXCEPTION, RETURNING FALSE" << endl;
+	return false;
+}
 
 int main()
 {
@@ -296,29 +381,102 @@ int main()
 	gethostname(uname, 100);
 	puts(uname);
 	bool isValid = true;			// USED IN && AND || TO DETERMINE IF PREVIOUS COMMAND WAS VALID
-
+	int opCounter = 0;
+	int clCounter = 0;
 	cout << "Beginning Terminal" << endl << "Enter 'quit' to exit the program" << endl;
 	cout << ulgn << "@" << uname << "$ ";
 	while (getline(cin, uInput))
 	{
+//cout << "NEW INPUT" << endl;
 		if (!uInput.empty() && uInput.at(0) != '#')
 		{
-//			vector< vector <string> > CMD;
-			/*
+			//vector< vector <string> > pcmd;
+			vector<string> bcmd = parse(uInput);
+			for (unsigned m = 0; m < bcmd.size(); m++)
+			{
+				cout <<"BCMD" << bcmd.at(m) << "END" << endl;
+			}	
 			vector<string> test = pParse(uInput);
+		/*	for (unsigned i = 0; i < test.size(); i++)
+			{
+				cout << "TEST" << test.at(i) << endl;
+			}
+		*/	
 			for (unsigned i = 0; i < test.size(); i++)
 			{
-				if (i ==  )
+				if (test.at(i) == "(")
 				{
-						
+					opCounter += 1;
 				}
-			}	*/		
-			vector<string> temp = parse(uInput);
-			bool holder = run(isValid, temp);
-			if (holder) {}
+				else if (test.at(i) == ")")
+				{
+					clCounter += 1;			
+				}
+			}
+	
+			if (opCounter != 0 && clCounter != 0)
+			{
+				if (opCounter != clCounter)
+				{
+					cout << "ERROR UNEVEN AMOUNT OF OPEN AND CLOSE PARENS" << endl;
+				}
+				else
+				{
+					vector< vector<string> > pcmds;
+					for (unsigned i = 0; i < test.size(); i++)
+					{	
+						cout << "INPUT" << test.at(i) << "END" <<  endl;
+						vector<string> temp;
+						if ( test.at(i) == "(")
+						{
+							temp.push_back(test.at(i+1));
+							pcmds.push_back(temp);
+						}
+						else if (test.at(i) == "&&" || test.at(i) == "|| " || test.at(i) == ";")
+						{
+	cout << "HIT IF" << endl;
+							temp.push_back(test.at(i));
+							pcmds.push_back(temp);
+						}	
+					}
+
+					for (unsigned i = 0; i < pcmds.size(); i++)
+					{
+						//cout << "TEST" << test.at(i) << endl;
+						cout << "PCMDS:";
+						for (unsigned t = 0; t < pcmds.at(i).size(); t++)
+						{
+							cout << pcmds.at(i).at(t) << " ";
+						}
+cout << endl;
+					}
+	
+					for (unsigned i = 0; i < pcmds.size(); i++)
+					{
+						pcmds.at(i) = parse(pcmds.at(i).at(0));
+						isValid = run(isValid, pcmds.at(i));
+						if (i+1 < pcmds.size()-1)
+						{
+							isValid = pRun(isValid, pcmds.at(i+1).at(0), pcmds.at(i+2));
+							i += 2;		
+						}
+					}
+				}
+			}
+			else
+			{
+				isValid = run(isValid, bcmd);
+			}		
+
+			if (isValid) {} // temp
+//			vector<string> temp = parse(uInput);
+//			bool holder = run(isValid, temp);
+//			if (holder) {}
 			//cout << "RUNNING CMDS" << endl;
 			//isValid = run(isValid, temp);
 		}
+		opCounter = 0;
+		clCounter = 0;
 		cout << ulgn << "@" << uname << "$ ";
 	}
 
