@@ -117,7 +117,7 @@ vector<string> parse(string uInput)
 {
 	vector<string> substr;			// USED TO HOLD PARSERS
 	typedef tokenizer<char_separator<char> > Tok;		// USED TO HOLD COMMANDS
-	char_separator<char> sep("", ";(&&)(||)[]", keep_empty_tokens);
+	char_separator<char> sep(" ", ";(&&)(||)[]", keep_empty_tokens);
 	Tok tok(uInput, sep);
 	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)
 	{
@@ -164,13 +164,15 @@ vector<string> parse(string uInput)
 	}
 	*/
 
-	for (unsigned i = 0; i < substr.size(); i++)
+	cout <<"SIZE"<<substr.size()<<endl;
+	for (unsigned x = 0; x < substr.size(); x++)
 	{
-		size_t found = substr.at(i).find("test");
+		size_t found = substr.at(x).find("test");
 		if (found != string::npos)
 		{
-			substr.push_back(substr.at(i).substr(4, substr.at(i).length()));
-			substr.at(i) = "test";
+		//	cout << "HIT IF" << endl;
+			//substr.insert(substr.begin() + x,substr.at(x).substr(4, substr.at(x).length()));
+			substr.at(x) = "test";
 		}
 	}
 	for (unsigned i = 0; i < substr.size(); i++)
@@ -198,7 +200,7 @@ vector<string> pParse(string uInput)
 {
 	vector<string> substr;			// USED TO HOLD PARSERS
 	typedef tokenizer<char_separator<char> > Tok;		// USED TO HOLD COMMANDS
-	char_separator<char> sep("", "()", keep_empty_tokens);
+	char_separator<char> sep(" ", "()", keep_empty_tokens);
 	Tok tok(uInput, sep);
 	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)
 	{
@@ -233,23 +235,22 @@ int main()
 	cout << ulgn << "@" << uname << "$ ";
 	while (getline(cin, uInput))
 	{
+//		vector< vector <string> > pcmds;
 		if (!uInput.empty() && uInput.at(0) != '#')
-		{
-			//			vector< vector <string> > CMD;
-			/*
-			vector<string> test = pParse(uInput);
-			for (unsigned i = 0; i < test.size(); i++)
-			{
-			if (i ==  )
-			{
-
-			}
-			}	*/
+		{//			vector<string> temp = pParse(uInput);
 			vector<string> temp = parse(uInput);
+//			pcmds.push_back(temp);
+//			for (unsigned i = 0; i < pcmds.size(); i++)	
+//			{
+//				for (unsigned j = 0; j < pcmds.at(i).size(); j++)
+//				{
+//					cout << "TEST:" << pcmds.at(i).at(j) << endl;
+//				}
+//			}
 			bool holder = run(isValid, temp);
 			if (holder) {}
-			//cout << "RUNNING CMDS" << endl;
-			//isValid = run(isValid, temp);
+	//		cout << "RUNNING CMDS" << endl;
+	//		isValid = run(isValid, temp);
 		}
 		cout << ulgn << "@" << uname << "$ ";
 	}
