@@ -241,9 +241,19 @@ vector<string> parse (string uInput)
 
 */
 //substr.erase(substr.begin() + 3);
-	for (unsigned i = 0; i < substr.size(); i++)
+
+
+/*	for (unsigned i = 0; i < substr.size(); i++)
 	{	
 		if (isspace( substr.at(i).at(substr.at(i).length()-1) ) != 0) {substr.at(i).erase(substr.at(i).end() - 1);}
+	}*/
+
+	for (unsigned i = 0; i < substr.size(); i++)
+	{
+		while (substr.at(i).at(substr.at(i).length()-1) == ' ')
+		{
+			substr.at(i).erase(substr.at(i).end()-1);
+		}		
 	}
 //ciout << "PAST FIRST FRONT CLEANING" << endl;
 /*for (unsigned x = 0; x < substr.size(); x++)
@@ -330,6 +340,16 @@ vector<string> pParse (string uInput)
 		}		
 	}
 
+	for (unsigned i = 0; i < substr.size(); i++)
+	{
+		while (substr.at(i).at(substr.at(i).length()-1) == ' ')
+		{
+			substr.at(i).erase(substr.at(i).end()-1);
+		}		
+	}
+
+
+
 	cout << "TESTING SUBSTR" << endl;
 	for (unsigned j = 0; j < substr.size(); j++)
 	{
@@ -342,7 +362,7 @@ vector<string> pParse (string uInput)
 
 bool pRun (bool isValid, string connector, vector<string> cmd)
 {
-	if (connector == "|| ")
+	if (connector == "||")
 	{
 		if (!isValid)
 		{
@@ -432,7 +452,7 @@ int main()
 							temp.push_back(test.at(i+1));
 							pcmds.push_back(temp);
 						}
-						else if (test.at(i) == "&&" || test.at(i) == "|| " || test.at(i) == ";")
+						else if (test.at(i) == "&&" || test.at(i) == "||" || test.at(i) == ";")
 						{
 	cout << "HIT IF" << endl;
 							temp.push_back(test.at(i));
