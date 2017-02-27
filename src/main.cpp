@@ -307,12 +307,26 @@ vector<string> parse (string uInput)
 		if (isspace(substr.at(i).at(0)) != 0) {substr.at(i).erase(substr.at(i).begin());}
 	}
 
+	cout << "TESTING CMDS:" << endl;		
+	for (unsigned i = 0; i < substr.size(); i++)
+	{
+		cout << "BEFORE" << substr.at(i) << endl;
+/*		if ((substr.at(i) != "&&" || substr.at(i) != "||" || substr.at(i) != ";" || substr.at(i) != "(" || substr.at(i) != ")")) 
+		{
+			if (i+1 < substr.size() && (substr.at(i+1) != "&&" || substr.at(i+1) != "||" || substr.at(i+1) != ";" || substr.at(i+1) != "(" || substr.at(i+1) != ")"))
+			{
+				substr.at(i) += " " + substr.at(i+1);
+				substr.erase(substr.begin()+(i+1));
+				i--;
+			}
+		}*/ 
+	//	{
+	//		substr.at(i) += " " + substr.at(i+1);
+	//		substr.erase(substr.begin()+(i+1));
+	//	}
 
-	//cout << "TESTING CMDS:" << endl;		
-//	for (unsigned i = 0; i < substr.size(); i++)
-//	{
-//		cout << substr.at(i) << endl;
-//	}
+		cout << "AFTER" <<  substr.at(i) << endl;
+	}
 	return substr;
 
 }
@@ -400,6 +414,18 @@ cout << "HIT ELSE" << endl;
 void pExecute(bool isValid, vector<string> test)
 {
 	string connector;
+	
+	for (unsigned i = 0; i < test.size(); i++)
+	{
+		if (test.at(i) == "||" && i != 0)
+		{
+			if (test.at(i-1) == ")")
+			{
+				
+			}	
+		}
+	}
+
 	for (unsigned i = 0; i < test.size(); i++)
 	{	
 		vector<string> temp;
@@ -426,6 +452,10 @@ void pExecute(bool isValid, vector<string> test)
 				test.erase(test.begin() + (i));
 			}
 			break;
+		}
+		else if (test.at(i) == "||" || test.at(i) == ";" || test.at(i) == "&&")
+		{
+			
 		}
 	}
 
@@ -618,15 +648,36 @@ int main()
 				}
 			}
 	
+		/*	for (unsigned i = 0; i < test.size(); i++)
+			{
+				cout << "TESTV" << test.at(i) << "END" << endl;
+			}
+*/
 			if (opCounter != 0 && clCounter != 0)
 			{
 				if (opCounter != clCounter)
 				{
 					cout << "ERROR UNEVEN AMOUNT OF OPEN AND CLOSE PARENS" << endl;
 				}
-				else
+				else if (test.at(0) == "(") 
 				{
 					pExecute(isValid, test);
+				}
+				else
+				{
+					for (unsigned i = 0; i < test.size(); i++)
+					{
+						if (test.at(i) == "(" || test.at(i) == ")")
+						{
+							test.erase(test.begin()+i);
+						}
+					}
+				/*	for (unsigned i = 0; i < test.size(); i++)
+					{
+						cout << "TESTV" << test.at(i) << "END" << endl;
+					}
+				*/
+					isValid = run(isValid, test);
 				}
 			}
 
