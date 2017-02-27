@@ -144,7 +144,7 @@ vector<string> parse (string uInput)
 {
 	vector<string> substr;			// USED TO HOLD PARSERS
 	typedef tokenizer<char_separator<char> > Tok;		// USED TO HOLD COMMANDS
-	char_separator<char> sep(" ", ";&|[]", keep_empty_tokens);
+	char_separator<char> sep(" ", ";&|[]()", keep_empty_tokens);
 	Tok tok(uInput, sep);
 	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)
 	{
@@ -364,6 +364,7 @@ vector<string> pParse (string uInput)
 
 bool pRun (bool isValid, string connector, vector<string> cmd)
 {
+cout << "CONNECTOR" << connector << "END" << endl;
 	if (connector == "||")
 	{
 		if (!isValid)
@@ -396,6 +397,184 @@ cout << "HIT ELSE" << endl;
 }
 
 
+void pExecute(bool isValid, vector<string> test)
+{
+	string connector;
+	for (unsigned i = 0; i < test.size(); i++)
+	{	
+		vector<string> temp;
+		if (test.at(i) == ")")
+		{
+			unsigned r = i-1;
+			while (test.at(r) != "(")
+			{
+				temp.insert(temp.begin(), test.at(r));
+				r--;
+			}
+			isValid = run(isValid, temp);
+			while (test.at(i) != "(" )
+			{
+				cout << "BEING ERASED" << test.at(0+i) << endl;
+				test.erase(test.begin() + (i));
+				i--;
+			}
+			test.erase(test.begin() + (i));
+			if (!test.empty())
+			{
+	cout << "HIT IF" << " I" << i <<  endl;
+				connector = test.at(i);
+				test.erase(test.begin() + (i));
+			}
+			break;
+		}
+	}
+
+
+for (unsigned i = 0; i < test.size(); i++)
+{
+	cout << "TEST" << test.at(i) << "END" << endl;
+}
+
+	for (unsigned i = 0; i < test.size(); i++)
+	{
+		
+		vector<string> temp;
+		if (test.at(i) == ")")
+		{
+//cout << "HIT SECOND IF" << endl;
+			unsigned r = i-1;
+			while (test.at(r) != "(")
+			{
+				temp.insert(temp.begin(), test.at(r));
+				r--;
+			}
+			isValid = pRun(isValid, connector, temp);
+			while (test.at(i) != "(" )
+			{
+				test.erase(test.begin() + (i));
+				i--;
+			}
+			test.erase(test.begin() + (i));
+			if (!test.empty())
+			{
+				connector = test.at(i);
+				test.erase(test.begin() + (i));
+			}
+		}
+	}
+}	
+/*
+			temp = parse(test.at(i-1));
+			isValid = pRun(isValid, connector, temp);
+			test.erase(test.begin() + (i-2), test.begin() + (i));
+			if (!test.empty())	
+			{
+				connector = test.at(0);
+				test.erase(test.begin());
+			}
+
+//begin cpp
+	vector< vector<string> > pcmds;
+	vector<int> positions;
+	for (unsigned i = 0; i < test.size(); i++)
+	{
+		if (test.at(i) == "(")
+		{
+			positions.push_back(i);
+		}	
+	}
+	for (unsigned i = positions.size()-1; i >= 0; i++)
+	{	
+//	cout << "INPUT" << test.at(i) << "END" <<  endl;
+		vector<string> temp;
+		if ( i+1 < test.size()-1)
+		{
+			if (test.at(i+1) != ")")
+			{
+				temp = parse(test.at(i+1));
+				isValid = run(isValid, temp);
+				test.erase(test.begin()+(positions.at(i)), test.begin() + (positions.at(i)+2));
+				break;		
+			}
+		}
+	}
+	
+	for (unsigned i = positions.size()-2; i >= 0; i++)
+	{	
+		vector<string> temp;
+		if ( i+1 < test.size()-1)
+		{
+			if (test.at(i+1) != ")")
+			{
+				vector<string> temporary;
+				temp = parse(test.at(i+1));
+				temporary.push_back(temp.at(1));
+				isValid = pRun(isValid, temp.at(0), temporary);
+				test.erase(test.begin()+positions.at(i), test.begin() + (positions.at(i)+2));
+				break;		
+			}
+		}
+	}
+
+				
+
+else if (test.at(i) == "&&" || test.at(i) == "||" || test.at(i) == ";")
+					{
+cout << "HIT IF" << endl;
+						temp.push_back(test.at(i));
+						pcmds.push_back(temp);
+					}	
+				}
+
+*/			
+					
+/*
+				for (unsigned i = 0; i < test.size(); i++)
+				{	
+					cout << "INPUT" << test.at(i) << "END" <<  endl;
+					vector<string> temp;
+					if ( test.at(i) == "(")
+					{
+						temp.push_back(test.at(i+1));
+						pcmds.push_back(temp);
+					}
+					else if (test.at(i) == "&&" || test.at(i) == "||" || test.at(i) == ";")
+					{
+cout << "HIT IF" << endl;
+						temp.push_back(test.at(i));
+						pcmds.push_back(temp);
+					}	
+				}
+
+					for (unsigned i = 0; i < pcmds.size(); i++)
+				{
+					//cout << "TEST" << test.at(i) << endl;
+					cout << "PCMDS:";
+					for (unsigned t = 0; t < pcmds.at(i).size(); t++)
+					{
+						cout << pcmds.at(i).at(t) << " ";
+					}
+cout << endl;
+				}
+
+				for (unsigned i = 0; i < pcmds.size(); i++)
+				{
+					pcmds.at(i) = parse(pcmds.at(i).at(0));
+					isValid = run(isValid, pcmds.at(i));
+					if (i+1 < pcmds.size()-1)
+					{
+						isValid = pRun(isValid, pcmds.at(i+1).at(0), pcmds.at(i+2));
+						i += 2;		
+					}
+				}
+
+			}
+		}
+}
+*/
+
+
+
 //	2/26/17 fix the spacing issue in parse, IE echo
 
 int main()
@@ -421,7 +600,7 @@ int main()
 			{
 				cout <<"BCMD" << bcmd.at(m) << "END" << endl;
 			}	
-			vector<string> test = pParse(uInput);
+			vector<string> test = parse(uInput);
 		/*	for (unsigned i = 0; i < test.size(); i++)
 			{
 				cout << "TEST" << test.at(i) << endl;
@@ -447,50 +626,10 @@ int main()
 				}
 				else
 				{
-					vector< vector<string> > pcmds;
-					
-
-			
-					for (unsigned i = 0; i < test.size(); i++)
-					{	
-						cout << "INPUT" << test.at(i) << "END" <<  endl;
-						vector<string> temp;
-						if ( test.at(i) == "(")
-						{
-							temp.push_back(test.at(i+1));
-							pcmds.push_back(temp);
-						}
-						else if (test.at(i) == "&&" || test.at(i) == "||" || test.at(i) == ";")
-						{
-	cout << "HIT IF" << endl;
-							temp.push_back(test.at(i));
-							pcmds.push_back(temp);
-						}	
-					}
-
-					for (unsigned i = 0; i < pcmds.size(); i++)
-					{
-						//cout << "TEST" << test.at(i) << endl;
-						cout << "PCMDS:";
-						for (unsigned t = 0; t < pcmds.at(i).size(); t++)
-						{
-							cout << pcmds.at(i).at(t) << " ";
-						}
-cout << endl;
-					}
-	
-					for (unsigned i = 0; i < pcmds.size(); i++)
-					{
-						pcmds.at(i) = parse(pcmds.at(i).at(0));
-						isValid = run(isValid, pcmds.at(i));
-						if (i+1 < pcmds.size()-1)
-						{
-							isValid = pRun(isValid, pcmds.at(i+1).at(0), pcmds.at(i+2));
-							i += 2;		
-						}
-					}
+					pExecute(isValid, test);
 				}
 			}
+
 			else
 			{
 				isValid = run(isValid, bcmd);
