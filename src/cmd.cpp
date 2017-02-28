@@ -18,25 +18,16 @@ Cmd::Cmd(string input1)
 
 //where the magic happens
 //uses fork and exec to execute commands and returns bool values to indicate a valid/invalid command
-bool Cmd::execute(string cmd_s)
+bool Cmd::execute(vector<string> myArgs)
 {
 	//cout << (char*)cmd_s.c_str() << endl;
-	int space = 0;
-	space = cmd_s.find(" ");
 	char* args[512];
-	if (space > 0)
+	for (int i = 0; i < myArgs.size(); i++)
 	{
-		string cmdx = cmd_s.substr(0, space);
-		string cmdy = cmd_s.substr(space + 1);
-		args[0] = (char*)cmdx.c_str();
-		args[1] = (char*)cmdy.c_str();
-		args[2] = NULL;
+		args[i] = (char*)myArgs[i].c_str();
 	}
-	else
-	{
-		args[0] = (char*)cmd_s.c_str();
-		args[1] = NULL;
-	}
+
+
 	pid_t pid;
 	pid = fork();
 	int status;

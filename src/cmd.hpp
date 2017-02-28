@@ -2,6 +2,7 @@
 #define _CMD_H_
 
 #include "cmdline.hpp"
+#include <vector>
 
 class Cmd : public Cmdline
 {
@@ -9,7 +10,7 @@ class Cmd : public Cmdline
 		Cmd();
 		Cmd(string input1);
 		//bool isValid();
-		bool execute(string cmd_s);	
+		bool execute(vector<string> myArgs);	
 	protected:
 		string uCmd;
 };
