@@ -7,7 +7,7 @@ Test::Test(string k)
 	
 }
 
-bool Test::execute(string path)
+bool Test::execute(vector<string> path)
 {
 	string flag;
 	string newPath;
@@ -15,15 +15,15 @@ bool Test::execute(string path)
 	int validPath;
 	bool valid = false;
 
-	if (path.at(0) == '-')
+	if (path[0].at(0) == '-')
 	{
-		flag = path.substr(0, 2);
-		newPath = path.substr(3);
+		flag = path[0];
+		newPath = path[1];
 	}
 	else
 	{
 		flag = "-e";
-		newPath = path;
+		newPath = path[0];
 	}
 
 	if (flag.size() > 2)
