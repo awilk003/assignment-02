@@ -1,24 +1,23 @@
 CXX=g++
 CXXFLAGS:=-g -ansi -Wall -Werror -pedantic 
 SOURCES=main.cpp and.cpp or.cpp cmd.cpp cmdline.cpp pound.cpp semicolon.cpp test.cpp
-OBJS=$(SOURCES:.cpp=.o)
+OBJS=$(patsubst %.cpp,bin/%.o,$(SOURCES))
 VPATH=src
-EXECUTABLE=rshell
+EXECUTABLE=bin/rshell
 
-all: $(SOURCES) $(EXECUTABLE)
+all: bin $(EXECUTABLE)
+
+bin:
+	mkdir -p bin
 
 $(EXECUTABLE): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $@
-	mkdir bin
-	mv $(OBJECTS) rshell bin
 
-.cpp.o:
-	$(CXX) -c $(CXXFLAGS) $< -o $@
+bin/%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $< 
 
 clean:
-	rm -f $(EXECUTABLE)
-	rm -f $(OBJS)
-	rm -R bin
-	rm -f *.gch
+	rm -f $(EXECUTABLE) $(OBJS) *.gch
+	rm -r bin
 
 
