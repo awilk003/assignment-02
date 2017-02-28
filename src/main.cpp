@@ -460,36 +460,52 @@ void pExecute(bool isValid, vector<string> test)
 	}
 
 
-for (unsigned i = 0; i < test.size(); i++)
-{
-	cout << "TEST" << test.at(i) << "END" << endl;
-}
+
 
 	for (unsigned i = 0; i < test.size(); i++)
 	{
-		
+
 		vector<string> temp;
-		if (test.at(i) == ")")
+		if (test.at(i) == "(")
+		{	
+			for (unsigned k = 0; k < test.size(); k++)
+			{
+				if (test.at(k) == ")")
+				{
+		//cout << "HIT SECOND IFiASDFASDFASDFASDFASDFASDFSADF" << endl;
+					unsigned r = k-1;
+					while (test.at(r) != "(")
+					{
+						temp.insert(temp.begin(), test.at(r));
+						r--;
+					}
+					isValid = pRun(isValid, connector, temp);
+					while (test.at(k) != "(" )
+					{
+						cout << "BEING ERASED" << test.at(k) << endl;
+						test.erase(test.begin() + (k));
+						k--;
+					}
+					test.erase(test.begin() + (k));
+					if (!test.empty())
+					{
+						connector = test.at(k);
+						test.erase(test.begin() + (k));
+					}
+				}
+			}
+		}
+		else if (test.at(i) != "(")
 		{
-//cout << "HIT SECOND IF" << endl;
-			unsigned r = i-1;
-			while (test.at(r) != "(")
+			for (unsigned k = 0; k < test.size(); k++)
 			{
-				temp.insert(temp.begin(), test.at(r));
-				r--;
+				if (test.at(k) == "(" || test.at(k) == ")")
+				{
+					test.erase(test.begin() + k);
+				}
 			}
-			isValid = pRun(isValid, connector, temp);
-			while (test.at(i) != "(" )
-			{
-				test.erase(test.begin() + (i));
-				i--;
-			}
-			test.erase(test.begin() + (i));
-			if (!test.empty())
-			{
-				connector = test.at(i);
-				test.erase(test.begin() + (i));
-			}
+			isValid = run(isValid, test);
+			break;			
 		}
 	}
 }	
