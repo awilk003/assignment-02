@@ -17,6 +17,7 @@ bool Test::execute(vector<string> path)
 
 	if (path[0].at(0) == '-')
 	{
+		cout << "FLAG HERE: " << path[0] << endl;
 		flag = path[0];
 		newPath = path[1];
 	}
@@ -28,6 +29,7 @@ bool Test::execute(vector<string> path)
 
 	if (flag.size() > 2)
 	{
+		cout << "FLAG SIZE: " << flag.size() << endl;
 		cout << "Invalid flag type, setting flag -e" << endl;
 		flag = "-e";
 	}
