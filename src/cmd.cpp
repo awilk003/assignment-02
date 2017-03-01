@@ -22,11 +22,12 @@ bool Cmd::execute(vector<string> myArgs)
 {
 	//cout << (char*)cmd_s.c_str() << endl;
 	char* args[512];
-	for (int i = 0; i < myArgs.size(); i++)
+	int i;
+	for (i = 0; i < myArgs.size(); i++)
 	{
 		args[i] = (char*)myArgs[i].c_str();
 	}
-
+	args[i + 1] = NULL;
 
 	pid_t pid;
 	pid = fork();
