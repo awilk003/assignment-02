@@ -26,7 +26,6 @@ bool Cmd::execute(vector<string> myArgs)
 	for ( i = 0; i < myArgs.size(); i++)
 	{
 		args[i] = (char*)myArgs[i].c_str();
-		cout << "ARG I = " << args[i] << endl;
 	}
 	args[i] = NULL;
 
