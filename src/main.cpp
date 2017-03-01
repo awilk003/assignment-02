@@ -437,6 +437,11 @@ void pExecute(bool isValid, vector<string> test)
 				temp.insert(temp.begin(), test.at(r));
 				r--;
 			}
+			if (temp.empty())
+			{
+				cout << "Syntax error near ')'" << endl;
+				return;
+			}
 			isValid = run(isValid, temp);
 			while (test.at(i) != "(" )
 			{
@@ -479,19 +484,28 @@ void pExecute(bool isValid, vector<string> test)
 						temp.insert(temp.begin(), test.at(r));
 						r--;
 					}
-					isValid = pRun(isValid, connector, temp);
-					while (test.at(k) != "(" )
+					if (temp.empty())
 					{
-						cout << "BEING ERASED" << test.at(k) << endl;
-						test.erase(test.begin() + (k));
-						k--;
+						cout << "Syntax error near ')'" << endl;
+						return;
 					}
-					test.erase(test.begin() + (k));
+					else
+					{
+						isValid = pRun(isValid, connector, temp);
+						while (test.at(k) != "(" )
+						{
+							cout << "BEING ERASED" << test.at(k) << endl;
+							test.erase(test.begin() + (k));
+							k--;
+						}
+						test.erase(test.begin() + (k));
+					}
 					if (!test.empty())
 					{
 						connector = test.at(k);
 						test.erase(test.begin() + (k));
 					}
+					
 				}
 			}
 		}
@@ -681,19 +695,30 @@ int main()
 				}
 				else
 				{
+					bool error = false;
 					for (unsigned i = 0; i < test.size(); i++)
 					{
-						if (test.at(i) == "(" || test.at(i) == ")")
-						{
-							test.erase(test.begin()+i);
+						if (test.at(i) == ")")
+						{		
+							if (test.at(i-1) ==  "(")
+							{
+								cout << "Syntax error near ')'" << endl;
+								error = true;
+								break;
+							}
 						}
 					}
-				/*	for (unsigned i = 0; i < test.size(); i++)
+					if (!error)
 					{
-						cout << "TESTV" << test.at(i) << "END" << endl;
+						for (unsigned i = 0; i < test.size(); i++)
+						{
+							if (test.at(i) == "(" || test.at(i) == ")")
+							{
+								test.erase(test.begin()+i);
+							}
+						}
+						isValid = run(isValid, test);
 					}
-				*/
-					isValid = run(isValid, test);
 				}
 			}
 
