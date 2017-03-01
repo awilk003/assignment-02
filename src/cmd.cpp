@@ -28,7 +28,7 @@ bool Cmd::execute(vector<string> myArgs)
 		args[i] = (char*)myArgs[i].c_str();
 		cout << "ARG I = " << args[i] << endl;
 	}
-	args[i + 1] = NULL;
+	args[i] = NULL;
 
 	pid_t pid;
 	pid = fork();
