@@ -7,7 +7,7 @@ class And : public Cmdline
 {
 	public:
 		And(bool Left, Cmdline* Right);
-		bool execute(string cmd);
+		bool execute(vector<string> cmd);
 	//	bool isValid();
 	protected:
 		bool Lchild;

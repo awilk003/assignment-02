@@ -7,7 +7,7 @@ Or::Or(bool Left, Cmdline* Right)
 }
 
 //calls execute on Cmdline* Right and returns a bool value indicating whether the command was executed or not
-bool Or::execute(string cmd)
+bool Or::execute(vector<string> cmd)
 {
 	if (!Lchild)
 	{

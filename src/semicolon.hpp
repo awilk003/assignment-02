@@ -4,7 +4,7 @@ class Semicolon : public Cmdline
 {
 	public:
 		Semicolon(bool Left, Cmdline* Right);
-		bool execute(string cmd);
+		bool execute(vector<string> cmd);
 	protected:
 		bool Lchild;
 		Cmdline* Rchild;

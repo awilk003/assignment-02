@@ -8,9 +8,7 @@ class Test : public Cmdline
 {
 public:
 	Test(string k);
-	bool execute(vector<string> path);
-
-	
+	bool execute(vector<string> path);	
 };
 
 #endif
