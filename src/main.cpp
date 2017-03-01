@@ -60,6 +60,7 @@ bool run(bool isValid, vector<string> cmds )
 			tHolder->execute(temp);
 			print(temp);
 			temp.clear();
+			j++;
 		}
 		else
 		{	//FIX TEST PARSING
@@ -73,7 +74,7 @@ bool run(bool isValid, vector<string> cmds )
 			tHolder->execute(temp);
 			print(temp);
 			temp.clear();
-			j += 2;
+			j++;
 		}
 	}
 	else	
@@ -106,61 +107,6 @@ bool run(bool isValid, vector<string> cmds )
 				{
 					//cout << "HIT CASE SEMICOLON" << endl;
 					j++;
-					while (j < cmds.size())
-					{
-						if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
-						{	
-							break;
-						}
-						temp.push_back(cmds.at(j));
-						j++;
-					}
-					print(temp);
-					Semicolon* sHolder = new Semicolon(isValid, uCmd);	// CREATE SEMICOLON OBJECT WHEN SEMICOLON IS DETECTED;
-					isValid = sHolder->execute(temp);			// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-					temp.clear();						//	delete sHolder;	
-					j++;
-				}
-				else if (cmds.at(j) == "||" )
-				{
-					//cout << "HIT CASE OR" << endl;
-					j++;
-					while (j < cmds.size())
-					{
-						if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
-						{	
-							break;
-						}
-						temp.push_back(cmds.at(j));
-						j++;
-					}
-					print(temp);
-					Or* oHolder = new Or(isValid, uCmd); 	//CREATE OR OBJECT WHEN "|" SYMBOL IS DETECTED
-					isValid = oHolder->execute(temp);		//EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-					temp.clear();
-					j++;							//delete oHolder;
-				}
-				else if (cmds.at(j) == "&&")
-				{	
-					j++;
-					while (j < cmds.size())
-					{
-						if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
-						{	
-							break;
-						}
-						temp.push_back(cmds.at(j));
-						j++;
-					}
-					//cout << "HIT CASE AND" << endl;	
-					print(temp);			    
-					And* aHolder = new And(isValid, uCmd);	//CREATE AND OBJECT WHEN "&" SYMBOL IS DETECTED
-					isValid = aHolder->execute(temp);	// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-					temp.clear();					//delete aHolder;
-					j++;
-				}
-				else if (cmds.at(j) == "[" || cmds.at(j) == "test")
-				{
 					if (cmds.at(j) == "[")	
 					{	
 						j++;
@@ -175,7 +121,7 @@ bool run(bool isValid, vector<string> cmds )
 						temp.clear();
 						j++;
 					}
-					else
+					else if (cmds.at(j) == "test")
 					{	
 						j++;	
 						while (j < cmds.size() && (cmds.at(j) != "||" || cmds.at(j) != "&&" || cmds.at(j) != ";"))
@@ -187,6 +133,123 @@ bool run(bool isValid, vector<string> cmds )
 						tHolder->execute(temp);
 						print(temp);
 						temp.clear();
+						j++;
+					}
+					else
+					{
+						while (j < cmds.size())
+						{
+							if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
+							{	
+								break;
+							}
+							temp.push_back(cmds.at(j));
+							j++;
+						}
+						print(temp);
+						Semicolon* sHolder = new Semicolon(isValid, uCmd);	// CREATE SEMICOLON OBJECT WHEN SEMICOLON IS DETECTED;
+						isValid = sHolder->execute(temp);			// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+						temp.clear();						//	delete sHolder;	
+						j++;
+					}
+				}
+				else if (cmds.at(j) == "||" )
+				{
+					//cout << "HIT CASE OR" << endl;
+					j++;
+					if (cmds.at(j) == "[" && !isValid)	
+					{	
+						j++;
+						while (cmds.at(j) != "]")
+						{
+							temp.push_back(cmds.at(j));
+							j++;
+						}
+						print(temp);
+						Test* tHolder = new Test("A");
+						isValid = tHolder->execute(temp);
+						temp.clear();
+						j++;
+					}
+					else if (cmds.at(j) == "test" && !isValid)
+					{	
+						j++;	
+						while (j < cmds.size() && (cmds.at(j) != "||" || cmds.at(j) != "&&" || cmds.at(j) != ";"))
+						{
+							temp.push_back(cmds.at(j));
+							j++;
+						}
+						Test* tHolder = new Test("A");
+						tHolder->execute(temp);
+						print(temp);
+						temp.clear();
+						j++;
+					}
+					else	
+					{
+						while (j < cmds.size())
+						{
+							if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
+							{	
+								break;
+							}
+							temp.push_back(cmds.at(j));
+							j++;
+						}
+						print(temp);
+						Or* oHolder = new Or(isValid, uCmd); 	//CREATE OR OBJECT WHEN "|" SYMBOL IS DETECTED
+						isValid = oHolder->execute(temp);		//EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+						temp.clear();
+						j++;							//delete oHolder;
+					}
+				}
+				else if (cmds.at(j) == "&&")
+				{
+					j++;
+					if (cmds.at(j) == "[")	
+					{	
+						j++;
+						while (cmds.at(j) != "]")
+						{
+							temp.push_back(cmds.at(j));
+							j++;
+						}
+						print(temp);
+						Test* tHolder = new Test("A");
+						isValid = tHolder->execute(temp);
+						temp.clear();
+						j++;
+					}
+					else if (cmds.at(j) == "test")
+					{	
+						j++;	
+						while (j < cmds.size() && (cmds.at(j) != "||" || cmds.at(j) != "&&" || cmds.at(j) != ";"))
+						{
+							temp.push_back(cmds.at(j));
+							j++;
+						}
+						Test* tHolder = new Test("A");
+						tHolder->execute(temp);
+						print(temp);
+						temp.clear();
+						j++;
+					}
+					else
+					{
+						while (j < cmds.size())
+						{
+							if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
+							{	
+								break;
+							}
+							temp.push_back(cmds.at(j));
+							j++;
+						}
+					//cout << "HIT CASE AND" << endl;	
+						print(temp);			    
+						And* aHolder = new And(isValid, uCmd);	//CREATE AND OBJECT WHEN "&" SYMBOL IS DETECTED
+						isValid = aHolder->execute(temp);	// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+						temp.clear();					//delete aHolder;
 						j++;
 					}
 				}
