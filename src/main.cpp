@@ -20,7 +20,7 @@ using namespace boost;
 
 //ALL COMMENTED CODE WAS USED FOR DEBUGGING PURPOSES, WITH THE EXCEPTION OF THE CODE OUTSIDE IF MAIN, WHICH IS SCRAPPED PREVIOUS ATTEMPTS.
 
-
+//Print function used for debugging
 void print(vector<string> input)
 {
 	cout << "NEW PRINT" << endl;
@@ -35,7 +35,7 @@ void print(vector<string> input)
 
 bool run(bool isValid, vector<string> cmds )
 {
-	vector<string> temp;
+	vector<string> temp; //TEMPORARY VECTOR OF COMMANDS TO BE PASSED INTO THE EXECUTE FUNCTION
 	if (cmds.at(0) == "quit")
 	{
 		exit(1); //IF FIRST COMMAND IS QUIT EXIT IMMEDIATLY
@@ -44,10 +44,10 @@ bool run(bool isValid, vector<string> cmds )
 
 	unsigned j = 0;
 
-	print(cmds);
-
+	//HARDCODED FIRST COMMAND WITH NO CONNECTOR IN THE BEGGINNING
 	if (cmds.at(j) == "[" || cmds.at(j) == "test")
 	{
+		//CHECKS FOR THE SPECIAL COMMANDS OF [] AND TEST
 		if (cmds.at(j) == "[")
 		{
 			j++;
@@ -57,29 +57,27 @@ bool run(bool isValid, vector<string> cmds )
 				j++;
 			}
 			Test* tHolder = new Test("A");
-			tHolder->execute(temp);
-			print(temp);
+			isValid = tHolder->execute(temp);
 			temp.clear();
 			j++;
 		}
 		else
-		{	//FIX TEST PARSING
-			j++;
+		{	j++;
 			while (j < cmds.size() && (cmds.at(j) != "&&"))
 			{
 				temp.push_back(cmds.at(j));
 				j++;
 			}
 			Test* tHolder = new Test("A");
-			tHolder->execute(temp);
-			print(temp);
+			isValid = tHolder->execute(temp);
 			temp.clear();
 			j++;
 		}
 	}
 	else	
 	{
-		Cmd* first = new Cmd(cmds.at(j)); // BECAUSE FIRST COMMAND DOES NOT HAVE A PARSER IN FRONT OF IT WE HARDCODED IT
+		//IF COMMAND CAN BE RUN NORMALLY, RUNS THE NORMAL COMMANDS
+		Cmd* first = new Cmd(cmds.at(j)); 
 		while (j < cmds.size())
 		{
 			if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
@@ -89,25 +87,28 @@ bool run(bool isValid, vector<string> cmds )
 			temp.push_back(cmds.at(j));
 			j++;
 		}
-		print(temp);
 		isValid = first->execute(temp); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
 		temp.clear();
 	}
 
-	cout << "J " << j << endl;
 
-	if (cmds.size() != 1) // IF ONLY ONE COMMAND THEN WILL NOT RUN
+	if (cmds.size()  > 2) // IF ONLY ONE COMMAND THEN WILL NOT RUN
 	{	
-		for (; j < cmds.size(); j++)	//ITERATING THROUGH THE PARSER VECTOR
+		for (; j < cmds.size(); j++)	// ITERATING THROUGH THE PARSER VECTOR, CREATING AND RUNNING THE CORRECT COMMANDS DEPENDING ON THE PARSER, EACH CASE CHECKS FOR THE RIGHT 
+						// PARSER AND CONSTRUCTS THE OBJECT ACCORDINGLY. EACH RUN ALSO CHECKS FOR THE "QUIT" COMMAND
 		{
 		     if ((cmds.at(j) == ";" || cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == "#" || cmds.at(j) == "[" || cmds.at(j) == "test"))
 		     {
-				Cmd* uCmd = new Cmd(cmds.at(j));		// CREATE NEW COMMANDS FOR EACH PARSER
+				Cmd* uCmd = new Cmd(cmds.at(j));					// CREATE NEW COMMANDS FOR EACH PARSER
 				if (cmds.at(j) == ";")
 				{
-					//cout << "HIT CASE SEMICOLON" << endl;
 					j++;
-					if (cmds.at(j) == "[")	
+					if (cmds.at(j) == "quit") 					// QUITS IF QUIT IS DETECTED
+					{
+						exit(1);
+					}
+
+					if (cmds.at(j) == "[")						//CHECKS FOR SPECIAL COMMAND []
 					{	
 						j++;
 						while (cmds.at(j) != "]")
@@ -115,13 +116,12 @@ bool run(bool isValid, vector<string> cmds )
 							temp.push_back(cmds.at(j));
 							j++;
 						}
-						print(temp);
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
 						temp.clear();
 						j++;
-					}
-					else if (cmds.at(j) == "test")
+					}		
+					else if (cmds.at(j) == "test")					// CHECKS FOR SPECIAL COMMAND TEST
 					{	
 						j++;	
 						while (j < cmds.size() && (cmds.at(j) != "||" || cmds.at(j) != "&&" || cmds.at(j) != ";"))
@@ -130,12 +130,11 @@ bool run(bool isValid, vector<string> cmds )
 							j++;
 						}
 						Test* tHolder = new Test("A");
-						tHolder->execute(temp);
-						print(temp);
+						isValid = tHolder->execute(temp);
 						temp.clear();
 						j++;
 					}
-					else
+					else 								// CREATED AND RUNS SEMICOLON OBJECT WITH PAST ISVALID PARAMETER
 					{
 						while (j < cmds.size())
 						{
@@ -146,46 +145,56 @@ bool run(bool isValid, vector<string> cmds )
 							temp.push_back(cmds.at(j));
 							j++;
 						}
-						print(temp);
-						Semicolon* sHolder = new Semicolon(isValid, uCmd);	// CREATE SEMICOLON OBJECT WHEN SEMICOLON IS DETECTED;
-						isValid = sHolder->execute(temp);			// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-						temp.clear();						//	delete sHolder;	
-						j++;
+						if (!temp.empty())
+						{
+							Semicolon* sHolder = new Semicolon(isValid, uCmd);	// CREATE SEMICOLON OBJECT WHEN SEMICOLON IS DETECTED;
+							isValid = sHolder->execute(temp);			// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+							temp.clear();			
+							j++;
+						}
 					}
 				}
 				else if (cmds.at(j) == "||" )
 				{
-					//cout << "HIT CASE OR" << endl;
 					j++;
-					if (cmds.at(j) == "[" && !isValid)	
+					if (cmds.at(j) == "quit")					// CATCHES AND QUITS IF "QUIT" IS DETECTED
+					{
+						exit(1);
+					}
+
+					if (cmds.at(j) == "[")						// CHECKS FOR SPECIAL COMMAND []
 					{	
 						j++;
-						while (cmds.at(j) != "]")
+						if (!isValid)
 						{
-							temp.push_back(cmds.at(j));
+							while (cmds.at(j) != "]")
+							{
+								temp.push_back(cmds.at(j));
+								j++;
+							}
+							Test* tHolder = new Test("A");
+							isValid = tHolder->execute(temp);
+							temp.clear();
 							j++;
 						}
-						print(temp);
-						Test* tHolder = new Test("A");
-						isValid = tHolder->execute(temp);
-						temp.clear();
-						j++;
 					}
-					else if (cmds.at(j) == "test" && !isValid)
+					else if (cmds.at(j) == "test")					// CHECKS FOR SPECIAL COMMAND TEST
 					{	
 						j++;	
-						while (j < cmds.size() && (cmds.at(j) != "||" || cmds.at(j) != "&&" || cmds.at(j) != ";"))
+						if (!isValid)
 						{
-							temp.push_back(cmds.at(j));
-							j++;
+							while (j < cmds.size() && (cmds.at(j) != "||" || cmds.at(j) != "&&" || cmds.at(j) != ";"))
+							{
+								temp.push_back(cmds.at(j));
+								j++;
+							}
+							Test* tHolder = new Test("A");
+							isValid = tHolder->execute(temp);
+							temp.clear();
+							j++;	
 						}
-						Test* tHolder = new Test("A");
-						tHolder->execute(temp);
-						print(temp);
-						temp.clear();
-						j++;
 					}
-					else	
+					else								// CREATES OR OBJECT AND RUNS IT
 					{
 						while (j < cmds.size())
 						{
@@ -196,17 +205,23 @@ bool run(bool isValid, vector<string> cmds )
 							temp.push_back(cmds.at(j));
 							j++;
 						}
-						print(temp);
-						Or* oHolder = new Or(isValid, uCmd); 	//CREATE OR OBJECT WHEN "|" SYMBOL IS DETECTED
-						isValid = oHolder->execute(temp);		//EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-						temp.clear();
-						j++;							//delete oHolder;
+						if (!temp.empty())
+						{
+							Or* oHolder = new Or(isValid, uCmd); 		//CREATE OR OBJECT WHEN "|" SYMBOL IS DETECTED
+							isValid = oHolder->execute(temp);		//EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+							temp.clear();
+							j++;						
+						}
 					}
 				}
 				else if (cmds.at(j) == "&&")
 				{
 					j++;
-					if (cmds.at(j) == "[")	
+					if (cmds.at(j) == "quit")					//QUITS IF "QUIT" IS DETECTED
+					{
+						exit(1);
+					}
+					if (cmds.at(j) == "[")						//CHECKS FOR AND RUNS SPECIAL COMMAND []
 					{	
 						j++;
 						while (cmds.at(j) != "]")
@@ -214,13 +229,12 @@ bool run(bool isValid, vector<string> cmds )
 							temp.push_back(cmds.at(j));
 							j++;
 						}
-						print(temp);
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
 						temp.clear();
 						j++;
 					}
-					else if (cmds.at(j) == "test")
+					else if (cmds.at(j) == "test")					//CHECKS FOR AND RUNS SPECIAL COMMAND TEST
 					{	
 						j++;	
 						while (j < cmds.size() && (cmds.at(j) != "||" || cmds.at(j) != "&&" || cmds.at(j) != ";"))
@@ -230,11 +244,10 @@ bool run(bool isValid, vector<string> cmds )
 						}
 						Test* tHolder = new Test("A");
 						tHolder->execute(temp);
-						print(temp);
 						temp.clear();
 						j++;
 					}
-					else
+					else								//CREATES THE "&&" OBJECT AND RUNS ACCORDING TO VALIDITY
 					{
 						while (j < cmds.size())
 						{
@@ -245,15 +258,16 @@ bool run(bool isValid, vector<string> cmds )
 							temp.push_back(cmds.at(j));
 							j++;
 						}
-					//cout << "HIT CASE AND" << endl;	
-						print(temp);			    
-						And* aHolder = new And(isValid, uCmd);	//CREATE AND OBJECT WHEN "&" SYMBOL IS DETECTED
-						isValid = aHolder->execute(temp);	// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-						temp.clear();					//delete aHolder;
-						j++;
+						if (!temp.empty())
+						{
+							And* aHolder = new And(isValid, uCmd);		//CREATE AND OBJECT WHEN "&" SYMBOL IS DETECTED
+							isValid = aHolder->execute(temp);		// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+							temp.clear();				
+							j++;
+						}
 					}
 				}
-				else if (cmds.at(j) == "#")
+				else if (cmds.at(j) == "#")						//IF # DETECTED STOPS RUNNING
 				{
 					break;
 				}
@@ -270,11 +284,11 @@ bool run(bool isValid, vector<string> cmds )
 
 vector<string> parse (string uInput)
 {
-	vector<string> substr;			// USED TO HOLD PARSERS
-	typedef tokenizer<char_separator<char> > Tok;		// USED TO HOLD COMMANDS
-	char_separator<char> sep(" ", ";&|[]()#", keep_empty_tokens);
-	Tok tok(uInput, sep);
-	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)
+	vector<string> substr;										// USED TO HOLD PARSERS
+	typedef tokenizer<char_separator<char> > Tok;							// USED TO HOLD COMMANDS
+	char_separator<char> sep(" ", ";&|[]()#", keep_empty_tokens);					// USED TO SEPERATE " ", AND SEPERATE AND KEEP:  ;, &, |, [, ], (, ), AND #
+	Tok tok(uInput, sep);							
+	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)					// PUSHES BACK THE SEPERATED WORDS, STOPPING IF # IS DETECTED
 	{
 		if ((*i) == "#")
 		{
@@ -282,22 +296,20 @@ vector<string> parse (string uInput)
 		}
 		else if ((*i) != "")
 		{
-	//		cout << "TOK"<< (*i) << endl;
-			substr.push_back((*i));
+				substr.push_back((*i));							// PUSHES BACK EACH SEPERATED COMMAND TO RETURNED SUBSTR
 		}	
 
-	//				    substr.push_back(" ");
 	}
 
 
-	for (unsigned i = 0; i < substr.size()-1; i++)
+	for (unsigned i = 0; i < substr.size()-1; i++)							// LOOOPS THROUGH TO CHECK FOR  && AND ||, RATHER THAN JUST & AND |
 	{
 		if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) == substr.at(i+1))
 		{
 			substr.at(i) = substr.at(i) + substr.at(i+1);
 			substr.erase(substr.begin() + (i+1));
 		}
-		else if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) != substr.at(i+1))
+		else if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) != substr.at(i+1)) 
 		{
 			if (i == 0)
 			{
@@ -313,146 +325,14 @@ vector<string> parse (string uInput)
 		}
 	}
 
-//	cout << "PAST && AND ||" << endl;
-	
-	int last = substr.size()-1;
+
+	int last = substr.size()-1;									// CHECKS THE LAST PART THE COMMANDS IN ORDER TO CHECK FOR ENDING "&&" OR "||"
 	if (substr.at(last) == "&" || substr.at(last) == "|")
 	{
 		substr.at(last-1) = substr.at(last-1) + substr.at(last);	
 		substr.erase(substr.begin() + last);
 	}
-
-/*	for (unsigned i = 0; i < substr.size(); i++)
-	{
-		cout << "SUBSTR" << substr.at(i) << endl;
-	}
-*/
-
-/*	for (unsigned x = 0; x < substr.size(); x++)
-	{
-		if (substr.at(x) == "[" && substr.size() >= (x+3) )
-		{
-			substr.erase(substr.begin() + (x+3));
-		}	
-	}
-
-*/
-//substr.erase(substr.begin() + 3);
-
-
-/*	for (unsigned i = 0; i < substr.size(); i++)
-	{	
-		if (isspace( substr.at(i).at(substr.at(i).length()-1) ) != 0) {substr.at(i).erase(substr.at(i).end() - 1);}
-	}*/
-
-	for (unsigned i = 0; i < substr.size(); i++)
-	{
-		while (substr.at(i).at(substr.at(i).length()-1) == ' ')
-		{
-			substr.at(i).erase(substr.at(i).end()-1);
-		}		
-	}
-//ciout << "PAST FIRST FRONT CLEANING" << endl;
-/*for (unsigned x = 0; x < substr.size(); x++)
-{
-	cout << "SUBSTR:" << substr.at(x) << "END" << endl; 
-}*/
-	for (unsigned i = 0; i < substr.size(); i++)
-	{
-		while (substr.at(i).at(0) == ' ')
-		{
-			substr.at(i).erase(substr.at(i).begin());
-		}		
-	}
-//cout << "PAST FIRST ROUND OF CLEANING" << endl;
-/*	for (unsigned i = 0; i < substr.size(); i++)	
-	{
-		size_t found = substr.at(i).find("test");			
-		if (found != string::npos)
-		{
-			substr.insert(substr.begin() + (i+1), substr.at(i).substr(4, substr.at(i).length()));
-			substr.at(i) = "test";
-		}
-	}
-*/
-/*	for (unsigned i = 0; i < substr.size(); i++)	
-	{
-		if (substr.at(i) == "test")
-		{	
-			while (i < substr.size()-2) 
-			{
-				if (substr.at(i) != "&&" || substr.at(i) != "||" || substr.at(i) != ";")
-				{
-					substr.at(i+1) += " " + substr.at(i+2);
-					substr.erase(substr.begin() + (i+2));
-				}
-				i++;
-			}	
-		}
-	}
-*/
-
-//cout << "PAST TEST PARSER" << endl;	
-
-	for (unsigned i = 0; i < substr.size(); i++)
-	{	
-		if (isspace( substr.at(i).at(substr.at(i).length()-1) ) != 0) {substr.at(i).erase(substr.at(i).end() - 1);}
-	}
-
-	for (unsigned i = 0; i < substr.size(); i++ )
-	{
-		if (isspace(substr.at(i).at(0)) != 0) {substr.at(i).erase(substr.at(i).begin());}
-	}
-
-//	cout << "TESTING CMDS:" << endl;		
-//	for (unsigned i = 0; i < substr.size(); i++)
-//	{
-//		cout << "BEFORE" << substr.at(i) << endl;
-/*		if ((substr.at(i) != "&&" || substr.at(i) != "||" || substr.at(i) != ";" || substr.at(i) != "(" || substr.at(i) != ")")) 
-		{
-			if (i+1 < substr.size() && (substr.at(i+1) != "&&" || substr.at(i+1) != "||" || substr.at(i+1) != ";" || substr.at(i+1) != "(" || substr.at(i+1) != ")"))
-			{
-				substr.at(i) += " " + substr.at(i+1);
-				substr.erase(substr.begin()+(i+1));
-				i--;
-			}
-		}*/ 
-	//	{
-	//		substr.at(i) += " " + substr.at(i+1);
-	//		substr.erase(substr.begin()+(i+1));
-	//	}
-
-//		cout << "AFTER" <<  substr.at(i) << endl;
-//	}
-	return substr;
-
-}
-
-
-vector<string> pParse (string uInput)
-{
-	vector<string> substr;			// USED TO HOLD PARSERS
-	typedef tokenizer<char_separator<char> > Tok;		// USED TO HOLD COMMANDS
-	char_separator<char> sep("", "()", keep_empty_tokens);
-	Tok tok(uInput, sep);
-	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)
-	{
-		if ((*i) != "")
-		{
-//			cout << "TOK" << (*i) << endl;
-			substr.push_back(*i);
-		}
-		
-	}
-	
-	for (unsigned i = 0; i < substr.size(); i++)
-	{
-		while (substr.at(i).at(0) == ' ')
-		{
-			substr.at(i).erase(substr.at(i).begin());
-		}		
-	}
-
+													// ERASES ANY ERRANT SPACES THAT MAY HAVE MADE IT IN
 	for (unsigned i = 0; i < substr.size(); i++)
 	{
 		while (substr.at(i).at(substr.at(i).length()-1) == ' ')
@@ -461,34 +341,34 @@ vector<string> pParse (string uInput)
 		}		
 	}
 
+	for (unsigned i = 0; i < substr.size(); i++)
+	{
+		while (substr.at(i).at(0) == ' ')
+		{
+			substr.at(i).erase(substr.at(i).begin());
+		}		
+	}
 
 
-//	cout << "TESTING SUBSTR" << endl;
-//	for (unsigned j = 0; j < substr.size(); j++)
-//	{
-//		cout << substr.at(j) << "END"  << endl;
-//	}
-//	cout << "END SUBSTR" << endl;
 	return substr;
 
 }
 
+// A SPECIAL VERSION OF RUN THAT IS USD IN ORDER TO TO MAINTAIN THE PRIORITY THAT COMES WITH THE USE OF PARENTHESIS
 bool pRun (bool isValid, string connector, vector<string> cmd)
 {
-//cout << "CONNECTOR" << connector << "END" << endl;
-	if (connector == "||")
-	{
+	if (connector == "||")										// CHECKS FOR THE || CONNECTOR AND RUNS ACCORDINGLY
+	{	
 		if (!isValid)
 		{
 			return run(isValid, cmd);
 		}
 		else
 		{
-//cout << "HIT ELSE" << endl;
 			return isValid;
 		}
 	}	
-	else if (connector == "&&")
+	else if (connector == "&&")									// CHECKS FOR THE && CONNECTOR AND RUNS ACCPRDINGLY
 	{
 		if (isValid)	
 		{
@@ -499,50 +379,48 @@ bool pRun (bool isValid, string connector, vector<string> cmd)
 			return isValid;
 		}
 	}
-	else if (connector == ";")
+	else if (connector == ";")									// CHECKS FOR THE ; CONNECTOR AND RUNS ACCODRINGLY
 	{
 		return run(isValid, cmd);
 	}
-	cout << "HIT EXCEPTION, RETURNING FALSE" << endl;
+	cout << "HIT EXCEPTION, RETURNING FALSE" << endl;						// IF THIS IS EVER DISPLAYED AND ERROR HAS OCCURED
 	return false;
 }
 
-
-void pExecute(bool isValid, vector<string> test)
+// A SPECIAL VERSION OF EXECUTE THAT ACCOUNTS OF THE PRIORITY OF THE USE OF PARANTHESIS
+void pExecute(bool isValid, vector<string> test)				
 {
-	string connector;
+	string connector;										// USED TO HOLDER THE CONNECTOR IN THE EVENT OF A MULTIPLE COMMAND INPUT
 	
-	for (unsigned i = 0; i < test.size(); i++)
+	for (unsigned i = 0; i < test.size(); i++)							// USED TO CREATE A SUBVECTOR THAT RUNS ALL COMMANDS WITHIN A PARANTHESIS
 	{	
-		vector<string> temp;
-		if (test.at(i) == ")")
+		vector<string> temp;									// TEMPORARY COMMAND VECTOR
+		if (test.at(i) == ")")									// RUNS UNTIL A CLOTHES PARANTEHSIS, AND THEREFORE END OF PRIORITY COMMAND
 		{
 			unsigned r = i-1;
-			while (test.at(r) != "(")
+			while (test.at(r) != "(")							// RUNS BACKWARDS TO OBTAIN ALL COMMANDS AND ADDS THEM TO TEMP
 			{
 				temp.insert(temp.begin(), test.at(r));
 				r--;
 			}
-			if (temp.empty())
+			if (temp.empty())								// CASE IN EVENT USED INPUTS ()
 			{
 				cout << "Syntax error near ')'" << endl;
 				return;
 			}
-			isValid = run(isValid, temp);
+			isValid = run(isValid, temp);							// RUNS NOW PRIORITIZED COMMAND
 			while (test.at(i) != "(" )
 			{
-	//			cout << "BEING ERASED" << test.at(0+i) << endl;
-				test.erase(test.begin() + (i));
+				test.erase(test.begin() + (i));						// ERASES PRIORITIZED COMMAND FROM MAIN VECTOR 
 				i--;
 			}
-			test.erase(test.begin() + (i));
-			if (!test.empty())
+			test.erase(test.begin() + (i));							// ERASES LEFT OVER "("
+			if (!test.empty())								// CHECKS IF THERE ARE MORE COMMANDS TO RUN, IF SO SETS CONNECTOR AND ERASES IT
 			{
-//	cout << "HIT IF" << " I" << i <<  endl;
 				connector = test.at(i);
 				test.erase(test.begin() + (i));
 			}
-			break;
+			break;										// END AFTER FIRST COMMAND
 		}
 
 	}
@@ -550,40 +428,37 @@ void pExecute(bool isValid, vector<string> test)
 
 
 
-	for (unsigned i = 0; i < test.size(); i++)
+	for (unsigned i = 0; i < test.size(); i++)							// NOW BEINGS RUN THROUGH REST OF COMMANDS, IF THEY EXIST
 	{
-
-		vector<string> temp;
+		vector<string> temp;									// SIMILAIR PROCESS TO PREVIOUS, EXCEPT NOW ACCOUTING FOR EXTRA CONNECTORS
 		if (test.at(i) == "(")
 		{	
-			for (unsigned k = 0; k < test.size(); k++)
+			for (unsigned k = 0; k < test.size(); k++)					// ITERATES THROUGH TEST
 			{
-				if (test.at(k) == ")")
+				if (test.at(k) == ")")							// SIMILARLY CHECKS THROUGH TO FIND END OF PARENS
 				{
-		//cout << "HIT SECOND IFiASDFASDFASDFASDFASDFASDFSADF" << endl;
 					unsigned r = k-1;
 					while (test.at(r) != "(")
 					{
-						temp.insert(temp.begin(), test.at(r));
+						temp.insert(temp.begin(), test.at(r));			// PUSH_BACK ALL COMMANDS THAT ARE BETWEEN () TO TEMP
 						r--;
 					}
-					if (temp.empty())
+					if (temp.empty())						// CHECKS CASE ()
 					{
 						cout << "Syntax error near ')'" << endl;
 						return;
 					}
 					else
 					{
-						isValid = pRun(isValid, connector, temp);
+						isValid = pRun(isValid, connector, temp);		// RUN COMMANDS IN TEMP
 						while (test.at(k) != "(" )
 						{
-//							cout << "BEING ERASED" << test.at(k) << endl;
-							test.erase(test.begin() + (k));
+							test.erase(test.begin() + (k));			// ERASES ALL COMMANDS THAT WERE JUST EXECUTED FOR NEXT LOOP
 							k--;
 						}
-						test.erase(test.begin() + (k));
+						test.erase(test.begin() + (k));				// ERASES ERRANT ")"
 					}
-					if (!test.empty())
+					if (!test.empty())						// IF THE VECTOR IS EMPTY, FINISHE DURNNING ELSE SET UP FOR NEXT ITERATION
 					{
 						connector = test.at(k);
 						test.erase(test.begin() + (k));
@@ -592,130 +467,21 @@ void pExecute(bool isValid, vector<string> test)
 				}
 			}
 		}
-		else if (test.at(i) != "(")
+		else if (test.at(i) != "(")								// IF OPEN PARENS IS NOT DETECTED, THE LOGICALLY PRIORITY NO LONGER MATTER
 		{
-			for (unsigned k = 0; k < test.size(); k++)
+			for (unsigned k = 0; k < test.size(); k++)					// ERASES ALL PARENS
 			{
 				if (test.at(k) == "(" || test.at(k) == ")")
 				{
 					test.erase(test.begin() + k);
 				}
 			}
-			isValid = run(isValid, test);
+
+			isValid = pRun(isValid, connector, test);					// RUNS REMAINING COMMANDS
 			break;			
 		}
 	}
 }	
-/*
-			temp = parse(test.at(i-1));
-			isValid = pRun(isValid, connector, temp);
-			test.erase(test.begin() + (i-2), test.begin() + (i));
-			if (!test.empty())	
-			{
-				connector = test.at(0);
-				test.erase(test.begin());
-			}
-
-//begin cpp
-	vector< vector<string> > pcmds;
-	vector<int> positions;
-	for (unsigned i = 0; i < test.size(); i++)
-	{
-		if (test.at(i) == "(")
-		{
-			positions.push_back(i);
-		}	
-	}
-	for (unsigned i = positions.size()-1; i >= 0; i++)
-	{	
-//	cout << "INPUT" << test.at(i) << "END" <<  endl;
-		vector<string> temp;
-		if ( i+1 < test.size()-1)
-		{
-			if (test.at(i+1) != ")")
-			{
-				temp = parse(test.at(i+1));
-				isValid = run(isValid, temp);
-				test.erase(test.begin()+(positions.at(i)), test.begin() + (positions.at(i)+2));
-				break;		
-			}
-		}
-	}
-	
-	for (unsigned i = positions.size()-2; i >= 0; i++)
-	{	
-		vector<string> temp;
-		if ( i+1 < test.size()-1)
-		{
-			if (test.at(i+1) != ")")
-			{
-				vector<string> temporary;
-				temp = parse(test.at(i+1));
-				temporary.push_back(temp.at(1));
-				isValid = pRun(isValid, temp.at(0), temporary);
-				test.erase(test.begin()+positions.at(i), test.begin() + (positions.at(i)+2));
-				break;		
-			}
-		}
-	}
-
-				
-
-else if (test.at(i) == "&&" || test.at(i) == "||" || test.at(i) == ";")
-					{
-cout << "HIT IF" << endl;
-						temp.push_back(test.at(i));
-						pcmds.push_back(temp);
-					}	
-				}
-
-*/			
-					
-/*
-				for (unsigned i = 0; i < test.size(); i++)
-				{	
-					cout << "INPUT" << test.at(i) << "END" <<  endl;
-					vector<string> temp;
-					if ( test.at(i) == "(")
-					{
-						temp.push_back(test.at(i+1));
-						pcmds.push_back(temp);
-					}
-					else if (test.at(i) == "&&" || test.at(i) == "||" || test.at(i) == ";")
-					{
-cout << "HIT IF" << endl;
-						temp.push_back(test.at(i));
-						pcmds.push_back(temp);
-					}	
-				}
-
-					for (unsigned i = 0; i < pcmds.size(); i++)
-				{
-					//cout << "TEST" << test.at(i) << endl;
-					cout << "PCMDS:";
-					for (unsigned t = 0; t < pcmds.at(i).size(); t++)
-					{
-						cout << pcmds.at(i).at(t) << " ";
-					}
-cout << endl;
-				}
-
-				for (unsigned i = 0; i < pcmds.size(); i++)
-				{
-					pcmds.at(i) = parse(pcmds.at(i).at(0));
-					isValid = run(isValid, pcmds.at(i));
-					if (i+1 < pcmds.size()-1)
-					{
-						isValid = pRun(isValid, pcmds.at(i+1).at(0), pcmds.at(i+2));
-						i += 2;		
-					}
-				}
-
-			}
-		}
-}
-*/
-
 
 
 //	2/26/17 fix the spacing issue in parse, IE echo
@@ -727,99 +493,97 @@ int main()
 	char* ulgn = getlogin();
 	gethostname(uname, 100);
 	puts(uname);
-	bool isValid = true;			// USED IN && AND || TO DETERMINE IF PREVIOUS COMMAND WAS VALID
-	int opCounter = 0;
-	int clCounter = 0;
-	cout << "Beginning Terminal" << endl << "Enter 'quit' to exit the program" << endl;
-	cout << ulgn << "@" << uname << "$ ";
-	while (getline(cin, uInput))
+	bool isValid = true;										// USED IN && AND || TO DETERMINE IF PREVIOUS COMMAND WAS VALID
+	int opCounter = 0;										// USED TO COUNT NUMBER OF "("
+	int clCounter = 0;										// USED TO COUNT NUMBER OF ")"
+	int opsCounter = 0;										// USED TO COUNT NUMBER OF "["
+	int clsCounter = 0;										// USED TO COUNT NUMBER OF "]"
+	cout << "Beginning Terminal" << endl << "Enter 'quit' to exit the program" << endl;		// BEGGINNING OUTPUT MESSAGE
+	cout << ulgn << "@" << uname << "$ ";								// EXTRA CREDIT
+	while (getline(cin, uInput))									// LOOPS WHILE GETTING USER INPUT
 	{
-//cout << "NEW INPUT" << endl;
-		if (!uInput.empty() && uInput.at(0) != '#')
+		if (!uInput.empty() && uInput.at(0) != '#')						
 		{
-			//vector< vector <string> > pcmd;
-			vector<string> bcmd = parse(uInput);
-//			for (unsigned m = 0; m < bcmd.size(); m++)
-//			{
-//				cout <<"BCMD" << bcmd.at(m) << "END" << endl;
-//			}	
-			vector<string> test = parse(uInput);
-		/*	for (unsigned i = 0; i < test.size(); i++)
+			vector<string> test = parse(uInput);						// TEST IS THE COMMAND VECTOR
+			for (unsigned i = 0; i < test.size(); i++)					// CHECKS FOR IF NUMBER OF "[" AND "]" ARE THE SAME
 			{
-				cout << "TEST" << test.at(i) << endl;
-			}
-		*/	
-			for (unsigned i = 0; i < test.size(); i++)
-			{
-				if (test.at(i) == "(")
+				if (test.at(i) == "[")							
 				{
-					opCounter += 1;
+					opsCounter++;
 				}
-				else if (test.at(i) == ")")
+				else if (test.at(i) == "]")
 				{
-					clCounter += 1;			
+					clsCounter++;
 				}
 			}
-	
-		/*	for (unsigned i = 0; i < test.size(); i++)
+
+			if (opsCounter != clsCounter)							
 			{
-				cout << "TESTV" << test.at(i) << "END" << endl;
+				cout << "Syntax error near ']'" << endl;	
 			}
-*/
-			if (opCounter != 0 && clCounter != 0)
-			{
-				if (opCounter != clCounter)
+			else
+			{	
+				for (unsigned i = 0; i < test.size(); i++)
 				{
-					cout << "ERROR UNEVEN AMOUNT OF OPEN AND CLOSE PARENS" << endl;
+					if (test.at(i) == "(")
+					{
+						opCounter += 1;
+					}
+					else if (test.at(i) == ")")
+					{
+						clCounter += 1;			
+					}
 				}
-				else if (test.at(0) == "(") 
+		
+				if (opCounter != 0 && clCounter != 0)					// CHECKS IF THE NUMBER OF "(" AND ")" ARE THE SAME
 				{
-					pExecute(isValid, test);
+					if (opCounter != clCounter)
+					{
+						cout << "ERROR UNEVEN AMOUNT OF OPEN AND CLOSE PARENS" << endl;
+					}
+					else if (test.at(0) == "(") 
+					{
+						pExecute(isValid, test);				// IF PARENS ARE DETECTED THEN RUN THE PRIORITIZED VERSION OF RUN
+					}
+					else
+					{
+						bool error = false;					// USED TO CHECK FOR CASE "()"
+						for (unsigned i = 0; i < test.size(); i++)		// CHECKS TO SEE IF CASE "()" IS TRUE
+						{
+							if (test.at(i) == ")")
+							{		
+								if (test.at(i-1) ==  "(")
+								{
+									cout << "Syntax error near ')'" << endl;
+									error = true;
+									break;
+								}
+							}
+						}
+						if (!error)
+						{
+							for (unsigned i = 0; i < test.size(); i++)	// IF CASE "()" IS NOT TRUE THEN RUN
+							{
+								if (test.at(i) == "(" || test.at(i) == ")")
+								{
+									test.erase(test.begin()+i);
+								}
+							}
+							isValid = run(isValid, test);
+						}
+					}
 				}
 				else
 				{
-					bool error = false;
-					for (unsigned i = 0; i < test.size(); i++)
-					{
-						if (test.at(i) == ")")
-						{		
-							if (test.at(i-1) ==  "(")
-							{
-								cout << "Syntax error near ')'" << endl;
-								error = true;
-								break;
-							}
-						}
-					}
-					if (!error)
-					{
-						for (unsigned i = 0; i < test.size(); i++)
-						{
-							if (test.at(i) == "(" || test.at(i) == ")")
-							{
-								test.erase(test.begin()+i);
-							}
-						}
-						isValid = run(isValid, test);
-					}
-				}
-			}
-
-			else
-			{
-				isValid = run(isValid, bcmd);
-			}		
-
-			if (isValid) {} // temp
-//			vector<string> temp = parse(uInput);
-//			bool holder = run(isValid, temp);
-//			if (holder) {}
-			//cout << "RUNNING CMDS" << endl;
-			//isValid = run(isValid, temp);
+					isValid = run(isValid, test);					// IF PARENS ARE NOT DETECTED THEN RUN NORMALLY
+				}	
+			}	
 		}
-		opCounter = 0;
-		clCounter = 0;
-		cout << ulgn << "@" << uname << "$ ";
+		opCounter = 0;										// CLEARED FOR NEXT ITERATION	
+		clCounter = 0;										// CLEARED FOR NEXT ITERATION
+		opsCounter = 0;										// CLEARED FOR NEXT ITERATION
+		clsCounter = 0;										// CLEARED FOR NEXT IERATION
+		cout << ulgn << "@" << uname << "$ ";						
 	}
 
 	return 0;
