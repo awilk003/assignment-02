@@ -92,13 +92,11 @@ bool run(bool isValid, vector<string> cmds )
 		temp.clear();
 	}
 	j--;
-	print(cmds);
 	if (cmds.size()  > 2) // IF ONLY ONE COMMAND THEN WILL NOT RUN
 	{	
 		for (; j < cmds.size(); j++)	// ITERATING THROUGH THE PARSER VECTOR, CREATING AND RUNNING THE CORRECT COMMANDS DEPENDING ON THE PARSER, EACH CASE CHECKS FOR THE RIGHT 
 						// PARSER AND CONSTRUCTS THE OBJECT ACCORDINGLY. EACH RUN ALSO CHECKS FOR THE "QUIT" COMMAND
 		{
-			cout << "CMDS" << cmds.at(j) << endl;
 		     if ((cmds.at(j) == ";" || cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == "#" || cmds.at(j) == "[" || cmds.at(j) == "test"))
 		     {
 				Cmd* uCmd = new Cmd(cmds.at(j));					// CREATE NEW COMMANDS FOR EACH PARSER
@@ -182,7 +180,7 @@ bool run(bool isValid, vector<string> cmds )
 						}
 					}
 					else if (cmds.at(j) == "test")					// CHECKS FOR SPECIAL COMMAND TEST
-					{cout << "hit test area" << endl;	
+					{	
 						j++;	
 						if (!isValid)
 						{
@@ -263,7 +261,7 @@ bool run(bool isValid, vector<string> cmds )
 						}
 						if (!temp.empty())
 						{
-							And* aHolder = new And(isValid, uCmd);		//CREATE AND OBJECT WHEN "&" SYMBOL IS DETECTED
+							And* aHolder = new And(isValid, uCmd);		//CREATE AND OBJECT WHEN "&" SYMBOL IS DETEC
 							isValid = aHolder->execute(temp);		// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
 							temp.clear();				
 						}
@@ -275,11 +273,6 @@ bool run(bool isValid, vector<string> cmds )
 					break;
 				}
 			}
-			else
-			{
-				temp.push_back(cmds.at(j));
-			}
-			
 		}
 	   }
 	   return isValid;
