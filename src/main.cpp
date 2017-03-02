@@ -494,6 +494,7 @@ void pExecute(bool isValid, vector<string> test)
 					else
 					{
 						isValid = pRun(isValid, connector, temp);		// RUN COMMANDS IN TEMP
+						temp.clear();
 						while (test.at(k) != "(" )
 						{
 							test.erase(test.begin() + (k));			// ERASES ALL COMMANDS THAT WERE JUST EXECUTED FOR NEXT LOOP
