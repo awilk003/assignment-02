@@ -272,54 +272,23 @@ vector<string> parse (string uInput)
 {
 	vector<string> substr;			// USED TO HOLD PARSERS
 	typedef tokenizer<char_separator<char> > Tok;		// USED TO HOLD COMMANDS
-	char_separator<char> sep(" ", ";&|[]()", keep_empty_tokens);
+	char_separator<char> sep(" ", ";&|[]()#", keep_empty_tokens);
 	Tok tok(uInput, sep);
 	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)
 	{
-		if ((*i) != "")
+		if ((*i) == "#")
+		{
+			break;
+		}
+		else if ((*i) != "")
 		{
 	//		cout << "TOK"<< (*i) << endl;
 			substr.push_back((*i));
-		}
+		}	
+
 	//				    substr.push_back(" ");
 	}
 
-
-/*
-	for (unsigned i = 0; i < substr.size(); i++)	
-	{
-		size_t found = substr.at(i).find("test");	
-		if (found != string::npos)
-		{
-			substr.push_back(substr.at(i).substr(4, substr.at(i).length()));
-			substr.at(i) = "test";
-		}
-	}
-*/	
-	for (unsigned i = 0; i < substr.size(); i++)	
-	{
-		if (substr.at(i) == "test")
-		{	
-			while (i < substr.size()-2) 
-			{
-				if (substr.at(i+1) == "&" || substr.at(i+1) == "|" || substr.at(i+1) == ";")
-				{
-					
-				}
-				else
-				{//	cout << "HIT IF " << endl;
-					substr.at(i+1) += " " + substr.at(i+2);
-					substr.erase(substr.begin() + (i+2));
-				}
-				i++;
-			}	
-		}
-	}
-
-//for (unsigned i = 0; i < substr.size(); i++)
-//{
-//	cout << "SUBSTR" << substr.at(i) << endl;
-//}
 
 	for (unsigned i = 0; i < substr.size()-1; i++)
 	{
