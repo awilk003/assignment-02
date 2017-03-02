@@ -40,12 +40,13 @@ bool Cmd::execute(vector<string> myArgs)
 	}
 	if (pid == 0) // child process
 	{
-		if (execvp(args[0], args) < 0)
+		if (execvp(args[0], args) == -1)
 		{
 			perror("exec");
-			exit(1);
+			//exit(1);
 
 		}
+		exit(1);
 	}
 	else // parent process
 	{
