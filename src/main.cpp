@@ -62,23 +62,26 @@ bool run(bool isValid, vector<string> cmds )
 			j++;
 		}
 		else
-		{	j++;
-			while (j < cmds.size() && (cmds.at(j) != "&&"))
+		{	
+			j++;
+			while (j < cmds.size()) 
 			{
+				if (cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == ";")
+				{
+					break;
+				}
 				temp.push_back(cmds.at(j));
 				j++;
-			}
+			}		
 			Test* tHolder = new Test("A");
 			isValid = tHolder->execute(temp);
-			temp.clear();
-			j++;
+			temp.clear();	
 		}
 	}
 	else	
 	{
 		//IF COMMAND CAN BE RUN NORMALLY, RUNS THE NORMAL COMMANDS
 		Cmd* first = new Cmd(cmds.at(j)); 
-	//	print(cmds);										//DEBUGGING
 		while (j < cmds.size())
 		{
 			if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
@@ -123,16 +126,19 @@ bool run(bool isValid, vector<string> cmds )
 					}		
 					else if (cmds.at(j) == "test")					// CHECKS FOR SPECIAL COMMAND TEST
 					{	
-						j++;	
-						while (j < cmds.size() && (cmds.at(j) != "||" || cmds.at(j) != "&&" || cmds.at(j) != ";"))
+						j++;
+						while (j < cmds.size()) 
 						{
+							if (cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == ";")
+							{
+								break;
+							}
 							temp.push_back(cmds.at(j));
 							j++;
-						}
+						}		
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
-						temp.clear();
-						j++;
+						temp.clear();	
 					}
 					else 								// CREATED AND RUNS SEMICOLON OBJECT WITH PAST ISVALID PARAMETER
 					{
@@ -180,20 +186,23 @@ bool run(bool isValid, vector<string> cmds )
 						}
 					}
 					else if (cmds.at(j) == "test")					// CHECKS FOR SPECIAL COMMAND TEST
-					{	
-						j++;	
+					{		
 						if (!isValid)
 						{
-							while (j < cmds.size() && (cmds.at(j) != "||" || cmds.at(j) != "&&" || cmds.at(j) != ";"))
+							j++;
+							while (j < cmds.size()) 
 							{
+								if (cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == ";")
+								{
+									break;
+								}
 								temp.push_back(cmds.at(j));
 								j++;
-							}
+							}		
 							Test* tHolder = new Test("A");
 							isValid = tHolder->execute(temp);
-							temp.clear();				
+							temp.clear();
 						}
-						j--;
 					}
 					else								// CREATES OR OBJECT AND RUNS IT
 					{
@@ -237,16 +246,19 @@ bool run(bool isValid, vector<string> cmds )
 					}
 					else if (cmds.at(j) == "test")					//CHECKS FOR AND RUNS SPECIAL COMMAND TEST
 					{	
-						j++;	
-						while (j < cmds.size() && (cmds.at(j) != "||" || cmds.at(j) != "&&" || cmds.at(j) != ";"))
+						j++;
+						while (j < cmds.size()) 
 						{
+							if (cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == ";")
+							{
+								break;
+							}
 							temp.push_back(cmds.at(j));
 							j++;
-						}
+						}		
 						Test* tHolder = new Test("A");
-						tHolder->execute(temp);
+						isValid = tHolder->execute(temp);
 						temp.clear();
-						
 					}
 					else								//CREATES THE "&&" OBJECT AND RUNS ACCORDING TO VALIDITY
 					{
@@ -265,8 +277,8 @@ bool run(bool isValid, vector<string> cmds )
 							isValid = aHolder->execute(temp);		// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
 							temp.clear();				
 						}
-						j--;
 					}
+					j--;
 				}
 				else if (cmds.at(j) == "#")						//IF # DETECTED STOPS RUNNING
 				{
