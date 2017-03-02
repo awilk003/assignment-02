@@ -78,6 +78,7 @@ bool run(bool isValid, vector<string> cmds )
 	{
 		//IF COMMAND CAN BE RUN NORMALLY, RUNS THE NORMAL COMMANDS
 		Cmd* first = new Cmd(cmds.at(j)); 
+	//	print(cmds);										//DEBUGGING
 		while (j < cmds.size())
 		{
 			if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
@@ -302,7 +303,7 @@ vector<string> parse (string uInput)
 	}
 
 
-	for (unsigned i = 0; i < substr.size()-1; i++)							// LOOOPS THROUGH TO CHECK FOR  && AND ||, RATHER THAN JUST & AND |
+	for (unsigned i = 0; i < substr.size()-1; i++)							// LOOPS THROUGH TO CHECK FOR  && AND ||, RATHER THAN JUST & AND |
 	{
 		if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) == substr.at(i+1))
 		{
@@ -391,36 +392,69 @@ bool pRun (bool isValid, string connector, vector<string> cmd)
 void pExecute(bool isValid, vector<string> test)				
 {
 	string connector;										// USED TO HOLDER THE CONNECTOR IN THE EVENT OF A MULTIPLE COMMAND INPUT
-	
 	for (unsigned i = 0; i < test.size(); i++)							// USED TO CREATE A SUBVECTOR THAT RUNS ALL COMMANDS WITHIN A PARANTHESIS
 	{	
-		vector<string> temp;									// TEMPORARY COMMAND VECTOR
-		if (test.at(i) == ")")									// RUNS UNTIL A CLOTHES PARANTEHSIS, AND THEREFORE END OF PRIORITY COMMAND
+		if (test.at(i) == "(")
 		{
-			unsigned r = i-1;
-			while (test.at(r) != "(")							// RUNS BACKWARDS TO OBTAIN ALL COMMANDS AND ADDS THEM TO TEMP
+			vector<string> temp;								// TEMPORARY COMMAND VECTOR
+			while (test.at(i) != ")")
 			{
-				temp.insert(temp.begin(), test.at(r));
-				r--;
+				i++;
 			}
-			if (temp.empty())								// CASE IN EVENT USED INPUTS ()
+			if (test.at(i) == ")")								// RUNS UNTIL A CLOTHES PARANTEHSIS, AND THEREFORE END OF PRIORITY COMMAND
 			{
-				cout << "Syntax error near ')'" << endl;
-				return;
+				unsigned r = i-1;
+				while (test.at(r) != "(")						// RUNS BACKWARDS TO OBTAIN ALL COMMANDS AND ADDS THEM TO TEMP
+				{
+					temp.insert(temp.begin(), test.at(r));
+					r--;
+				}
+				if (temp.empty())							// CASE IN EVENT USED INPUTS ()
+				{
+					cout << "Syntax error near ')'" << endl;
+					return;
+				}
+				isValid = run(isValid, temp);						// RUNS NOW PRIORITIZED COMMAND
+				while (test.at(i) != "(" )
+				{
+					test.erase(test.begin() + (i));					// ERASES PRIORITIZED COMMAND FROM MAIN VECTOR 
+					i--;
+				}
+				test.erase(test.begin() + (i));						// ERASES LEFT OVER "("
+				if (!test.empty())							// CHECKS IF THERE ARE MORE COMMANDS TO RUN, IF SO SETS CONNECTOR AND ERASES IT
+				{
+					connector = test.at(i);
+					test.erase(test.begin() + (i));
+				}
+				break;										// END AFTER FIRST COMMAND
 			}
-			isValid = run(isValid, temp);							// RUNS NOW PRIORITIZED COMMAND
-			while (test.at(i) != "(" )
-			{
-				test.erase(test.begin() + (i));						// ERASES PRIORITIZED COMMAND FROM MAIN VECTOR 
-				i--;
-			}
-			test.erase(test.begin() + (i));							// ERASES LEFT OVER "("
-			if (!test.empty())								// CHECKS IF THERE ARE MORE COMMANDS TO RUN, IF SO SETS CONNECTOR AND ERASES IT
-			{
-				connector = test.at(i);
-				test.erase(test.begin() + (i));
-			}
-			break;										// END AFTER FIRST COMMAND
+		}
+		else
+		{
+				vector<string> temp;
+				while (i < test.size())
+				{
+					if (test.at(i) == "&&" || test.at(i) == "||" || test.at(i) == ";")
+					{	
+						break;
+					}
+	 				temp.push_back(test.at(i));
+					i++;	
+				}
+				while (i != 0)
+				{
+					test.erase(test.begin());
+					i--;
+				}
+				isValid = run(isValid, temp);
+				temp.clear();
+				if (!test.empty())
+				{
+					connector = test.at(0);
+				//	cout << "CONNECTOR" << connector << endl;
+					test.erase(test.begin());
+				}
+				break;
 		}
 
 	}
@@ -443,6 +477,7 @@ void pExecute(bool isValid, vector<string> test)
 						temp.insert(temp.begin(), test.at(r));			// PUSH_BACK ALL COMMANDS THAT ARE BETWEEN () TO TEMP
 						r--;
 					}
+					//print(temp);
 					if (temp.empty())						// CHECKS CASE ()
 					{
 						cout << "Syntax error near ')'" << endl;
@@ -463,22 +498,28 @@ void pExecute(bool isValid, vector<string> test)
 						connector = test.at(k);
 						test.erase(test.begin() + (k));
 					}
-					
 				}
 			}
 		}
 		else if (test.at(i) != "(")								// IF OPEN PARENS IS NOT DETECTED, THE LOGICALLY PRIORITY NO LONGER MATTER
 		{
-			for (unsigned k = 0; k < test.size(); k++)					// ERASES ALL PARENS
+			for (unsigned l = 0; l < test.size(); l++)					// ERASES ALL PARENS
 			{
-				if (test.at(k) == "(" || test.at(k) == ")")
+				if (test.at(l) == "||" || test.at(l) == "&&" || test.at(l) == ";")
 				{
-					test.erase(test.begin() + k);
+					break;
 				}
+				temp.push_back(test.at(l));
+				test.erase(test.begin() + l);
 			}
-
-			isValid = pRun(isValid, connector, test);					// RUNS REMAINING COMMANDS
-			break;			
+			isValid = pRun(isValid, connector, temp);					// RUNS REMAINING COMMANDS
+			temp.clear();
+			if (!test.empty())
+			{
+				connector = test.at(0);
+				test.erase(test.begin());
+			}
+				
 		}
 	}
 }	
@@ -541,10 +582,11 @@ int main()
 					{
 						cout << "ERROR UNEVEN AMOUNT OF OPEN AND CLOSE PARENS" << endl;
 					}
-					else if (test.at(0) == "(") 
+					else 
 					{
 						pExecute(isValid, test);				// IF PARENS ARE DETECTED THEN RUN THE PRIORITIZED VERSION OF RUN
 					}
+/*
 					else
 					{
 						bool error = false;					// USED TO CHECK FOR CASE "()"
@@ -560,18 +602,8 @@ int main()
 								}
 							}
 						}
-						if (!error)
-						{
-							for (unsigned i = 0; i < test.size(); i++)	// IF CASE "()" IS NOT TRUE THEN RUN
-							{
-								if (test.at(i) == "(" || test.at(i) == ")")
-								{
-									test.erase(test.begin()+i);
-								}
-							}
-							isValid = run(isValid, test);
-						}
 					}
+*/
 				}
 				else
 				{
