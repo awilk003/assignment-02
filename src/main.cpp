@@ -58,6 +58,7 @@ bool run(bool isValid, vector<string> cmds )
 			}
 			Test* tHolder = new Test("A");
 			isValid = tHolder->execute(temp);
+			delete tHolder;
 			temp.clear();
 			j++;
 		}
@@ -75,6 +76,7 @@ bool run(bool isValid, vector<string> cmds )
 			}		
 			Test* tHolder = new Test("A");
 			isValid = tHolder->execute(temp);
+			delete tHolder;
 			temp.clear();	
 		}
 	}
@@ -92,6 +94,7 @@ bool run(bool isValid, vector<string> cmds )
 			j++;
 		}
 		isValid = first->execute(temp); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
+		delete first;
 		temp.clear();
 	}
 	j--;
@@ -121,6 +124,7 @@ bool run(bool isValid, vector<string> cmds )
 						}
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
+						delete tHolder;
 						temp.clear();
 						j++;
 					}		
@@ -138,6 +142,7 @@ bool run(bool isValid, vector<string> cmds )
 						}		
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
+						delete tHolder;
 						temp.clear();	
 					}
 					else 								// CREATED AND RUNS SEMICOLON OBJECT WITH PAST ISVALID PARAMETER
@@ -155,8 +160,8 @@ bool run(bool isValid, vector<string> cmds )
 						{
 							Semicolon* sHolder = new Semicolon(isValid, uCmd);	// CREATE SEMICOLON OBJECT WHEN SEMICOLON IS DETECTED;
 							isValid = sHolder->execute(temp);			// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+							delete sHolder;
 							temp.clear();			
-			
 						}
 					}
 					j--;
@@ -182,6 +187,7 @@ bool run(bool isValid, vector<string> cmds )
 							Test* tHolder = new Test("A");
 							isValid = tHolder->execute(temp);
 							temp.clear();
+							delete tHolder;
 							j++;
 						}
 					}
@@ -201,6 +207,7 @@ bool run(bool isValid, vector<string> cmds )
 							}		
 							Test* tHolder = new Test("A");
 							isValid = tHolder->execute(temp);
+							delete tHolder;
 							temp.clear();
 						}
 					}
@@ -219,6 +226,7 @@ bool run(bool isValid, vector<string> cmds )
 						{
 							Or* oHolder = new Or(isValid, uCmd); 		//CREATE OR OBJECT WHEN "|" SYMBOL IS DETECTED
 							isValid = oHolder->execute(temp);		//EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+							delete oHolder;
 							temp.clear();						
 						}
 					}
@@ -241,6 +249,7 @@ bool run(bool isValid, vector<string> cmds )
 						}
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
+						delete tHolder;
 						temp.clear();
 						j++;
 					}
@@ -258,6 +267,7 @@ bool run(bool isValid, vector<string> cmds )
 						}		
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
+						delete tHolder;
 						temp.clear();
 					}
 					else								//CREATES THE "&&" OBJECT AND RUNS ACCORDING TO VALIDITY
@@ -275,6 +285,7 @@ bool run(bool isValid, vector<string> cmds )
 						{
 							And* aHolder = new And(isValid, uCmd);		//CREATE AND OBJECT WHEN "&" SYMBOL IS DETEC
 							isValid = aHolder->execute(temp);		// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
+							delete aHolder;
 							temp.clear();				
 						}
 					}
@@ -284,6 +295,7 @@ bool run(bool isValid, vector<string> cmds )
 				{
 					break;
 				}
+				delete uCmd;
 			}
 		}
 	   }
@@ -484,8 +496,7 @@ void pExecute(bool isValid, vector<string> test)
 					{
 						temp.insert(temp.begin(), test.at(r));			// PUSH_BACK ALL COMMANDS THAT ARE BETWEEN () TO TEMP
 						r--;
-					}
-					//print(temp);
+					}	
 					if (temp.empty())						// CHECKS CASE ()
 					{
 						cout << "Syntax error near ')'" << endl;
