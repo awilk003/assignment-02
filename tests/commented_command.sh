@@ -1,8 +1,7 @@
 #!/bin/sh
-make clean; make
 echo "#ls; ls || ls && ls # ls"  | bin/rshell
-#"ls ; ls || ls && ls # ls";
-#"ls #  ls"
-#"asdf#ls"
-#"ls#asdf"
+# echo "((ps #) "
+# echo "(echo a)  #  ls"
+# echo ((echo a #|| echo b)"
+# echo "#test -e bin/rshell [ bin/rshell]"
 

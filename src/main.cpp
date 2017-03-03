@@ -317,7 +317,7 @@ vector<string> parse (string uInput)
 		}
 		else if ((*i) != "")
 		{
-				substr.push_back((*i));							// PUSHES BACK EACH SEPERATED COMMAND TO RETURNED SUBSTR
+			substr.push_back((*i));							// PUSHES BACK EACH SEPERATED COMMAND TO RETURNED SUBSTR
 		}	
 
 	}
@@ -568,7 +568,11 @@ int main()
 			vector<string> test = parse(uInput);						// TEST IS THE COMMAND VECTOR
 			for (unsigned i = 0; i < test.size(); i++)					// CHECKS FOR IF NUMBER OF "[" AND "]" ARE THE SAME
 			{
-				if (test.at(i) == "[")							
+				if (test.at(i) == "#")
+				{
+					break;
+				}
+				else if (test.at(i) == "[")							
 				{
 					opsCounter++;
 				}
@@ -586,7 +590,11 @@ int main()
 			{	
 				for (unsigned i = 0; i < test.size(); i++)
 				{
-					if (test.at(i) == "(")
+					if (test.at(i) == "#")
+					{
+						break;
+					}
+					else if (test.at(i) == "(")
 					{
 						opCounter += 1;
 					}
