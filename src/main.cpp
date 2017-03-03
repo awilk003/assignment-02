@@ -482,10 +482,10 @@ void pExecute(bool isValid, vector<string> test)
 
 
 
-	for (unsigned i = 0; i < test.size(); i++)							// NOW BEINGS RUN THROUGH REST OF COMMANDS, IF THEY EXIST
+	while (!test.empty())							// NOW BEINGS RUN THROUGH REST OF COMMANDS, IF THEY EXIST
 	{
 		vector<string> temp;									// SIMILAIR PROCESS TO PREVIOUS, EXCEPT NOW ACCOUTING FOR EXTRA CONNECTORS
-		if (test.at(i) == "(")
+		if (test.at(0) == "(")
 		{	
 			for (unsigned k = 0; k < test.size(); k++)					// ITERATES THROUGH TEST
 			{
@@ -521,16 +521,12 @@ void pExecute(bool isValid, vector<string> test)
 				}
 			}
 		}
-		else if (test.at(i) != "(")								// IF OPEN PARENS IS NOT DETECTED, THE LOGICALLY PRIORITY NO LONGER MATTER
+		else if (test.at(0) != "(")								// IF OPEN PARENS IS NOT DETECTED, THE LOGICALLY PRIORITY NO LONGER MATTER
 		{
-			for (unsigned l = 0; l < test.size(); l++)					// ERASES ALL PARENS
+			while( !test.empty() && (test.at(0) != "&&") && (test.at(0) != "||") && (test.at(0) != ";"))
 			{
-				if (test.at(l) == "||" || test.at(l) == "&&" || test.at(l) == ";")
-				{
-					break;
-				}
-				temp.push_back(test.at(l));
-				test.erase(test.begin() + l);
+				temp.push_back(test.at(0));
+				test.erase(test.begin());
 			}
 			isValid = pRun(isValid, connector, temp);					// RUNS REMAINING COMMANDS
 			temp.clear();
