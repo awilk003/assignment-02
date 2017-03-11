@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS:=-g -ansi -Wall -Werror -pedantic 
-SOURCES=main.cpp and.cpp or.cpp cmd.cpp cmdline.cpp pound.cpp semicolon.cpp test.cpp
+SOURCES=wildcard *.cpp
 OBJS=$(patsubst %.cpp,bin/%.o,$(SOURCES))
 VPATH=src
 EXECUTABLE=bin/rshell
