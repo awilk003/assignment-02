@@ -1,33 +1,32 @@
-#include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string>
+#include "out.hpp"
 
 Rout::Rout()
 {}
 
-void Rout::truncate(string filename)
+void Rout::truncate(const string &filename)
 {
 	int out;
-	out = open((char*)filename.c_string(), O_WRONLY | O_TRUNC | O_CREAT);
-	dup2(out, 1);
-	close out;  
+	out = open(filename.c_string(), O_WRONLY | O_TRUNC | O_CREAT, 0666);
+	dup2(out, STDOUT_FILENO);
+	close(filename.c_string());
 }
 
-void Rout::append(string filename)
+void Rout::append(const string &filename)
 {
 	int out;
-	out = open((char*)filename.c_string(), O_WRONLY | O_APPEND | O_CREAT);
-	dup2(out, 1);
-	close out;
+	out = open(filename.c_string(), O_WRONLY | O_APPEND | O_CREAT, 0666);
+	dup2(out, STDOUT_FILENO);
+	close(filename.c_string());
 }
 
 
-bool execute(vector<string> cmd)
+bool Rout::execute(const vector<string> &cmd)
 {
-	bool valid = true;
 
 	if (cmd[cmd.size()-1] == "a")
 	{
@@ -38,9 +37,8 @@ bool execute(vector<string> cmd)
 		truncate(cmd[cmd.size()-1]);
 	}
 
-	return valid; 
+	return true; 
 }
-
 
 
 

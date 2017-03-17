@@ -10,9 +10,9 @@ class Rout
 {
 public:
 	Rout();
-	void truncate(string filename);
-	void append(string filename);
-	bool execute(vector<string> cmd);
+	void truncate(const string &filename);
+	void append(const string &filename);
+	bool execute(const vector<string> &cmd);
 	//virtual bool isValid() = 0;
 };
 
