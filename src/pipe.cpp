@@ -3,7 +3,10 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <string>
+#include <stdio.h>
+
 
 Pipe::Pipe()
 {}
