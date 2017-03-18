@@ -61,5 +61,5 @@ bool Pipe::execute(const vector<string> &cmd, string &input)
 			exit(1);
 		}
 	}
-	
+	return true;
 }
