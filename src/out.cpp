@@ -31,7 +31,7 @@ void Rout::append(const string &filename)
 }
 
 
-bool Rout::execute(const vector<string> &cmd, const char &flag )
+bool Rout::execute(const vector<string> &cmds, const char &flag )
 {
 
 	if (flag == 'a')
