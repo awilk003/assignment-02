@@ -119,7 +119,7 @@ bool run(bool isValid, vector<string> cmds )
 			}
 			Test* tHolder = new Test("A");
 			isValid = tHolder->execute(temp);
-			delete tHolder;
+		//	delete tHolder;
 			temp.clear();
 			j++;
 		}
@@ -138,7 +138,7 @@ bool run(bool isValid, vector<string> cmds )
 			Test* tHolder = new Test("A");
 
 			isValid = tHolder->execute(temp);
-			delete tHolder;
+		//	delete tHolder;
 			temp.clear();	
 		}
 	}
@@ -156,7 +156,7 @@ bool run(bool isValid, vector<string> cmds )
 			j++;
 		}
 		isValid = first->execute(temp); // SET ISVALID TO WHETHER OR NOT THE COMMAND WAS VALID OR NOT FOR POSSIBLE NEXT COMMAND}
-		delete first;
+	//	delete first;
 		temp.clear();
 	}
 	j--;
@@ -218,7 +218,7 @@ bool run(bool isValid, vector<string> cmds )
 						}
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
-						delete tHolder;
+				//		delete tHolder;
 						temp.clear();
 						j++;
 					}		
@@ -236,7 +236,7 @@ bool run(bool isValid, vector<string> cmds )
 						}		
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
-						delete tHolder;
+					//	delete tHolder;
 						temp.clear();	
 					}
 					else 								// CREATED AND RUNS SEMICOLON OBJECT WITH PAST ISVALID PARAMETER
@@ -254,7 +254,7 @@ bool run(bool isValid, vector<string> cmds )
 						{
 							Semicolon* sHolder = new Semicolon(isValid, uCmd);	// CREATE SEMICOLON OBJECT WHEN SEMICOLON IS DETECTED;
 							isValid = sHolder->execute(temp);			// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-							delete sHolder;
+					//		delete sHolder;
 							temp.clear();			
 						}
 					}
@@ -312,7 +312,7 @@ bool run(bool isValid, vector<string> cmds )
 							Test* tHolder = new Test("A");
 							isValid = tHolder->execute(temp);
 							temp.clear();
-							delete tHolder;
+					//		delete tHolder;
 							j++;
 						}
 					}
@@ -332,7 +332,7 @@ bool run(bool isValid, vector<string> cmds )
 							}		
 							Test* tHolder = new Test("A");
 							isValid = tHolder->execute(temp);
-							delete tHolder;
+				//			delete tHolder;
 							temp.clear();
 						}
 					}
@@ -351,7 +351,7 @@ bool run(bool isValid, vector<string> cmds )
 						{
 							Or* oHolder = new Or(isValid, uCmd); 		//CREATE OR OBJECT WHEN "|" SYMBOL IS DETECTED
 							isValid = oHolder->execute(temp);		//EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-							delete oHolder;
+						//	delete oHolder;
 							temp.clear();						
 						}
 					}
@@ -408,7 +408,7 @@ bool run(bool isValid, vector<string> cmds )
 						}
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
-						delete tHolder;
+					//	delete tHolder;
 						temp.clear();
 						j++;
 					}
@@ -426,7 +426,7 @@ bool run(bool isValid, vector<string> cmds )
 						}		
 						Test* tHolder = new Test("A");
 						isValid = tHolder->execute(temp);
-						delete tHolder;
+					//	delete tHolder;
 						temp.clear();
 					}
 					else								//CREATES THE "&&" OBJECT AND RUNS ACCORDING TO VALIDITY
@@ -445,7 +445,7 @@ bool run(bool isValid, vector<string> cmds )
 						{
 							And* aHolder = new And(isValid, uCmd);		//CREATE AND OBJECT WHEN "&" SYMBOL IS DETEC
 							isValid = aHolder->execute(temp);		// EXECUTES COMMAND AND CHECKS/SETS VALIDITY
-							delete aHolder;
+						//	delete aHolder;
 							temp.clear();				
 						}
 					}
@@ -455,7 +455,7 @@ bool run(bool isValid, vector<string> cmds )
 				{
 					break;
 				}
-				delete uCmd;
+				//delete uCmd;
 			}
 		}
 	   }
@@ -485,11 +485,12 @@ vector<string> parse (string uInput)
 
 	for (unsigned i = 0; i < substr.size()-1; i++)							// LOOPS THROUGH TO CHECK FOR  && AND ||, RATHER THAN JUST & AND |
 	{
-		if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) == substr.at(i+1))
+		if ((substr.at(i) == "&" || substr.at(i) == "|" || substr.at(i) == ">") && substr.at(i) == substr.at(i+1))
 		{
 			substr.at(i) = substr.at(i) + substr.at(i+1);
 			substr.erase(substr.begin() + (i+1));
 		}
+/*
 		else if ((substr.at(i) == "&" || substr.at(i) == "|") && substr.at(i) != substr.at(i+1)) 
 		{
 			if (i == 0)
@@ -504,16 +505,18 @@ vector<string> parse (string uInput)
 				substr.erase(substr.begin() + (i+1));
 			}
 		}
+*/
 	}
 
 
 	int last = substr.size()-1;									// CHECKS THE LAST PART THE COMMANDS IN ORDER TO CHECK FOR ENDING "&&" OR "||"
+
 	if (substr.at(last) == "&" || substr.at(last) == "|")
 	{
 		substr.at(last-1) = substr.at(last-1) + substr.at(last);	
 		substr.erase(substr.begin() + last);
 	}
-													// ERASES ANY ERRANT SPACES THAT MAY HAVE MADE IT IN
+												// ERASES ANY ERRANT SPACES THAT MAY HAVE MADE IT IN
 	for (unsigned i = 0; i < substr.size(); i++)
 	{
 		while (substr.at(i).at(substr.at(i).length()-1) == ' ')
@@ -722,6 +725,7 @@ int main()
 		if (!uInput.empty() && uInput.at(0) != '#')						
 		{
 			vector<string> test = parse(uInput);						// TEST IS THE COMMAND VECTOR
+			print(test);
 			for (unsigned i = 0; i < test.size(); i++)					// CHECKS FOR IF NUMBER OF "[" AND "]" ARE THE SAME
 			{
 				if (test.at(i) == "#")
