@@ -24,7 +24,8 @@ bool Pipe::execute(const vector<string> &cmd, string &input)
 	}
 	
 	//set file descriptors
-	pipes[0] = input;
+	int in = open(input.c_str(), O_RDONLY)
+	pipes[0] = in;
 	pipes[1] = STDOUT_FILENO;
 	
 	//set output destination
