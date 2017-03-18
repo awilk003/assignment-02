@@ -1,1 +1,19 @@
-HELLO WORLD
+HIT PARENT
+and.o
+bin
+cmdline.o
+cmd.o
+hw2
+hw3
+LICENSE
+main.o
+Makefile
+or.o
+pound.o
+README.md
+semicolon.o
+src
+test.o
+tests
+test.txt
+jchee006@hammer.cs.ucr.edu$ 
