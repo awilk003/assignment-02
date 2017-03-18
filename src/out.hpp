@@ -15,7 +15,7 @@ public:
 	Rout(const string &filename);
 	void truncate(const string &filename);
 	void append(const string &filename);
-	bool execute(const vector<string> &cmd);
+	bool execute(const vector<string> &cmd, const char &flag);
 	//virtual bool isValid() = 0;
 };
 
