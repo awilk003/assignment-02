@@ -20,9 +20,9 @@ void Rout::truncate(const string &filename)
 void Rout::append(const string &filename)
 {
 	int out;
-	out = open(filename.c_string(), O_WRONLY | O_APPEND | O_CREAT, 0666);
+	out = open(filename.c_str(), O_WRONLY | O_APPEND | O_CREAT, 0666);
 	dup2(out, STDOUT_FILENO);
-	close(filename.c_string());
+	close(filename.c_str());
 }
 
 
