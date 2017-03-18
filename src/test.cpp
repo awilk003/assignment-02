@@ -5,7 +5,7 @@
 
 Test::Test()
 {
-};
+}
 
 Test::Test(string k)
 {

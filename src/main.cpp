@@ -7,6 +7,7 @@
 #include "and.hpp"
 #include "test.hpp"
 #include "in.hpp"
+#include "out.hpp"
 #include <vector>
 #include <string>
 #include <cstring>
@@ -45,7 +46,7 @@ bool isConnector (string input)
 
 string findSymbol(vector<string> cmds, int j)
 {
-	string listofsymbols = "<>";
+	string listofsymbols = "<>>";
 	string symbol;
 	for (unsigned k = j; k < cmds.size(); k++)
 	{
@@ -77,31 +78,45 @@ bool run(bool isValid, vector<string> cmds )
 	string symbol = findSymbol(cmds, j);
 	if (!symbol.empty())
 	{ 
+		string path;	
+		for(; j < cmds.size(); j++)
+		{
+			if (cmds.at(j) == symbol)
+			{
+				path = cmds.at(j+1);
+				break;
+			}
+			else if (isConnector(cmds.at(j)))
+			{
+				break;
+			}
+			else
+			{	
+				temp.push_back(cmds.at(j));
+			}
+		}
 		if (symbol == "<")
 		{
-			string path;	
-			for(j; j < cmds.size(); j++)
-			{
-				if (cmds.at(j) == "<")
-				{
-					path = cmds.at(j+1);
-					break;
-				}
-	
-				else if (isConnector(cmds.at(j)))
-				{
-					break;
-				}
-				else
-				{
-		
-					temp.push_back(cmds.at(j));
-				}
-			}
-			
 			Input* inHolder = new Input(path);
 			inHolder->execute(temp);
-			temp.clear();		
+			temp.clear();			
+		//	delete inHolder;
+		}
+		else
+		{
+			if (symbol == ">")
+			{
+				cout << "SINGLE GREATE" << endl;
+				Rout* rHolder = new Rout(path);
+				rHolder->execute(temp, 't');
+			}
+			else 
+			{
+				Rout* rHolder = new Rout(path);
+				rHolder->execute(temp, 'a');
+			}
+			temp.clear();
+		//	delete rHolder;
 		}
 	}
 
@@ -184,7 +199,7 @@ bool run(bool isValid, vector<string> cmds )
 						if (symbol == "<")
 						{
 							string path;	
-							for(j; j < cmds.size(); j++)
+							for(; j < cmds.size(); j++)
 							{
 								if (cmds.at(j) == "<")
 								{
@@ -533,7 +548,7 @@ vector<string> parse (string uInput)
 		}		
 	}
 
-
+	print(substr);
 	return substr;
 
 }
@@ -725,7 +740,7 @@ int main()
 		if (!uInput.empty() && uInput.at(0) != '#')						
 		{
 			vector<string> test = parse(uInput);						// TEST IS THE COMMAND VECTOR
-			print(test);
+			
 			for (unsigned i = 0; i < test.size(); i++)					// CHECKS FOR IF NUMBER OF "[" AND "]" ARE THE SAME
 			{
 				if (test.at(i) == "#")
