@@ -13,11 +13,12 @@ Rout::Rout()
 Rout::Rout(const string &filename)
 {
 	file = filename;
+	int out;
 }
 
 void Rout::truncate(const string &filename)
 {
-	int out;
+	
 	out = open(filename.c_str(), O_WRONLY | O_TRUNC | O_CREAT, 0666);
 	dup2(out, STDOUT_FILENO);
 
