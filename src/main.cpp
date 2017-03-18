@@ -6,6 +6,7 @@
 #include "or.hpp"
 #include "and.hpp"
 #include "test.hpp"
+#include "in.hpp"
 #include <vector>
 #include <string>
 #include <cstring>
@@ -33,6 +34,36 @@ void print(vector<string> input)
 	cout << endl;
 }
 
+bool isConnector (string input)
+{
+	if (input == ";" || input == "||" || input == "&&")
+	{
+		return true;
+	}
+	return false;
+}
+
+string findSymbol(vector<string> cmds, int j)
+{
+	string listofsymbols = "<>";
+	string symbol;
+	for (unsigned k = j; k < cmds.size(); k++)
+	{
+		if (listofsymbols.find(cmds.at(k)) != string::npos)
+		{
+			symbol = cmds.at(k);
+			break;
+		}
+		else if (isConnector(cmds.at(k)))
+		{
+			break;
+		}
+	}
+	return symbol;
+}
+
+
+
 bool run(bool isValid, vector<string> cmds )
 {
 	vector<string> temp; //TEMPORARY VECTOR OF COMMANDS TO BE PASSED INTO THE EXECUTE FUNCTION
@@ -43,9 +74,39 @@ bool run(bool isValid, vector<string> cmds )
 	}
 
 	unsigned j = 0;
+	string symbol = findSymbol(cmds, j);
+	if (!symbol.empty())
+	{ 
+		if (symbol == "<")
+		{
+			string path;	
+			for(j; j < cmds.size(); j++)
+			{
+				if (cmds.at(j) == "<")
+				{
+					path = cmds.at(j+1);
+					break;
+				}
+	
+				else if (isConnector(cmds.at(j)))
+				{
+					break;
+				}
+				else
+				{
+		
+					temp.push_back(cmds.at(j));
+				}
+			}
+			
+			Input* inHolder = new Input(path);
+			inHolder->execute(temp);
+			temp.clear();		
+		}
+	}
 
 	//HARDCODED FIRST COMMAND WITH NO CONNECTOR IN THE BEGGINNING
-	if (cmds.at(j) == "[" || cmds.at(j) == "test")
+	else if (cmds.at(j) == "[" || cmds.at(j) == "test")
 	{
 		//CHECKS FOR THE SPECIAL COMMANDS OF [] AND TEST
 		if (cmds.at(j) == "[")
@@ -67,7 +128,7 @@ bool run(bool isValid, vector<string> cmds )
 			j++;
 			while (j < cmds.size()) 
 			{
-				if (cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == ";")
+				if (isConnector(cmds.at(j)))
 				{
 					break;
 				}
@@ -75,6 +136,7 @@ bool run(bool isValid, vector<string> cmds )
 				j++;
 			}		
 			Test* tHolder = new Test("A");
+
 			isValid = tHolder->execute(temp);
 			delete tHolder;
 			temp.clear();	
@@ -86,7 +148,7 @@ bool run(bool isValid, vector<string> cmds )
 		Cmd* first = new Cmd(cmds.at(j)); 
 		while (j < cmds.size())
 		{
-			if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
+			if (isConnector(cmds.at(j)))
 			{	
 				break;
 			}
@@ -98,13 +160,14 @@ bool run(bool isValid, vector<string> cmds )
 		temp.clear();
 	}
 	j--;
+	
 	if (cmds.size()  > 2) // IF ONLY ONE COMMAND THEN WILL NOT RUN
-	{	
+	{		
 		for (; j < cmds.size(); j++)	// ITERATING THROUGH THE PARSER VECTOR, CREATING AND RUNNING THE CORRECT COMMANDS DEPENDING ON THE PARSER, EACH CASE CHECKS FOR THE RIGHT 
 						// PARSER AND CONSTRUCTS THE OBJECT ACCORDINGLY. EACH RUN ALSO CHECKS FOR THE "QUIT" COMMAND
-		{
-		     if ((cmds.at(j) == ";" || cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == "#" || cmds.at(j) == "[" || cmds.at(j) == "test"))
-		     {
+		{ 		
+		   	if (isConnector(cmds.at(j))) 
+			{
 				Cmd* uCmd = new Cmd(cmds.at(j));					// CREATE NEW COMMANDS FOR EACH PARSER
 				if (cmds.at(j) == ";")
 				{
@@ -113,8 +176,39 @@ bool run(bool isValid, vector<string> cmds )
 					{
 						exit(1);
 					}
+					
+					symbol = findSymbol(cmds, j);
+					
+					if (!symbol.empty())
+					{
+						if (symbol == "<")
+						{
+							string path;	
+							for(j; j < cmds.size(); j++)
+							{
+								if (cmds.at(j) == "<")
+								{
+									path = cmds.at(j+1);
+									break;
+								}
+	
+								if (isConnector(cmds.at(j)))
+								{
+									break;
+								}
+								else
+								{
+									temp.push_back(cmds.at(j));
+								}
+							}	
 
-					if (cmds.at(j) == "[")						//CHECKS FOR SPECIAL COMMAND []
+							Input* inHolder = new Input(path);
+							inHolder->execute(temp);
+							temp.clear();	
+						}
+					}
+		
+					else if (cmds.at(j) == "[")						//CHECKS FOR SPECIAL COMMAND []
 					{	
 						j++;
 						while (cmds.at(j) != "]")
@@ -133,7 +227,7 @@ bool run(bool isValid, vector<string> cmds )
 						j++;
 						while (j < cmds.size()) 
 						{
-							if (cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == ";")
+							if (isConnector(cmds.at(j)))
 							{
 								break;
 							}
@@ -149,7 +243,7 @@ bool run(bool isValid, vector<string> cmds )
 					{
 						while (j < cmds.size())
 						{
-							if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
+							if (isConnector(cmds.at(j)))
 							{	
 								break;
 							}
@@ -173,8 +267,39 @@ bool run(bool isValid, vector<string> cmds )
 					{
 						exit(1);
 					}
+					symbol = findSymbol(cmds, j);
+					
+					if (!symbol.empty())
+					{
+						if (symbol == "<")
+						{
+							string path;	
+							for(; j < cmds.size(); j++)
+							{
+								if (cmds.at(j) == "<")
+								{
+									path = cmds.at(j+1);
+									break;
+								}
+	
+								if (isConnector(cmds.at(j)))
+								{
+									break;
+								}
+								else
+								{
+									temp.push_back(cmds.at(j));
+								}
+							}	
 
-					if (cmds.at(j) == "[")						// CHECKS FOR SPECIAL COMMAND []
+							Input* inHolder = new Input(path);
+							inHolder->execute(temp);
+							temp.clear();	
+						}
+					}
+		
+
+					else if (cmds.at(j) == "[")						// CHECKS FOR SPECIAL COMMAND []
 					{	
 						j++;
 						if (!isValid)
@@ -198,7 +323,7 @@ bool run(bool isValid, vector<string> cmds )
 							j++;
 							while (j < cmds.size()) 
 							{
-								if (cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == ";")
+								if (isConnector(cmds.at(j)))
 								{
 									break;
 								}
@@ -215,7 +340,7 @@ bool run(bool isValid, vector<string> cmds )
 					{
 						while (j < cmds.size())
 						{
-							if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
+							if (isConnector(cmds.at(j)))
 							{	
 								break;
 							}
@@ -239,7 +364,41 @@ bool run(bool isValid, vector<string> cmds )
 					{
 						exit(1);
 					}
-					if (cmds.at(j) == "[")						//CHECKS FOR AND RUNS SPECIAL COMMAND []
+
+					symbol = findSymbol(cmds, j);
+					
+					if (!symbol.empty())
+					{
+						if (symbol == "<")
+						{
+							string path;	
+							for(; j < cmds.size(); j++)
+							{
+								if (cmds.at(j) == "<")
+								{
+									path = cmds.at(j+1);
+									break;
+								}
+	
+								if (isConnector(cmds.at(j)))
+								{
+									break;
+								}
+								else
+								{
+									temp.push_back(cmds.at(j));
+								}
+							}	
+
+							Input* inHolder = new Input(path);
+							inHolder->execute(temp);
+							temp.clear();	
+						}
+					}
+		
+
+
+					else if(cmds.at(j) == "[")						//CHECKS FOR AND RUNS SPECIAL COMMAND []
 					{	
 						j++;
 						while (cmds.at(j) != "]")
@@ -258,7 +417,7 @@ bool run(bool isValid, vector<string> cmds )
 						j++;
 						while (j < cmds.size()) 
 						{
-							if (cmds.at(j) == "||" || cmds.at(j) == "&&" || cmds.at(j) == ";")
+							if (isConnector(cmds.at(j)))
 							{
 								break;
 							}
@@ -274,13 +433,14 @@ bool run(bool isValid, vector<string> cmds )
 					{
 						while (j < cmds.size())
 						{
-							if (cmds.at(j) == "&&" || cmds.at(j) == "||" || cmds.at(j) == ";")
+							if (isConnector(cmds.at(j)))
 							{	
 								break;
 							}
 							temp.push_back(cmds.at(j));
 							j++;
 						}
+
 						if (!temp.empty())
 						{
 							And* aHolder = new And(isValid, uCmd);		//CREATE AND OBJECT WHEN "&" SYMBOL IS DETEC
@@ -307,7 +467,7 @@ vector<string> parse (string uInput)
 {
 	vector<string> substr;										// USED TO HOLD PARSERS
 	typedef tokenizer<char_separator<char> > Tok;							// USED TO HOLD COMMANDS
-	char_separator<char> sep(" ", ";&|[]()#", keep_empty_tokens);					// USED TO SEPERATE " ", AND SEPERATE AND KEEP:  ;, &, |, [, ], (, ), AND #
+	char_separator<char> sep(" ", ";&|[]()#<>", keep_empty_tokens);					// USED TO SEPERATE " ", AND SEPERATE AND KEEP:  ;, &, |, [, ], (, ), AND #
 	Tok tok(uInput, sep);							
 	for (Tok::iterator i = tok.begin(); i != tok.end(); i++)					// PUSHES BACK THE SEPERATED WORDS, STOPPING IF # IS DETECTED
 	{

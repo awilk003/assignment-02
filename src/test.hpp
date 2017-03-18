@@ -7,6 +7,7 @@
 class Test : public Cmdline
 {
 public:
+	Test();
 	Test(string k);
 	bool execute(vector<string> path);	
 };

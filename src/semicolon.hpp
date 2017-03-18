@@ -1,3 +1,5 @@
+#ifndef SEMI_HPP
+#define SEMI_HPP
 #include "cmdline.hpp"
 
 class Semicolon : public Cmdline
@@ -9,3 +11,5 @@ class Semicolon : public Cmdline
 		bool Lchild;
 		Cmdline* Rchild;
 };
+
+#endif

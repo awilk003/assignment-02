@@ -2,6 +2,11 @@
 #include <sys/stat.h>
 #include <string>
 #include <stdio.h>
+
+Test::Test()
+{
+};
+
 Test::Test(string k)
 {
 	
