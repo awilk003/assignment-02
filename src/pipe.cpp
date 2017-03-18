@@ -26,7 +26,7 @@ bool Pipe::execute(const vector<string> &cmd, string &input)
 	
 	//set output destination
 	string filename = cmd[cmd.size() - 1];
-	int newOut = open(filename.c_string(), O_WRONLY | O_APPEND | O_CREAT, 0666);
+	int newOut = open(filename.c_str(), O_WRONLY | O_APPEND | O_CREAT, 0666);
 
 	//create pipe
 	pipe(pipes);
