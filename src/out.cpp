@@ -80,6 +80,7 @@ bool Rout::execute(const vector<string> &cmds, const char &flag )
 		{
 			return false;
 		}
+		dup2(STDOUT_FILENO, out);
 		close(out);
 	}
 
