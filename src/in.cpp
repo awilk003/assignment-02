@@ -9,9 +9,6 @@
 #include <sys/stat.h>
 
 
-
-
-
 Input::Input(string file)
 {
 	filename = file;
