@@ -8,7 +8,7 @@ class Pipe
 {
 public:
 	Pipe();
-	bool execute(vector<string> cmd, string &input);
+	bool execute(const vector<string> &cmd, string &input);
 	//virtual bool isValid() = 0;
 
 };
