@@ -8,8 +8,11 @@
 
 class Rout
 {
+private:
+	string file;
 public:
 	Rout();
+	Rout(const string &filename);
 	void truncate(const string &filename);
 	void append(const string &filename);
 	bool execute(const vector<string> &cmd);
