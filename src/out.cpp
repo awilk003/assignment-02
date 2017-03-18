@@ -13,7 +13,6 @@ Rout::Rout()
 Rout::Rout(const string &filename)
 {
 	file = filename;
-	int out;
 }
 
 void Rout::truncate(const string &filename)
