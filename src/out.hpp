@@ -10,6 +10,7 @@ class Rout
 {
 private:
 	string file;
+	int out;
 public:
 	Rout();
 	Rout(const string &filename);
