@@ -9,6 +9,7 @@
 #include "in.hpp"
 #include "out.hpp"
 #include "pipe.hpp"
+//#include "backup.hpp"
 #include <vector>
 #include <string>
 #include <cstring>
@@ -69,7 +70,7 @@ bool findPipe(vector<string> cmds, int j)
 	
 	for (unsigned k = j; k < cmds.size(); k++)
 	{	
-		cout << "AT K " << cmds.at(k) << "END" << endl;
+//		cout << "AT K " << cmds.at(k) << "END" << endl;
 		if (cmds.at(k) == "|")
 		{	
 			return true;
@@ -138,14 +139,13 @@ bool run(bool isValid, vector<string> cmds )
 
 	else if (findPipe(cmds, j))
 	{
-		cout << "HIT PIPE" << endl;
-	//	Pipe* pipeHolder = new Pipe();
-		/*
+		//cout << "HIT PIPE" << endl;
+		vector<string> rhs;
 		for(; j < cmds.size(); j++)
 		{
 			if (cmds.at(j)== "|" )
 			{
-		
+				break;	
 			}
 			else if (isConnector(cmds.at(j)))
 			{
@@ -156,8 +156,20 @@ bool run(bool isValid, vector<string> cmds )
 				temp.push_back(cmds.at(j));
 			}
 		}
-		*/
-				
+		j++;
+		for (; j < cmds.size(); j++)
+		{
+			if (isConnector(cmds.at(j)))
+			{
+				break;
+			}
+			else
+			{
+				rhs.push_back(cmds.at(j));
+			}
+		}
+		print(temp);
+		print(rhs);		
 	}
 
 	//HARDCODED FIRST COMMAND WITH NO CONNECTOR IN THE BEGGINNING
@@ -181,6 +193,7 @@ bool run(bool isValid, vector<string> cmds )
 		else
 		{	
 			j++;
+//			Pipe* pipeHolder = new Pipe();
 			while (j < cmds.size()) 
 			{
 				if (isConnector(cmds.at(j)))
@@ -630,7 +643,7 @@ vector<string> parse (string uInput)
 		}		
 	}
 
-	print(substr);
+//	print(substr);
 	return substr;
 
 }
