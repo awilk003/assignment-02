@@ -76,7 +76,6 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 
 		pid_t pid2;
 		pid2 = fork();
-		int status;
 		if (pid2 == -1)
 		{
 			perror("fork");
