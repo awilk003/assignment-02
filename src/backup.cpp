@@ -103,14 +103,6 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 			}
 		}
 
-		return true;
-	}
-	else
-	{
-		cout << "No such file or directory" << endl;
-		return false;
-	}
-
 	return true;
 }
 
