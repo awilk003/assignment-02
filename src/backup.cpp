@@ -87,7 +87,7 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 			in = open(filename.c_str(), O_RDONLY);
 			dup2(in, 0);
 			close(in);
-			execvp(args[0], args);
+			execvp(rightArgs[0], rightArgs);
 			exit(0);
 		}
 		else // parent process
