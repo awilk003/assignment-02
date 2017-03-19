@@ -23,7 +23,7 @@ int main()
 	char* rightArgs[512];
 	rightArgs[0] = (char*)"tee";
 	rightArgs[1] = (char*)"testing.txt";
-	rightArgs[1] = (char*)NULL;
+	rightArgs[2] = (char*)NULL;
 
 	//int outback = dup(1);
 	//int inback = dup(0);
