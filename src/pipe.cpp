@@ -108,7 +108,7 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 		}
 		dup2(outback, 1);
 		dup2(outback, pipes[1]);
-		close(out);
+		close(pipes[1]);
 	}
 	return true;
 }
