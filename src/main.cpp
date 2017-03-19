@@ -9,7 +9,7 @@
 #include "in.hpp"
 #include "out.hpp"
 #include "pipe.hpp"
-//#include "backup.hpp"
+#include "backup.hpp"
 #include <vector>
 #include <string>
 #include <cstring>
@@ -168,8 +168,9 @@ bool run(bool isValid, vector<string> cmds )
 				rhs.push_back(cmds.at(j));
 			}
 		}
-		print(temp);
-		print(rhs);		
+		Backup* bHolder = new Backup();
+		bHolder->execute(temp, rhs);
+		temp.clear();
 	}
 
 	//HARDCODED FIRST COMMAND WITH NO CONNECTOR IN THE BEGGINNING
