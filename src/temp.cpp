@@ -81,7 +81,7 @@ int main()
 	}
 	if (pid2 == 0)
 	{
-		dup2(1, pipes[0]);
+		dup2(1, pipes[1]);
 		close(pipes[0]);
 
 		if (execvp(rightArgs[0], rightArgs) == -1)
