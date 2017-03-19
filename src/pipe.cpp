@@ -13,7 +13,7 @@ Pipe::Pipe()
 
 bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 {
-	int pid1;
+	pid_t pid1;
 	int status;
 	int pipes[2];
 	//int out;
@@ -59,6 +59,7 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 	}
 	if (pid1 == 0) // child process
 	{
+		cout << "1ST FORK" << endl;
 		if (execvp(leftArgs[0], leftArgs) == -1)
 		{
 			perror("exec");
@@ -80,7 +81,7 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 		}
 	}
 	close(pipes[0]); 
-	int pid2 = fork();
+	pid_t pid2 = fork();
 
 	if (pid2 == -1)
 	{
@@ -89,6 +90,7 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 	}
 	if (pid2 == 0)
 	{
+		cout << "2ND FORK" << endl;
 		//dup2(pipes[0], 0);
 		//close(pipes[1]);
 		if (execvp(rightArgs[0], rightArgs) == -1)
