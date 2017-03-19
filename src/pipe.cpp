@@ -102,7 +102,7 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 	}
 	else
 	{
-		if (waitpid(pid1, &status, 0) == -1)
+		if (waitpid(pid2, &status, 0) == -1)
 		{
 			perror("wait");
 			exit(1);
