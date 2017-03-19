@@ -20,14 +20,16 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 
 	//pass in commands to args
 	char* leftArgs[512];
-	for (unsigned i = 0; i < lhs.size()-1; i++)
+	unsigned i;
+	for (i = 0; i < lhs.size()-1; i++)
 	{
 		leftArgs[i] = (char*)lhs[i].c_str();
 	}
 	leftArgs[i] = NULL;
 
 	char* rightArgs[512];
-	for (unsigned j = 0; j < rhs.size(); j++)
+	unsigned j;
+	for (j = 0; j < rhs.size(); j++)
 	{
 		rightArgs[j] = (char*)rhs[j].c_str();
 	}
@@ -36,7 +38,7 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 	//int in = open(input.c_str(), O_RDONLY);
 	
 	int outback = dup(1);
-	int inback = dup(0);
+	//int inback = dup(0);
 
 	//set output destination
 	string filename = lhs[lhs.size() - 1];
