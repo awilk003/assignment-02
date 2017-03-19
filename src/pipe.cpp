@@ -91,8 +91,8 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 	}
 	if (pid2 == 0)
 	{
-		dup2(pipes[1], 1);
-		close(pipes[0]);
+		dup2(1, pipes[0]);
+		close(pipes[1]);
 
 		if (execvp(rightArgs[0], rightArgs) == -1)
 		{
