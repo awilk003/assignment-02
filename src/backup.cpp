@@ -126,7 +126,7 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 		}
 		else // parent process
 		{
-			if (waitpid(pid2, &status, 0) == -1)
+			if (waitpid(pid3, &status, 0) == -1)
 			{
 				perror("wait");
 				exit(1);
