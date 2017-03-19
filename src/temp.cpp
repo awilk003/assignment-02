@@ -92,7 +92,7 @@ int main()
 	}
 	else
 	{
-		if (waitpid(pid1, &status, 0) == -1)
+		if (waitpid(pid2, &status, 0) == -1)
 		{
 			perror("wait");
 			exit(1);
