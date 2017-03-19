@@ -11,7 +11,7 @@ class Backup
 public:
 	Backup();
 	Backup(const string &filename);
-	bool execute(const vector<string>);
+	bool execute(const vector<string> &lhs, const vector<string &rhs);
 	//virtual bool isValid() = 0;
 };
 
