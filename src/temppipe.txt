@@ -1,0 +1,130 @@
+#include <iostream>
+#include <string.h>
+#include <stdio.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <vector>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+using namespace std;
+
+int main()
+{
+	vector<string> addendum;
+
+	char* args[512];
+	args[0] = (char*)"echo";
+	args[1] = (char*)"a";
+//	args[2] = (char*)"test.txt";
+	args[2] = (char*)NULL;
+	
+
+
+	int backups[2];
+	backups[0] = dup(0);
+	backups[1] = dup(1);
+	int out2in [2];
+	int in2out [2];
+
+	pipe(out2in);
+	pipe(in2out);
+
+//	dup2(in2out[0], out2in[1]);
+
+	string filename = "test.txt";
+	pid_t pid;
+	pid = fork();
+	int status;
+	if (pid == -1)
+	{ 
+		perror("fork");
+		exit(1);
+	}
+	if (pid == 0) // child process
+	{
+	//		int in = open(filename.c_str(), O_RDONLY);
+//		dup2(in, 0);
+//		dup2(in2out[0], 0);
+//		dup2(in2out[1], 1);
+//		close(out2in[0]);
+//		for (unsigned i = 0; i < 2; i++)
+//		{
+//			cout << "ARGS " << args[i] << endl;
+//		}
+		close(in2out[0]);
+		close(1);		
+		dup2(in2out[1], 1);
+//		close(out2in[1]);
+		execvp(args[0], args);	
+//		close(in);
+		exit(0);
+	}
+	else // parent process
+	{	
+		if (waitpid(pid, &status, 0) == -1)
+		{
+			perror("wait");
+			exit(1);
+		}
+		if (WEXITSTATUS(status) != 0)
+		{
+			return false;
+		}
+		close(in2out[1]);
+		dup2(in2out[0], 0);
+		string a;
+		cin >> a;
+		cout << "IN TUBE" << a << endl;
+	}			
+	char* rightArgs[512];
+	rightArgs[0] = (char*)"cat";	
+	rightArgs[1] = (char*)NULL;
+	pid_t pid2 = fork();
+
+
+	if (pid2 == -1)
+	{
+		perror("fork");
+		exit(1);
+	}
+	if (pid2 == 0)
+	{				
+	//	close(out2in[0]);	
+	//	close(in2out[1]);
+		dup2(in2out[0], 0);
+//		for (unsigned i = 0; i < 2; i++)
+//		{
+//			cout << "RARGS" << rightArgs[i] << endl;
+//		}
+		cout << "HITTING EXEC" << endl;
+		execvp(rightArgs[0], rightArgs);
+	}
+	else
+	{	
+		//dup2(pipes[1], newOut);
+		//close(pipes[0])
+		if (waitpid(pid2, &status, 0) == -1)
+		{
+			perror("wait");
+			exit(1);
+		}
+		if (WEXITSTATUS(status) != 0)
+		{
+			return false;
+		}
+		close(in2out[1]);
+		dup2(in2out[0], 0);
+			
+	}
+
+
+
+
+
+return true;
+}
+
+

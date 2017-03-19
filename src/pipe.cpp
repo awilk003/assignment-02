@@ -47,7 +47,7 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 	//create pipe
 	pipe(pipes);
 	dup2(pipes[0], in);
-	dup2(pipes[1], STDOUT_FILENO);
+	dup2(pipes[1], 1);
 
 	pid1 = fork();
 

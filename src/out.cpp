@@ -82,7 +82,7 @@ bool Rout::execute(const vector<string> &cmds, const char &flag )
 			return false;
 		}	
 		dup2(outback, 1);
-		dup2(outback, out);
+	//	dup2(outback, out);
 		close(out);
 	}
 

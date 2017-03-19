@@ -129,6 +129,10 @@ bool Input::execute(vector<string> cmds)
 			in = open(filename.c_str(), O_RDONLY);
 			dup2(in, 0);
 			close(in);
+//			for (unsigned i = 0; i < 10; i ++)
+//			{
+//				cout << "ARGS" << args[i] << endl;
+//			}
 			execvp(args[0], args);
 			exit(0);
 		}
