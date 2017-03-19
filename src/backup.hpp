@@ -8,8 +8,6 @@
 
 class Backup
 {
-private:
-	string file;
 public:
 	Backup();
 	Backup(const string &filename);

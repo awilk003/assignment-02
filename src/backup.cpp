@@ -12,14 +12,13 @@ Backup::Backup()
 
 Backup::Backup(const string &filename)
 {
-	file = filename;
 }
 
 
 bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 {
 	int outback = dup(1);
-
+	string filename = "testA.txt";
 	int out;
 	out = open(filename.c_str(), O_WRONLY | O_TRUNC | O_CREAT, 0666);
 	dup2(out, 1);
