@@ -19,7 +19,7 @@ void Rout::truncate(const string &filename)
 {
 	
 	out = open(filename.c_str(), O_WRONLY | O_TRUNC | O_CREAT, 0666);
-	dup2(out, STDOUT_FILENO);
+	dup2(out, 1);
 
 }
 
@@ -27,13 +27,14 @@ void Rout::append(const string &filename)
 {
 	int out;
 	out = open(filename.c_str(), O_WRONLY | O_APPEND | O_CREAT, 0666);
-	dup2(out, STDOUT_FILENO);
+	dup2(out, 1);
 }
 
 
 bool Rout::execute(const vector<string> &cmds, const char &flag )
 {
-
+	int outback = dup(1);
+	
 	if (flag == 'a')
 	{
 		append(file);
@@ -79,8 +80,9 @@ bool Rout::execute(const vector<string> &cmds, const char &flag )
 		if (WEXITSTATUS(status) != 0)
 		{
 			return false;
-		}
-		dup2(STDOUT_FILENO, out);
+		}	
+		dup2(outback, 1);
+		dup2(outback, out);
 		close(out);
 	}
 

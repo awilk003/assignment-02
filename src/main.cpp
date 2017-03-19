@@ -8,6 +8,7 @@
 #include "test.hpp"
 #include "in.hpp"
 #include "out.hpp"
+#include "pipe.hpp"
 #include <vector>
 #include <string>
 #include <cstring>
@@ -63,7 +64,23 @@ string findSymbol(vector<string> cmds, int j)
 	return symbol;
 }
 
-
+bool findPipe(vector<string> cmds, int j)
+{
+	
+	for (unsigned k = j; k < cmds.size(); k++)
+	{	
+		cout << "AT K " << cmds.at(k) << "END" << endl;
+		if (cmds.at(k) == "|")
+		{	
+			return true;
+		}
+		else if (isConnector(cmds.at(k)))
+		{
+			break;
+		}
+	}
+	return false;
+}
 
 bool run(bool isValid, vector<string> cmds )
 {
@@ -105,8 +122,7 @@ bool run(bool isValid, vector<string> cmds )
 		else
 		{
 			if (symbol == ">")
-			{
-				cout << "SINGLE GREATE" << endl;
+			{	
 				Rout* rHolder = new Rout(path);
 				rHolder->execute(temp, 't');
 			}
@@ -118,6 +134,30 @@ bool run(bool isValid, vector<string> cmds )
 			temp.clear();
 		//	delete rHolder;
 		}
+	}
+
+	else if (findPipe(cmds, j))
+	{
+		cout << "HIT PIPE" << endl;
+	//	Pipe* pipeHolder = new Pipe();
+		/*
+		for(; j < cmds.size(); j++)
+		{
+			if (cmds.at(j)== "|" )
+			{
+		
+			}
+			else if (isConnector(cmds.at(j)))
+			{
+				break;
+			}
+			else
+			{	
+				temp.push_back(cmds.at(j));
+			}
+		}
+		*/
+				
 	}
 
 	//HARDCODED FIRST COMMAND WITH NO CONNECTOR IN THE BEGGINNING
@@ -196,31 +236,45 @@ bool run(bool isValid, vector<string> cmds )
 					
 					if (!symbol.empty())
 					{
+						string path;	
+						for(; j < cmds.size(); j++)
+						{
+							if (cmds.at(j) == symbol)
+							{
+								path = cmds.at(j+1);
+								break;
+							}
+							else if (isConnector(cmds.at(j)))
+							{
+								break;
+							}
+							else
+							{	
+								temp.push_back(cmds.at(j));
+							}
+						}
 						if (symbol == "<")
 						{
-							string path;	
-							for(; j < cmds.size(); j++)
-							{
-								if (cmds.at(j) == "<")
-								{
-									path = cmds.at(j+1);
-									break;
-								}
-	
-								if (isConnector(cmds.at(j)))
-								{
-									break;
-								}
-								else
-								{
-									temp.push_back(cmds.at(j));
-								}
-							}	
-
 							Input* inHolder = new Input(path);
 							inHolder->execute(temp);
-							temp.clear();	
+							temp.clear();			
+							//	delete inHolder;
 						}
+						else
+						{
+							if (symbol == ">")
+							{	
+								Rout* rHolder = new Rout(path);
+								rHolder->execute(temp, 't');
+							}
+							else 
+							{	
+								Rout* rHolder = new Rout(path);
+								rHolder->execute(temp, 'a');
+							}
+						}
+						temp.clear();
+						//	delete rHolder;
 					}
 		
 					else if (cmds.at(j) == "[")						//CHECKS FOR SPECIAL COMMAND []
@@ -286,31 +340,45 @@ bool run(bool isValid, vector<string> cmds )
 					
 					if (!symbol.empty())
 					{
+						string path;	
+						for(; j < cmds.size(); j++)
+						{
+							if (cmds.at(j) == symbol)
+							{
+								path = cmds.at(j+1);
+								break;
+							}
+							else if (isConnector(cmds.at(j)))
+							{
+								break;
+							}
+							else
+							{	
+								temp.push_back(cmds.at(j));
+							}
+						}
 						if (symbol == "<")
 						{
-							string path;	
-							for(; j < cmds.size(); j++)
-							{
-								if (cmds.at(j) == "<")
-								{
-									path = cmds.at(j+1);
-									break;
-								}
-	
-								if (isConnector(cmds.at(j)))
-								{
-									break;
-								}
-								else
-								{
-									temp.push_back(cmds.at(j));
-								}
-							}	
-
 							Input* inHolder = new Input(path);
 							inHolder->execute(temp);
-							temp.clear();	
+							temp.clear();			
+							//	delete inHolder;
 						}
+						else
+						{
+							if (symbol == ">")
+							{	
+								Rout* rHolder = new Rout(path);
+								rHolder->execute(temp, 't');
+							}
+							else 
+							{	
+								Rout* rHolder = new Rout(path);
+								rHolder->execute(temp, 'a');
+							}
+						}
+						temp.clear();
+						//	delete rHolder;
 					}
 		
 
@@ -384,31 +452,45 @@ bool run(bool isValid, vector<string> cmds )
 					
 					if (!symbol.empty())
 					{
+						string path;	
+						for(; j < cmds.size(); j++)
+						{
+							if (cmds.at(j) == symbol)
+							{
+								path = cmds.at(j+1);
+								break;
+							}
+							else if (isConnector(cmds.at(j)))
+							{
+								break;
+							}
+							else
+							{	
+								temp.push_back(cmds.at(j));
+							}
+						}
 						if (symbol == "<")
 						{
-							string path;	
-							for(; j < cmds.size(); j++)
-							{
-								if (cmds.at(j) == "<")
-								{
-									path = cmds.at(j+1);
-									break;
-								}
-	
-								if (isConnector(cmds.at(j)))
-								{
-									break;
-								}
-								else
-								{
-									temp.push_back(cmds.at(j));
-								}
-							}	
-
 							Input* inHolder = new Input(path);
 							inHolder->execute(temp);
-							temp.clear();	
+							temp.clear();			
+							//	delete inHolder;
 						}
+						else
+						{
+							if (symbol == ">")
+							{	
+								Rout* rHolder = new Rout(path);
+								rHolder->execute(temp, 't');
+							}
+							else 
+							{	
+								Rout* rHolder = new Rout(path);
+								rHolder->execute(temp, 'a');
+							}
+						}
+						temp.clear();
+						//	delete rHolder;
 					}
 		
 
