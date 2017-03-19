@@ -25,7 +25,7 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 
 	char* args[512];
 	unsigned i;
-	for (i = 0; i < cmds.size(); i++)
+	for (i = 0; i < lhs.size(); i++)
 	{
 		args[i] = (char*)lhs[i].c_str();
 	}
@@ -33,7 +33,7 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 
 	char* rightArgs[512];
 	unsigned j;
-	for (j = 0; j < cmds.size(); j++)
+	for (j = 0; j < rhs.size(); j++)
 	{
 		rightArgs[j] = (char*)rhs[j].c_str();
 	}
@@ -74,15 +74,15 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 		close(out);
 	}
 
-		pid_t pid;
-		pid = fork();
+		pid_t pid2;
+		pid2 = fork();
 		int status;
-		if (pid == -1)
+		if (pid2 == -1)
 		{
 			perror("fork");
 			exit(1);
 		}
-		if (pid == 0) // child process
+		if (pid2 == 0) // child process
 		{
 			int in;
 			in = open(filename.c_str(), O_RDONLY);
@@ -93,7 +93,7 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 		}
 		else // parent process
 		{
-			if (waitpid(pid, &status, 0) == -1)
+			if (waitpid(pid2, &status, 0) == -1)
 			{
 				perror("wait");
 				exit(1);
