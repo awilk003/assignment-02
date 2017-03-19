@@ -35,7 +35,7 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 	rightArgs[j] = NULL;
 	
 
-	int outback = dup(1);
+	//int outback = dup(1);
 	//int inback = dup(0);
 
 	//set output destination
@@ -92,7 +92,7 @@ bool Pipe::execute(const vector<string> &lhs, const vector<string> &rhs)
 	if (pid2 == 0)
 	{
 		dup2(pipes[1], 1);
-		close(pipes[0])
+		close(pipes[0]);
 
 		if (execvp(rightArgs[0], rightArgs) == -1)
 		{
