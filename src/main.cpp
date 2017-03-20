@@ -178,7 +178,7 @@ bool run(bool isValid, vector<string> cmds )
 				}
 
 			}
-//			mpHolder->remove();
+			mpHolder->remove();
 			
 		}
 
