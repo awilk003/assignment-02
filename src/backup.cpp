@@ -446,7 +446,7 @@ bool mPipe::reExecute(const vector<string> &lhs, const vector<string> &rhs, int 
 	int status;
 	symbol = checkSymbol(rhs, path);
 
-	int out = open(otherPath.c_str(), O_WRONLY | O_TRUNC | O_CREAT, 0666);
+	int out = open(otherPath.c_str(), O_RDWR | O_TRUNC);
 
 	dup2(currFD[1], 1);
 	
@@ -460,10 +460,6 @@ bool mPipe::reExecute(const vector<string> &lhs, const vector<string> &rhs, int 
 	}
 	if (pid2 == 0) // child process
 	{
-		int in;
-		in = open(otherPath.c_str(), O_RDONLY);
-		dup2(in, 0);
-
 		if (!symbol.empty())
 		{
 			int i = 0;
@@ -493,7 +489,10 @@ bool mPipe::reExecute(const vector<string> &lhs, const vector<string> &rhs, int 
 				}
 			}		
 		}
-//		dup2(out, 1);
+
+//		dup2(out, 0);
+		dup2(out, 1);		
+		dup2(out, 0);
 		execvp(rightArgs[0], rightArgs);
 		exit(0);
 	}

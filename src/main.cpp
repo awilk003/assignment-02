@@ -37,6 +37,8 @@ void print(vector<string> input)
 	cout << endl;
 }
 
+
+//A helper function to determine whther or not the passed in string is a "Connector"/returns true if it is, false if not, use to check the string for connectors
 bool isConnector (string input)
 {
 	if (input == ";" || input == "||" || input == "&&")
@@ -46,6 +48,7 @@ bool isConnector (string input)
 	return false;
 }
 
+//A helper function to determine if a "<", ">", or ">>" is detected, starting at the index j, so it does not always start from the begginning
 string findSymbol(vector<string> cmds, int j)
 {
 	string listofsymbols = "<>>";
@@ -65,6 +68,7 @@ string findSymbol(vector<string> cmds, int j)
 	return symbol;
 }
 
+//A helper function to determine if "|" is detected 
 bool findPipe(vector<string> cmds, int j)
 {
 	
@@ -83,6 +87,7 @@ bool findPipe(vector<string> cmds, int j)
 	return false;
 }
 
+//A helper function to find the number of pipes before a connector, I.E in order to fund the number of chains to go through
 int numofPipes(vector<string> cmds, int j)
 {
 	int numofPipes = 0;
@@ -102,21 +107,21 @@ int numofPipes(vector<string> cmds, int j)
 
 bool run(bool isValid, vector<string> cmds )
 {
-	vector<string> temp; //TEMPORARY VECTOR OF COMMANDS TO BE PASSED INTO THE EXECUTE FUNCTION
+	vector<string> temp;								//TEMPORARY VECTOR OF COMMANDS TO BE PASSED INTO THE EXECUTE FUNCTION
 	if (cmds.at(0) == "quit")
 	{
-		exit(1); //IF FIRST COMMAND IS QUIT EXIT IMMEDIATLY
+		exit(1);								//IF FIRST COMMAND IS QUIT EXIT IMMEDIATLY
 		cout << "SHOULD HAVE QUIT" << endl;
 	}
 
 	unsigned j = 0;
 	string symbol = findSymbol(cmds, j);
-	if (findPipe(cmds, j))
+	if (findPipe(cmds, j))								//detects if a pipe is in the first command
 	{
-		int currFD[2] = {0,1};
+		int currFD[2] = {0,1};							//sets a backup for the currint file directory for ins and out
 		vector<string> rhs;
-		int counter = numofPipes(cmds, j);	
-		for(; j < cmds.size(); j++)
+		int counter = numofPipes(cmds, j);					//number of pipes in the commands
+		for(; j < cmds.size(); j++)						//creates the arguement on the lhs, stop when "|" or connector is detected 
 		{
 			if (cmds.at(j)== "|")
 			{
@@ -132,8 +137,8 @@ bool run(bool isValid, vector<string> cmds )
 			}
 		}
 		j++;
-		for (; j < cmds.size(); j++)
-		{
+		for (; j < cmds.size(); j++)						//creates the arguement on the rhs, stop when "|" or connector is detected		
+		{							
 			if (isConnector(cmds.at(j)) || cmds.at(j) == "|")
 			{
 				break;
@@ -143,21 +148,20 @@ bool run(bool isValid, vector<string> cmds )
 				rhs.push_back(cmds.at(j));
 			}
 		}
-		if (counter <= 1)
+		if (counter <= 1)							//If only one pipe is detected runs a single pipe
 		{
 			Backup* bHolder = new Backup();
 			isValid = bHolder->execute(temp, rhs, currFD);
 		}
-		else
+		else									//If more than one pipe is created, create a multiple pipe process
 		{	
 			mPipe* mpHolder = new mPipe("pleasedonthaveafilenamethingsPLZOGODIFYOUDOUSUCK.txt");
 			isValid = mpHolder->execute(temp, rhs, currFD);
-		
 			j++;
-			for (; counter > 1; counter--)
+			for (; counter > 1; counter--)					//While the counter is above the final number
 			{	
 				rhs.clear();
-				for (; j < cmds.size(); j++)
+				for (; j < cmds.size(); j++)				//creates the arguement on the rhs, stop when "|" or connector is detected		
 				{
 					if (cmds.at(j) != "|")
 					{
@@ -168,32 +172,33 @@ bool run(bool isValid, vector<string> cmds )
 						break;
 					}
 				}
-				if (counter == 2)
+				if (counter == 2)					//If last of the chain outs to console
 				{
 					isValid = mpHolder->finalExecute(temp, rhs, currFD);
-				}
-				else
+				}	
+				else							// else outputs to tempfile
 				{		
 					isValid = mpHolder->reExecute(temp, rhs, currFD);	
 				}
+				j++;
 
 			}
-			mpHolder->remove();
+			mpHolder->remove();						//removes the temp file;
 			
 		}
 
-		temp.clear();
+		temp.clear();								//clears temp for next commands;
 	}
 
 
-	else if (!symbol.empty())
+	else if (!symbol.empty())							//if a "<", ">", ">>" is detected
 	{ 
 		string path;	
-		for(; j < cmds.size(); j++)
+		for(; j < cmds.size(); j++)						//creates the arguement on the lhs, stop when a symbol or connector is detected	
 		{
 			if (cmds.at(j) == symbol)
 			{
-				path = cmds.at(j+1);
+				path = cmds.at(j+1);					//sets the file name
 				break;
 			}
 			else if (isConnector(cmds.at(j)))
@@ -204,8 +209,8 @@ bool run(bool isValid, vector<string> cmds )
 			{	
 				temp.push_back(cmds.at(j));
 			}
-		}
-		if (symbol == "<")
+		}	
+		if (symbol == "<")							//create a "<" object and runs it
 		{
 			Input* inHolder = new Input(path);
 			inHolder->execute(temp);
@@ -214,12 +219,12 @@ bool run(bool isValid, vector<string> cmds )
 		}
 		else
 		{
-			if (symbol == ">")
+			if (symbol == ">")						//create a ">" object and run it
 			{	
 				Rout* rHolder = new Rout(path);
 				rHolder->execute(temp, 't');
 			}
-			else 
+			else 								//create a ">>" object and run it
 			{
 				Rout* rHolder = new Rout(path);
 				rHolder->execute(temp, 'a');
@@ -302,12 +307,12 @@ bool run(bool isValid, vector<string> cmds )
 						exit(1);
 					}
 					
-					symbol = findSymbol(cmds, j);
+					symbol = findSymbol(cmds, j);					//sets symbol by using helper functions
 					if (findPipe(cmds, j))
 					{ 	
 						int currFD[2] = {0, 1};
 						vector<string> rhs;
-						for(; j < cmds.size(); j++)
+						for(; j < cmds.size(); j++)				//sets rhs of the "|" operator	
 						{
 							if (cmds.at(j)== "|" )
 							{
@@ -323,7 +328,7 @@ bool run(bool isValid, vector<string> cmds )
 							}
 						}
 						j++;
-						for (; j < cmds.size(); j++)
+						for (; j < cmds.size(); j++)				//sets lhs of the "|" operator
 						{
 							if (isConnector(cmds.at(j)))
 							{
@@ -334,15 +339,15 @@ bool run(bool isValid, vector<string> cmds )
 								rhs.push_back(cmds.at(j));
 							}
 						}
-						Backup* bHolder = new Backup();
+						Backup* bHolder = new Backup();				//creates and runs a pipe
 						isValid = bHolder->execute(temp, rhs, currFD);
 						temp.clear();
 					}
-					else if (!symbol.empty())
+					else if (!symbol.empty())					//check to see if a symbol was detected
 					{
-						string path;	
-						for(; j < cmds.size(); j++)
-						{
+						string path;			
+						for(; j < cmds.size(); j++)				//creates lhs arguement and path
+						{	
 							if (cmds.at(j) == symbol)
 							{
 								path = cmds.at(j+1);
@@ -357,7 +362,7 @@ bool run(bool isValid, vector<string> cmds )
 								temp.push_back(cmds.at(j));
 							}
 						}
-						if (symbol == "<")
+						if (symbol == "<")					//creates and runs "<"
 						{
 							Input* inHolder = new Input(path);
 							isValid = inHolder->execute(temp);
@@ -366,12 +371,12 @@ bool run(bool isValid, vector<string> cmds )
 						}
 						else
 						{
-							if (symbol == ">")
+							if (symbol == ">")				//creates and runs ">"
 							{	
 								Rout* rHolder = new Rout(path);
 								isValid = rHolder->execute(temp, 't');
 							}
-							else 
+							else 						//creates and runs ">>"
 							{	
 								Rout* rHolder = new Rout(path);
 								isValid = rHolder->execute(temp, 'a');
@@ -440,7 +445,7 @@ bool run(bool isValid, vector<string> cmds )
 					{
 						exit(1);
 					}
-					symbol = findSymbol(cmds, j);
+					symbol = findSymbol(cmds, j);					// looks for and sets symbol
 					
 					if (findPipe(cmds, j))
 					{ 	
@@ -448,7 +453,7 @@ bool run(bool isValid, vector<string> cmds )
 						if (!isValid)
 						{	
 							vector<string> rhs;
-							for(; j < cmds.size(); j++)
+							for(; j < cmds.size(); j++)			// if a pipe is found then run pipe
 							{
 								if (cmds.at(j)== "|" )
 								{
@@ -481,7 +486,7 @@ bool run(bool isValid, vector<string> cmds )
 						}
 					}
 
-					else if (!symbol.empty())
+					else if (!symbol.empty())						//looks to see if a special execute symbol is detected
 					{
 						if (!isValid)
 						{
@@ -594,9 +599,9 @@ bool run(bool isValid, vector<string> cmds )
 						exit(1);
 					}
 
-					symbol = findSymbol(cmds, j);
+					symbol = findSymbol(cmds, j);					//detects and sets symbol
 					
-					if (findPipe(cmds, j))
+					if (findPipe(cmds, j))						//runs pipe
 					{ 	
 						int currFD[2] = {0, 1};
 						if(isValid)	
@@ -635,7 +640,7 @@ bool run(bool isValid, vector<string> cmds )
 						}
 					}
 
-					else if (!symbol.empty())
+					else if (!symbol.empty())					// runs special execution of symbols
 					{
 						if (isValid)
 						{

@@ -1,4 +1,4 @@
   PID TTY          TIME CMD
- 8325 pts/6    00:00:00 bash
-23008 pts/6    00:00:00 rshell
-23009 pts/6    00:00:00 ps
+38717 pts/2    00:00:00 bash
+38795 pts/2    00:00:00 rshell
+38796 pts/2    00:00:00 ps

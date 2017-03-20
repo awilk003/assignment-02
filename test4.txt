@@ -1,0 +1,16 @@
+  PID TTY          TIME CMD
+35716 pts/1    00:00:00 bash
+37667 pts/1    00:00:00 rshell
+37668 pts/1    00:00:00 ps
+  PID TTY          TIME CMD
+35716 pts/1    00:00:00 bash
+37667 pts/1    00:00:00 rshell
+37668 pts/1    00:00:00 ps
+  PID TTY          TIME CMD
+35716 pts/1    00:00:00 bash
+37667 pts/1    00:00:00 rshell
+37668 pts/1    00:00:00 ps
+  PID TTY          TIME CMD
+35716 pts/1    00:00:00 bash
+37667 pts/1    00:00:00 rshell
+37668 pts/1    00:00:00 ps
