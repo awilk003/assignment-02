@@ -37,7 +37,7 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 	{
 		rightArgs[j] = (char*)rhs[j].c_str();
 	}
-	rightArgs[i] = NULL;
+	rightArgs[j] = NULL;
 
 	pid_t pid;
 	pid = fork();
@@ -97,6 +97,40 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 		else // parent process
 		{
 			if (waitpid(pid2, &status, 0) == -1)
+			{
+				perror("wait");
+				exit(1);
+			}
+			if (WEXITSTATUS(status) != 0)
+			{
+				return false;
+			}
+		}
+		string cmd = "rm";
+		char* lastArgs[512];
+		lastArgs[0] = (char *)cmd.c_str();
+		lastArgs[1] = (char *)filename.c_str();
+		lastArgs[2] = NULL;
+
+		pid_t pid3;
+		pid3 = fork();
+		if (pid3 == -1)
+		{
+			perror("fork");
+			exit(1);
+		}
+		if (pid3 == 0) // child process
+		{
+			int in;
+			in = open(filename.c_str(), O_RDONLY);
+			dup2(in, 0);
+			close(in);
+			execvp(lastArgs[0], lastArgs);
+			exit(0);
+		}
+		else // parent process
+		{
+			if (waitpid(pid3, &status, 0) == -1)
 			{
 				perror("wait");
 				exit(1);
