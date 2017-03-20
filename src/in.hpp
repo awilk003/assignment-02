@@ -1,3 +1,5 @@
+#ifndef I_HPP
+#define I_HPP
 #include "test.hpp"
 #include <stdio.h>
 #include <unistd.h>
@@ -16,3 +18,5 @@ class Input : public Test
 		string filename;
 		bool check(vector<string> path);
 };
+
+#endif
