@@ -37,7 +37,7 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 	{
 		rightArgs[j] = (char*)rhs[j].c_str();
 	}
-	rightArgs[i] = NULL;
+	rightArgs[j] = NULL;
 
 	pid_t pid;
 	pid = fork();
