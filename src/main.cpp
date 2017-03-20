@@ -94,7 +94,46 @@ bool run(bool isValid, vector<string> cmds )
 
 	unsigned j = 0;
 	string symbol = findSymbol(cmds, j);
-	if (!symbol.empty())
+	if (findPipe(cmds, j))
+	{
+		//cout << "HIT PIPE" << endl;
+		vector<string> rhs;
+		for(; j < cmds.size(); j++)
+		{
+			if (cmds.at(j)== "|" )
+			{
+				break;	
+			}
+			else if (isConnector(cmds.at(j)))
+			{
+				break;
+			}
+			else
+			{	
+				temp.push_back(cmds.at(j));
+			}
+		}
+		j++;
+		for (; j < cmds.size(); j++)
+		{
+			if (isConnector(cmds.at(j)))
+			{
+				break;
+			}
+			else
+			{
+				rhs.push_back(cmds.at(j));
+			}
+		}
+		print(temp);
+		print(rhs);
+		Backup* bHolder = new Backup();
+		bHolder->execute(temp, rhs);
+		temp.clear();
+	}
+
+
+	else if (!symbol.empty())
 	{ 
 		string path;	
 		for(; j < cmds.size(); j++)
@@ -135,42 +174,6 @@ bool run(bool isValid, vector<string> cmds )
 			temp.clear();
 		//	delete rHolder;
 		}
-	}
-
-	else if (findPipe(cmds, j))
-	{
-		//cout << "HIT PIPE" << endl;
-		vector<string> rhs;
-		for(; j < cmds.size(); j++)
-		{
-			if (cmds.at(j)== "|" )
-			{
-				break;	
-			}
-			else if (isConnector(cmds.at(j)))
-			{
-				break;
-			}
-			else
-			{	
-				temp.push_back(cmds.at(j));
-			}
-		}
-		j++;
-		for (; j < cmds.size(); j++)
-		{
-			if (isConnector(cmds.at(j)))
-			{
-				break;
-			}
-			else
-			{
-				rhs.push_back(cmds.at(j));
-			}
-		}
-		Backup* bHolder = new Backup();
-		bHolder->execute(temp, rhs);
-		temp.clear();
 	}
 
 	//HARDCODED FIRST COMMAND WITH NO CONNECTOR IN THE BEGGINNING
@@ -247,8 +250,41 @@ bool run(bool isValid, vector<string> cmds )
 					}
 					
 					symbol = findSymbol(cmds, j);
-					
-					if (!symbol.empty())
+					if (findPipe(cmds, j))
+					{ 	
+						vector<string> rhs;
+						for(; j < cmds.size(); j++)
+						{
+							if (cmds.at(j)== "|" )
+							{
+								break;	
+							}
+							else if (isConnector(cmds.at(j)))
+							{
+								break;
+							}
+							else
+							{	
+								temp.push_back(cmds.at(j));
+							}
+						}
+						j++;
+						for (; j < cmds.size(); j++)
+						{
+							if (isConnector(cmds.at(j)))
+							{
+								break;
+							}
+							else
+							{
+								rhs.push_back(cmds.at(j));
+							}
+						}
+						Backup* bHolder = new Backup();
+						bHolder->execute(temp, rhs);
+						temp.clear();
+					}
+					else if (!symbol.empty())
 					{
 						string path;	
 						for(; j < cmds.size(); j++)

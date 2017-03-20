@@ -87,6 +87,10 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs)
 			in = open(filename.c_str(), O_RDONLY);
 			dup2(in, 0);
 			close(in);
+			for (unsigned i = 0; i < 3; i++)
+			{
+				cout << "RARGS " << rightArgs[i] << endl;
+			}
 			execvp(rightArgs[0], rightArgs);
 			exit(0);
 		}
