@@ -1,3 +1,4 @@
   PID TTY          TIME CMD
- 5078 pts/2    00:00:00 ps
-48217 pts/2    00:00:00 bash
+ 8325 pts/6    00:00:00 bash
+23008 pts/6    00:00:00 rshell
+23009 pts/6    00:00:00 ps

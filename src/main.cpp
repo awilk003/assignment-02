@@ -149,12 +149,39 @@ bool run(bool isValid, vector<string> cmds )
 			isValid = bHolder->execute(temp, rhs, currFD);
 		}
 		else
-		{
-			currFD[0] = 3;
-			currFD[1] = 4;
-			mPipe* mpHolder = new mPipe();
+		{	
+			mPipe* mpHolder = new mPipe("pleasedonthaveafilenamethingsPLZOGODIFYOUDOUSUCK.txt");
 			isValid = mpHolder->execute(temp, rhs, currFD);
+		
+			j++;
+			for (; counter > 1; counter--)
+			{	
+				rhs.clear();
+				for (; j < cmds.size(); j++)
+				{
+					if (cmds.at(j) != "|")
+					{
+						rhs.push_back(cmds.at(j));
+					}
+					else
+					{
+						break;
+					}
+				}
+				if (counter == 2)
+				{
+					isValid = mpHolder->finalExecute(temp, rhs, currFD);
+				}
+				else
+				{		
+					isValid = mpHolder->reExecute(temp, rhs, currFD);	
+				}
+
+			}
+//			mpHolder->remove();
+			
 		}
+
 		temp.clear();
 	}
 

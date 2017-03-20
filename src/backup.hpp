@@ -20,9 +20,14 @@ public:
 class mPipe : public Backup
 {
 	public:
-	mPipe();
-	bool execute(const vector<string> &lhs, const vector<string> &rhs, int (& currFD)[2]);
-
+		mPipe();
+		mPipe(string Input);
+		bool execute(const vector<string> &lhs, const vector<string> &rhs, int (& currFD)[2]);
+		bool reExecute(const vector<string> &lhs, const vector<string> &rhs, int (& currFD)[2]);
+		bool finalExecute(const vector<string> &lhs, const vector<string> &rhs, int (& currFD)[2]);
+		void remove();
+	private:
+		string otherPath;
 };
 
 
