@@ -14,6 +14,7 @@ Backup::Backup(const string &filename)
 {
 }
 
+//checking for misdirection
 string Backup::checkSymbol(vector<string> cmds, string& path)
 {
 	string listofsymbols = "<>>";
@@ -31,18 +32,22 @@ string Backup::checkSymbol(vector<string> cmds, string& path)
 
 }
 
+//Where we pipe the processes
 bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs, int (& currFD)[2])
 {
 	string path;
 	string symbol = checkSymbol(lhs, path);
+
+	//debug statements
 //	cout << "SYMBOL" << symbol << endl;
 //	cout << "PATH" << path << endl;
 
-	//int outback = dup(1);
 	string filename = "testA.txt";
 	int out;
 	out = open(filename.c_str(), O_WRONLY | O_TRUNC | O_CREAT, 0666);
 
+	
+	// grabbing executable arguements
 	char* args[512];
 	unsigned i;
 	for (i = 0; i < lhs.size(); i++)
@@ -59,6 +64,8 @@ bool Backup::execute(const vector<string> &lhs, const vector<string> &rhs, int (
 	}
 	rightArgs[j] = NULL;
 
+
+	//forking process so we can use execvp
 	pid_t pid;
 	pid = fork();
 	int status;
@@ -231,10 +238,13 @@ mPipe::mPipe(string input)
 	otherPath = input;
 }
 
+//used for chain piping
 bool mPipe::execute(const vector<string> &lhs, const vector<string> &rhs, int (& currFD)[2])
 {
 	string path;
 	string symbol = checkSymbol(lhs, path);
+
+	//debug statements
 //	cout << "SYMBOL" << symbol << endl;
 //	cout << "PATH" << path << endl;
 
@@ -424,7 +434,7 @@ bool mPipe::execute(const vector<string> &lhs, const vector<string> &rhs, int (&
 	return true;
 }
 
-
+//another component of chain piping
 bool mPipe::reExecute(const vector<string> &lhs, const vector<string> &rhs, int (& currFD)[2])
 {
 	string path;
@@ -511,6 +521,7 @@ bool mPipe::reExecute(const vector<string> &lhs, const vector<string> &rhs, int 
 return true;
 }
 
+//for chain piping, handles final commands
 bool mPipe::finalExecute(const vector<string> &lhs, const vector<string> &rhs, int (& currFD)[2])
 {
 	string path;
@@ -592,7 +603,7 @@ bool mPipe::finalExecute(const vector<string> &lhs, const vector<string> &rhs, i
 return true;
 }
 
-
+//helper function, cleans up unneeded components
 void mPipe::remove()
 {
 		string cmd = "rm";

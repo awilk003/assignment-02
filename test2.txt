@@ -1,4 +1,0 @@
-  PID TTY          TIME CMD
-38717 pts/2    00:00:00 bash
-38795 pts/2    00:00:00 rshell
-38796 pts/2    00:00:00 ps
