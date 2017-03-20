@@ -8,7 +8,6 @@
 #include "test.hpp"
 #include "in.hpp"
 #include "out.hpp"
-#include "pipe.hpp"
 #include "backup.hpp"
 #include <vector>
 #include <string>
